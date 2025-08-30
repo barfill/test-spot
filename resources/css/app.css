@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+
+.alert-success {
+    @apply my-8 rounded-md border-l-4 border-green-300 bg-green-100 p-4 text-green-700 opacity-75;
+}
+
+.alert-error {
+    @apply my-8 rounded-md border-l-4 border-red-300 bg-red-100 p-4 text-red-700 opacity-75;
+}

@@ -1,0 +1,31 @@
+<?php
+
+return [
+    // Dashboard
+    'dashboard' => 'Dashboard',
+    'dashboards' => 'Dashboards',
+    'my_dashboards' => 'My Dashboards',
+    'all_dashboards' => 'All Dashboards',
+    'create_dashboard' => 'Create Dashboard',
+    'edit_dashboard' => 'Edit Dashboard',
+    'dashboard_created' => 'Dashboard created successfully!',
+    'dashboard_updated' => 'Dashboard updated successfully!',
+    'dashboard_deleted' => 'Dashboard deleted successfully!',
+
+    // General
+    'name' => 'Name',
+    'description' => 'Description',
+    'image' => 'Image',
+    'active' => 'Active',
+    'create' => 'Create',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'back' => 'Back',
+
+    // User types
+    'teacher' => 'Teacher',
+    'student' => 'Student',
+    'admin' => 'Admin',
+];
