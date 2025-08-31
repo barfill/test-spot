@@ -18,6 +18,7 @@ return [
     'image' => 'Image',
     'active' => 'Active',
     'create' => 'Create',
+    'update' => 'Update',
     'edit' => 'Edit',
     'delete' => 'Delete',
     'save' => 'Save',

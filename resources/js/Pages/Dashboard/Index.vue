@@ -1,17 +1,17 @@
 <template>
-    <h1>Dashboard</h1>
-    <p>Welcome to your dashboard!</p>
-    <Link :href="route('dashboard.index')">Go to Dashboard</Link>
-
+    <Breadcrumbs
+        :translations="translations"
+        :locale="locale"
+    />
     <div v-for="dashboard in dashboards" :key="dashboard.id">
         <div>
-            <Link :href="route('dashboard.show', dashboard.id)">
+            <Link :href="route('dashboard.show', { locale, dashboard: dashboard.id })">
                 <DashboardCard :dashboard="dashboard"/>
             </Link>
         </div>
         <div>
-            <Link :href="route('dashboard.edit', dashboard.id)">Edit</Link>
-            <Link :href="route('dashboard.destroy', dashboard.id)" method="delete" as="button">Delete</Link>
+            <Link :href="route('dashboard.edit', { locale, dashboard: dashboard.id })">{{ translations.edit }}</Link>
+            <Link :href="route('dashboard.destroy', { dashboard: dashboard.id, locale })" method="delete" as="button">{{ translations.delete }}</Link>
         </div>
     </div>
 </template>
@@ -19,8 +19,11 @@
 <script setup>
     import { Link } from '@inertiajs/vue3';
     import DashboardCard from '@/Components/UI/DashboardCard.vue';
+    import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
 
     defineProps({
-        dashboards: Array
+        dashboards: Array,
+        locale: String,
+        translations: Object
     });
 </script>

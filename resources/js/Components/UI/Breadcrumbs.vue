@@ -2,7 +2,7 @@
     <nav>
         <ul class="flex items-center space-x-2 text-indigo-600">
             <li>
-                <a href="/" class="hover:text-indigo-800">Dashboards</a>
+                <a :href="route('dashboard.index', { locale })" class="hover:text-indigo-800">{{ translations.dashboards }}</a>
             </li>
             <template v-for="(crumb, index) in breadcrumbs" :key="index">
                 <li class="text-gray-500">/</li>
@@ -14,7 +14,9 @@
 
 <script setup>
     defineProps({
-        breadcrumbs: Array
+        breadcrumbs: Array,
+        translations: Object,
+        locale: String
     });
 </script>
 

@@ -15,9 +15,10 @@ return [
     // General
     'name' => 'Nazwa',
     'description' => 'Opis',
-    'image' => 'Obrazek',
+    'image' => 'Zdjecie',
     'active' => 'Aktywny',
     'create' => 'Utwórz',
+    'update' => 'Aktualizuj',
     'edit' => 'Edytuj',
     'delete' => 'Usuń',
     'save' => 'Zapisz',
