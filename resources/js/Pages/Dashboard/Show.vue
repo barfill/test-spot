@@ -1,7 +1,11 @@
 <template>
-    <Breadcrumbs :breadcrumbs="[
-        { label: dashboard.name, link: '#' }
-    ]"/>
+    <Breadcrumbs
+        :breadcrumbs="[
+            { label: dashboard.name, link: '#' }
+        ]"
+        :translations="translations"
+        :locale="locale"
+    />
 
     <h2>{{ dashboard.name }}</h2>
     <p>{{ dashboard.description }}</p>
@@ -11,6 +15,8 @@
 import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
 
 defineProps({
-    dashboard: Object
+    dashboard: Object,
+    locale: String,
+    translations: Object
 });
 </script>
