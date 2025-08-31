@@ -15,7 +15,8 @@ return [
     // General
     'name' => 'Nazwa',
     'description' => 'Opis',
-    'image' => 'Zdjecie',
+    'image' => 'Zdjęcie',
+    'no_images' => 'Brak zdjęcia',
     'active' => 'Aktywny',
     'create' => 'Utwórz',
     'update' => 'Aktualizuj',

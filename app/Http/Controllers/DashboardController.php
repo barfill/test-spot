@@ -18,6 +18,7 @@ class DashboardController extends Controller
             'translations' => [
                 'dashboards' => __('app.dashboards'),
                 'all_dashboards' => __('app.all_dashboards'),
+                'no_images' => __('app.no_images'),
                 'create' => __('app.create'),
                 'name' => __('app.name'),
                 'description' => __('app.description'),

@@ -1,7 +1,7 @@
 <template>
     <header class="w-full border-b border-zinc-800 dark:border-zinc-300 bg-white dark:bg-zinc-800">
         <div class="container mx-auto">
-            <nav class="flex items-center justify-between p-4">
+            <nav class="flex items-center justify-between py-4 px-8">
                 <div class="text-lg font-medium">
                     <Link :href="route('dashboard.index', { locale })">{{ translations.dashboards }}</Link>
                 </div>
@@ -19,7 +19,7 @@
         </div>
     </header>
 
-    <main class="container mx-auto">
+    <main class="container mx-auto p-8">
         <div v-if="successMessage" class="alert-success">
             {{ successMessage }}
         </div>

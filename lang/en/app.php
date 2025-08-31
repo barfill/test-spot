@@ -16,6 +16,7 @@ return [
     'name' => 'Name',
     'description' => 'Description',
     'image' => 'Image',
+    'no_images' => 'No Image',
     'active' => 'Active',
     'create' => 'Create',
     'update' => 'Update',
