@@ -25,18 +25,15 @@
                 <div v-if="form.errors.description" class="text-error">{{ form.errors.description }}</div>
             </div>
 
-            <div class="grid grid-cols-10 gap-4 justify-between pb-6">
-                <div class="col-span-7">
+            <div class="grid grid-cols-1 md:grid-cols-10 gap-4 justify-between pb-6">
+                <div class="col-span-1 md:col-span-7">
                     <label for="image" class="label label-disabled">{{ translations.image }}</label>
                     <span class="absolute span-enabled"> {{ translations.image }}</span>
                     <input type="text" id="image" name="image" v-model="form.image" class="input"/>
                     <div v-if="form.errors.image" class="text-error">{{ form.errors.image }}</div>
                 </div>
 
-                <div
-                    class="col-span-3"
-                    :class="form.errors.image ? 'checkbox-container-scaled' : 'checkbox-container'"
-                >
+                <div class="col-span-1 py-2 md:col-span-3" :class="form.errors.image ? 'checkbox-container-scaled' : 'checkbox-container'">
                     <label for="is_active" class="checkbox-label">{{ translations.active }}</label>
                     <input type="checkbox" id="is_active" name="is_active" v-model="form.is_active" class="checkbox"/>
                 </div>
