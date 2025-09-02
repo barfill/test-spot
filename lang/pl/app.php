@@ -18,6 +18,7 @@ return [
     'image' => 'Zdjęcie',
     'no_images' => 'Brak zdjęcia',
     'active' => 'Aktywny',
+    'inactive' => 'Nieaktywny',
     'create' => 'Utwórz',
     'update' => 'Aktualizuj',
     'edit' => 'Edytuj',
