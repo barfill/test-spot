@@ -34,6 +34,24 @@
     @apply bg-green-500 dark:bg-green-400 hover:bg-green-600 dark:hover:bg-green-300 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded;
 }
 
+.btn-toggle-active {
+    @apply block w-full p-4 border font-medium bg-orange-500 dark:bg-orange-400 text-white border-gray-300 dark:border-zinc-600 rounded-md shadow-md;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-toggle-inactive {
+    @apply block w-full p-4 border font-medium text-zinc-400 dark:text-zinc-500 border-gray-300 dark:border-zinc-600 rounded-md shadow-md;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-toggle-active:hover {
+    @apply border-zinc-400;
+}
+
+.btn-toggle-inactive:hover {
+    @apply border-orange-400 dark:border-orange-300;
+}
+
 .select-dropdown {
     @apply border border-gray-300 rounded px-3 py-2 bg-white dark:bg-zinc-700 dark:border-zinc-600 dark:text-white;
 }
@@ -96,6 +114,10 @@
 
 .text-error {
     @apply text-red-600 dark:text-red-400 font-medium mt-1.5 pl-2;
+}
+
+.text-hidden {
+    @apply mt-1.5 text-white dark:text-zinc-800;
 }
 
 .card-hover:hover {

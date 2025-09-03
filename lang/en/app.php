@@ -18,6 +18,7 @@ return [
     'image' => 'Image',
     'no_images' => 'No Image',
     'active' => 'Active',
+    'inactive' => 'Inactive',
     'create' => 'Create',
     'update' => 'Update',
     'edit' => 'Edit',
