@@ -49,8 +49,15 @@ class AuthenticationController extends Controller
             ->withErrors(['email' => __('auth.failed')]);
     }
 
-    public function destroy()
+    public function destroy($locale)
     {
+        Auth::logout();
 
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect()
+            ->route('login', ['locale' => $locale])
+            ->with('success', __('auth.logout_success'));
     }
 }

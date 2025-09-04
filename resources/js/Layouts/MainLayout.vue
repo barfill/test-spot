@@ -2,29 +2,30 @@
     <header class="w-full border-b border-zinc-800 dark:border-zinc-300 bg-white dark:bg-zinc-800">
         <div class="container mx-auto">
             <nav class="flex items-center justify-between py-4 px-8">
-                <div class="text-lg font-medium relative">
-                    <div v-if="user">
+                <div class="text-lg font-medium relative w-max">
+                    <div v-if="user" ref="dropdownRef">
                         <div
-                            @click="toggleUserDropdown"
-                            class="flex items-center gap-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-700 p-2 rounded-md transition-colors"
+                            class="flex items-center gap-2 cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-700 p-2 rounded transition-colors"
+                            @click="userDropDown"
+                            :class="{ 'bg-zinc-200 dark:bg-zinc-700': userDropdownEnabled }"
                         >
                             <span class="text-zinc-700 dark:text-zinc-200"> {{ user.title ?? '' }} {{ user.first_name }} {{ user.last_name }}</span>
-                            <svg :class="{ 'rotate-180': userDropdownOpen }" class="w-4 h-4 transition-transform text-zinc-700 dark:text-zinc-200" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            <svg
+                                :class="{ 'rotate-180': userDropdownEnabled }"
+                                class="w-4 h-4 text-zinc-700 dark:text-zinc-200 transition-transform"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            > <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
 
-                        <div v-if="userDropdownOpen"
-                            @click.stop
-                            class="absolute top-full left-0 mt-2 min-w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md shadow-lg z-50"
-                        >
-                            <div>
-                                <Link :href="route('login', { locale })" class="block px-4 py-2 hover:bg-gray-100">{{ translations.edit_profile }}</Link>
-
-                                <button @click="logout" type="button" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
-                                    {{ translations.sign_out }}
-                                </button>
-                            </div>
+                        <div v-if="userDropdownEnabled" class="absolute border  dark:border-zinc-200 p-2 rounded w-full bg-white dark:bg-zinc-700">
+                            <Link :href="route('login', { locale })" class="block text-center w-full px-4 py-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded transition-colors">{{ translations.edit_profile }}</Link>
+                            <Link :href="route('logout', { locale })" method="delete" as="button"
+                                class="block text-center w-full px-4 py-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded transition-colors cursor-pointer"
+                            >{{ translations.sign_out }}</Link>
                         </div>
                     </div>
 
@@ -45,12 +46,6 @@
             </nav>
         </div>
     </header>
-
-    <div
-        v-if="userDropdownOpen"
-        @click="userDropdownOpen = false"
-        class="fixed inset-0 z-40"
-    ></div>
 
     <main class="container mx-auto p-8">
         <div v-if="successMessage" class="alert-success">
@@ -80,27 +75,49 @@
 
     const { changeLanguage } = useLanguage();
 
-    const userDropdownOpen = ref(false);
+    const userDropdownEnabled = ref(false);
+    const dropdownRef = ref(null);
 
-    const toggleUserDropdown = () => {
-        userDropdownOpen.value = !userDropdownOpen.value;
+    function userDropDown() {
+        userDropdownEnabled.value = !userDropdownEnabled.value;
     }
 
-    const logout = () => {
-        router.post(route('logout', { locale: page.props.locale }));
-    };
-
-    const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-            userDropdownOpen.value = false;
+    function handleClickOutside(element) {
+        if (!userDropdownEnabled.value) return;
+        if (!dropdownRef.value) return;
+        if (!dropdownRef.value.contains(element.target)) {
+            userDropdownEnabled.value = false;
         }
-    };
+        console.log('Clicked outside');
+    }
+
+    function handleKeydown(event) {
+        if (!userDropdownEnabled.value) return;
+        if (event.key === 'Escape' && userDropdownEnabled.value) {
+            userDropdownEnabled.value = false;
+        }
+    }
+
+    let lastScrollY = 0;
+    function handleScrollDown() {
+        if (!userDropdownEnabled.value) return;
+        const currentY = window.scrollY;
+        if (currentY > lastScrollY) {
+            userDropdownEnabled.value = false;
+        }
+        lastScrollY = currentY;
+    }
 
     onMounted(() => {
-        document.addEventListener('keydown', handleEscape);
+        document.addEventListener('click', handleClickOutside);
+        document.addEventListener('keydown', handleKeydown);
+        window.addEventListener('scroll', handleScrollDown);
     });
 
     onUnmounted(() => {
-        document.removeEventListener('keydown', handleEscape);
+        document.removeEventListener('click', handleClickOutside);
+        document.removeEventListener('keydown', handleKeydown);
+        window.removeEventListener('scroll', handleScrollDown);
     });
+
 </script>
