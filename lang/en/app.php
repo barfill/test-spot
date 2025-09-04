@@ -12,6 +12,9 @@ return [
     'dashboard_updated' => 'Dashboard updated successfully!',
     'dashboard_deleted' => 'Dashboard deleted successfully!',
 
+    //User
+    'edit_profile' => 'Edit Profile',
+
     // General
     'name' => 'Name',
     'description' => 'Description',

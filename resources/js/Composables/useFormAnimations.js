@@ -20,7 +20,7 @@ let globalAnimationLock = false;
 export function labelTransition(event, formType = 'create') {
     const inputElement = event.target;
 
-    if(inputElement.tagName === 'INPUT' && inputElement.type === 'text') {
+    if(inputElement.tagName === 'INPUT' && (inputElement.type === 'text' || inputElement.type === 'password' || inputElement.type === 'email')) {
         if(globalAnimationLock) {
             return;
         }
