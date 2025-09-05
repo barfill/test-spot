@@ -23,7 +23,7 @@ return [
     'sign_out' => 'Sign Out',
     'email' => 'Email Address',
     'password' => 'Password',
-    'remember_me' => 'Remember Me',
+    'remember_me' => 'Remember me',
     'forgot_password' => 'Forgot Your Password?',
     'no_account' => 'Don\'t have an account?',
     'register' => 'Register',

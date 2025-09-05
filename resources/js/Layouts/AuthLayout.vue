@@ -16,14 +16,14 @@
     </header>
 
     <main class="container mx-auto p-8 w-full">
-        <div class="w-1/2 mx-auto">
+        <!-- <div class="w-1/2 mx-auto">
             <div v-if="successMessage" class="alert-success">
                 {{ successMessage }}
             </div>
             <div v-if="errorMessage" class="alert-error">
                 {{ errorMessage }}
             </div>
-        </div>
+        </div> -->
         <slot></slot>
     </main>
 </template>

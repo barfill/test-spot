@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends Controller
@@ -34,14 +35,15 @@ class AuthenticationController extends Controller
         ]);
 
         // Auth::attempt($validated, $request->boolean('remember'));
-        if (Auth::attempt($validated, true)) { //user will be remembered as default for now
+        if (Auth::attempt($validated, $request->boolean('remember_me'))) { //user will be remembered as default for now
             $request->session()->regenerate();
+
+            // dd($request);
 
             return redirect()
                 ->intended(route('dashboard.index', ['locale' => $locale]))
                 ->with('success', __('auth.login_success'));
         }
-
         $request->session()->regenerate();
 
         return redirect()

@@ -30,7 +30,7 @@
                     </div>
 
                     <div v-else>
-                        <Link :href="route('login', { locale })">{{ translations.sign_in }}</Link>
+                        <Link :href="route('login', { locale })" class="p-2 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors">{{ translations.sign_in }}</Link>
                     </div>
                 </div>
                 <div class="text-heading">

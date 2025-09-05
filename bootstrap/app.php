@@ -12,10 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(append: [
+        $middleware->web(
+            append: [
             HandleInertiaRequests::class,
             \App\Http\Middleware\Language::class,
         ]);
+        $middleware->redirectGuestsTo(function($request) {
+            $locale = $request->route('locale')
+                ?? $request->session()->get('locale')
+                ?? config('app.locale');
+            return route('login', ['locale' => $locale]);
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
