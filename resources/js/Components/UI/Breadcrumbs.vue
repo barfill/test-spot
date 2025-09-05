@@ -1,5 +1,5 @@
 <template>
-    <nav>
+    <nav class="pl-2">
         <ul class="flex items-center space-x-2 text-orange-500 dark:text-orange-400 font-bold text-md">
             <li>
                 <a :href="route('dashboard.index', { locale })" class="hover:text-orange-400 dark:hover:text-orange-300">{{ translations.dashboards }}</a>

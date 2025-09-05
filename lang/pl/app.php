@@ -12,6 +12,9 @@ return [
     'dashboard_updated' => 'Panel został zaktualizowany pomyślnie!',
     'dashboard_deleted' => 'Panel został usunięty pomyślnie!',
 
+    //User
+    'edit_profile' => 'Edytuj profil',
+
     // General
     'name' => 'Nazwa',
     'description' => 'Opis',

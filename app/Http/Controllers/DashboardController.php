@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dashboard;
 use Illuminate\Http\Request;
 use App\Http\Requests\DashboardRequest;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -24,6 +25,10 @@ class DashboardController extends Controller
                 'description' => __('app.description'),
                 'edit' => __('app.edit'),
                 'delete' => __('app.delete'),
+                'sign_in' => __('auth.sign_in'),
+                'sign_out' => __('auth.sign_out'),
+                'edit_profile' => __('app.edit_profile')
+
             ]
         ]);
     }
@@ -43,7 +48,10 @@ class DashboardController extends Controller
                 'description' => __('app.description'),
                 'save' => __('app.save'),
                 'cancel' => __('app.cancel'),
-                'required' => __('validation.required')
+                'required' => __('validation.required'),
+                'sign_in' => __('auth.sign_in'),
+                'sign_out' => __('auth.sign_out'),
+                'edit_profile' => __('app.edit_profile')
             ]
         ]);
     }
@@ -73,6 +81,9 @@ class DashboardController extends Controller
                 'description' => __('app.description'),
                 'edit' => __('app.edit'),
                 'delete' => __('app.delete'),
+                'sign_in' => __('auth.sign_in'),
+                'sign_out' => __('auth.sign_out'),
+                'edit_profile' => __('app.edit_profile')
             ]
         ]);
     }
@@ -94,6 +105,9 @@ class DashboardController extends Controller
                 'description' => __('app.description'),
                 'edit' => __('app.edit'),
                 'delete' => __('app.delete'),
+                'sign_in' => __('auth.sign_in'),
+                'sign_out' => __('auth.sign_out'),
+                'edit_profile' => __('app.edit_profile')
             ]
         ]);
     }
