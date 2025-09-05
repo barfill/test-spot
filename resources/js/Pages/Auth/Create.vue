@@ -1,5 +1,5 @@
 <template>
-    <div class="mx-auto w-3/4 border-1 border-zinc-800 dark:border-zinc-300 rounded-md p-8 py-10 mt-6">
+    <div class="mx-auto w-3/4 border-1 border-zinc-800 dark:border-zinc-300 rounded-md p-8 py-10 mt-6 shadow-md">
         <div class="mx-auto w-3/4 flex flex-col lg:flex-row items-center justify-between mb-4 lg:mb-8">
             <h1 class="text-3xl font-bold text-center text-zinc-700 dark:text-zinc-200 mb-2 lg:mb-0">{{ translations.login }}</h1>
             <div class="flex gap-2">
