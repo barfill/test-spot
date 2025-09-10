@@ -36,8 +36,12 @@
                 <div class="text-heading">
                     <Link :href="route('dashboard.index', { locale })">TestSpot</Link>
                 </div>
-                <div class="flex gap-2">
-                    <Link v-if="(isStudent === false)" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create }} +</Link>
+                <div class="flex gap-2 items-center">
+                    <div v-if="(isStudent === false)">
+                        <Link v-if="(createAction === 'createDashboard')" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create_dashboard }} +</Link>
+                        <Link v-if="(createAction === 'createAssignment')" :href="route('dashboard.index', { locale })" class="btn-primary">{{ translations.create_assignment }} +</Link>
+                    </div>
+                    <!-- <Link v-if="(isStudent === false)" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create }} +</Link> -->
                     <select :value="locale" @change="changeLanguage" class="select-dropdown">
                         <option value="en">🇺🇸 English</option>
                         <option value="pl">🇵🇱 Polski</option>
@@ -74,13 +78,13 @@
     const user = computed(() => page.props.user);
 
     const indexActiveView = useRemember('assigned','dashboards.view');
-    const isStudent = ref(user.type === 'student');
-
-    console.log('isStudent in MainLayout:', isStudent.value);
-        console.log('isStudent in MainLayout:', isStudent);
+    const isStudent = ref(user.value.type === 'student');
 
     provide('indexActiveView', indexActiveView);
     provide('isStudent', isStudent);
+
+    const createAction = ref('createDashboard');
+    provide('createAction', createAction);
 
     const { changeLanguage } = useLanguage();
 

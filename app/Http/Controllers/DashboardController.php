@@ -42,9 +42,11 @@ class DashboardController extends Controller
             'createdDashboards' => $userCreatedDashboards ?? [],
             'locale' => $locale,
             'translations' => [
+                'dashboard' => __('app.dashboard'),
                 'dashboards' => __('app.dashboards'),
                 'all_dashboards' => __('app.all_dashboards'),
                 'my_dashboards' => __('app.my_dashboards'),
+                'create_dashboard' => __('app.create_dashboard'),
                 'assigned_dashboards' => __('app.assigned_dashboards'),
                 'created_dashboards' => __('app.created_dashboards'),
                 'created_by' => __('app.created_by'),
@@ -101,6 +103,7 @@ class DashboardController extends Controller
     public function show($locale, Dashboard $dashboard)
     {
         $this->authorize('view', $dashboard);
+        $dashboard->load('owner');
 
         return inertia('Dashboard/Show', [
             'dashboard' => $dashboard,
@@ -108,6 +111,8 @@ class DashboardController extends Controller
             'translations' => [
                 'dashboards' => __('app.dashboards'),
                 'create' => __('app.create'),
+                'create_assignment' => __('app.create_assignment'),
+                'assign_users' => __('app.assign_users'),
                 'dashboard' => __('app.dashboard'),
                 'name' => __('app.name'),
                 'description' => __('app.description'),

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Models\Dashboard;
@@ -18,6 +19,7 @@ Route::prefix('{locale}')
                 return redirect()->route('dashboard.index', ['locale' => app()->getLocale()]);
             });
             Route::resource('dashboard', DashboardController::class);
+            Route::resource('dashboard.users', DashboardUserController::class);
             Route::delete('logout', [AuthenticationController::class, 'destroy'])->name('logout');
         });
 
