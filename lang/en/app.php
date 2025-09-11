@@ -45,6 +45,17 @@ return [
 
     //User
     'edit_profile' => 'Edit Profile',
+    'create_user' => 'Create User',
+    'user_created' => 'User created successfully!',
+    'user_updated' => 'User updated successfully!',
+    'user_deleted' => 'User deleted successfully!',
+    'users' => 'Users',
+    'all_users' => 'All Users',
+    'no_users' => 'No users to display.',
+    'assign_user' => 'Assign User',
+    'remove_user' => 'Remove User',
+    'user_assigned' => 'User successfully assigned to dashboard!',
+    'user_removed' => 'User successfully removed from dashboard!',
 
     // General
     'name' => 'Name',

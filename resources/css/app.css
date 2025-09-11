@@ -52,6 +52,14 @@
     @apply border-orange-400 dark:border-orange-300;
 }
 
+.user-selected {
+
+}
+
+.user-unselected {
+
+}
+
 .select-dropdown {
     @apply border border-gray-300 rounded px-3 py-2 bg-white dark:bg-zinc-700 dark:border-zinc-600 dark:text-white;
 }

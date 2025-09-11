@@ -45,6 +45,17 @@ return [
 
     //User
     'edit_profile' => 'Edytuj profil',
+    'create_user' => 'Utwórz użytkownika',
+    'user_created' => 'Użytkownik został utworzony pomyślnie!',
+    'user_updated' => 'Użytkownik został zaktualizowany pomyślnie!',
+    'user_deleted' => 'Użytkownik został usunięty pomyślnie!',
+    'users' => 'Użytkownicy',
+    'all_users' => 'Wszyscy Użytkownicy',
+    'no_users' => 'Brak użytkowników do wyświetlenia.',
+    'assign_user' => 'Przypisz użytkownika',
+    'remove_user' => 'Usuń użytkownika',
+    'user_assigned' => 'Użytkownik został pomyślnie przypisany do panelu!',
+    'user_removed' => 'Użytkownik został pomyślnie usunięty z panelu!',
 
     // General
     'name' => 'Nazwa',

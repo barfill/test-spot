@@ -140,6 +140,7 @@ class DashboardController extends Controller
                 'create' => __('app.create'),
                 'update' => __('app.update'),
                 'dashboard' => __('app.dashboard'),
+                'create_dashboard' => __('app.create_dashboard'),
                 'name' => __('app.name'),
                 'description' => __('app.description'),
                 'edit' => __('app.edit'),

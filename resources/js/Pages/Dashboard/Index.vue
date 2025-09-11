@@ -71,7 +71,4 @@
 
     const activeView = inject('indexActiveView');
     const isStudent = inject('isStudent');
-
-
-
 </script>

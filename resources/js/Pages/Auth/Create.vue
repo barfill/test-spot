@@ -49,6 +49,7 @@
     import { Link, useForm } from '@inertiajs/vue3';
     import { labelTransition } from '@/Composables/useFormAnimations';
     import AuthLayout from '@/Layouts/AuthLayout.vue';
+    import { defineOptions, defineProps, inject } from 'vue';
 
     const props = defineProps({
         locale: String,

@@ -39,7 +39,8 @@
                 <div class="flex gap-2 items-center">
                     <div v-if="(isStudent === false)">
                         <Link v-if="(createAction === 'createDashboard')" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create_dashboard }} +</Link>
-                        <Link v-if="(createAction === 'createAssignment')" :href="route('dashboard.index', { locale })" class="btn-primary">{{ translations.create_assignment }} +</Link>
+                        <Link v-if="(createAction === 'createAssignment')" :href="route('dashboard.index', { locale })" class="btn-primary">{{ translations.create_assignment }} +</Link> <!-- Not implemented yet -->
+                        <Link v-if="(createAction === 'createUser')" :href="route('dashboard.index', { locale })" class="btn-primary">{{ translations.create_user }} +</Link>  <!-- Not implemented yet -->
                     </div>
                     <!-- <Link v-if="(isStudent === false)" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create }} +</Link> -->
                     <select :value="locale" @change="changeLanguage" class="select-dropdown">
@@ -101,7 +102,6 @@
         if (!dropdownRef.value.contains(element.target)) {
             userDropdownEnabled.value = false;
         }
-        console.log('Clicked outside');
     }
 
     function handleKeydown(event) {
