@@ -52,6 +52,7 @@ return [
     'users' => 'Users',
     'all_users' => 'All Users',
     'no_users' => 'No users to display.',
+    'manage' => 'Manage',
     'assign_user' => 'Assign User',
     'remove_user' => 'Remove User',
     'user_assigned' => 'User successfully assigned to dashboard!',

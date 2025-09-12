@@ -29,6 +29,7 @@ class DashboardUserController extends Controller
                 'dashboards' => __('app.dashboards'),
                 'users' => __('app.users'),
                 'user' => __('app.user'),
+                'manage' => __('app.manage'),
                 'assign_users' => __('app.assign_users'),
                 'assigned_users' => __('app.assigned_users'),
                 'create_user' => __('app.create_user'),

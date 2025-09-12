@@ -52,6 +52,7 @@ return [
     'users' => 'Użytkownicy',
     'all_users' => 'Wszyscy Użytkownicy',
     'no_users' => 'Brak użytkowników do wyświetlenia.',
+    'manage' => 'Zarządzaj',
     'assign_user' => 'Przypisz użytkownika',
     'remove_user' => 'Usuń użytkownika',
     'user_assigned' => 'Użytkownik został pomyślnie przypisany do panelu!',
