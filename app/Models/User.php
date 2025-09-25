@@ -62,4 +62,31 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Dashboard::class)->withTimestamps();
     }
+
+    public function scopeDashboardUsersAndNoAssignedStudentsWithMembershipFlag($query, $dashboardId) {
+        return $query
+            ->select(
+                'users.*'
+            )
+            ->selectRaw('
+                CASE
+		        WHEN dashboard_user.dashboard_id IS NOT NULL AND dashboard_user.user_id IS NOT NULL
+                    THEN 1
+                    ELSE 0
+                END AS is_in_dashboard')
+            ->leftJoin('dashboard_user', function ($join) use ($dashboardId){
+                $join->on('users.id', '=', 'dashboard_user.user_id')
+                    ->where('dashboard_user.dashboard_id', '=', $dashboardId);
+            })
+            ->where(function ($q) {
+                $q->where('users.type', 'student')
+                  ->orWhereNotNull('dashboard_user.dashboard_id');
+            })
+            ->orderByDesc('is_in_dashboard')
+            ->orderBy('first_name')
+            ->orderBy('last_name')
+            ->orderBy('email')
+            ->distinct()
+        ;
+    }
 }

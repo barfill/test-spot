@@ -57,6 +57,8 @@ return [
     'remove_user' => 'Remove User',
     'user_assigned' => 'User successfully assigned to dashboard!',
     'user_removed' => 'User successfully removed from dashboard!',
+    'search_users' => 'Search users...',
+
 
     // General
     'name' => 'Name',

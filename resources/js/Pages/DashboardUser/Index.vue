@@ -12,12 +12,21 @@
                 max-h-[calc(100vh-270px)]
                 md:max-h-[calc(100vh-230px)]
                 grid grid-rows-[auto_1fr] gap-4 overflow-hidden">
-        <div class="col-span-full border p-4">search</div>
+        <div class="col-span-full">
+            <form @submit.prevent>
+                <TextInput
+                    v-model="searchQuery"
+                    :name="'search_users'"
+                    :placeholder="translations.search_users"
+                    autocomplete="off"
+                />
+            </form>
+        </div>
 
         <div class="overflow-y-auto grid grid-cols-1 lg:grid-cols-2 gap-8 auto-rows-max pr-5 pb-2">
-            <div v-for="user in dashboardUsers" :key="user.id"
+              <div v-for="user in filteredUsers" :key="user.id"
                 class="user-row"
-                :class="'user-selected'"
+                :class="user.is_in_dashboard ? 'user-selected' : 'user-unselected'"
             >
                 <div class="flex flex-row gap-4 justify-between items-center">
                     <div class="flex flex-col min-w-0">
@@ -25,22 +34,10 @@
                         <div class="text-xs font-normal text-zinc-600 dark:text-zinc-800 leading-tight truncate" :title="user.email">{{ user.email }}</div>
                     </div>
                     <div class="flex flex-col md:flex-row gap-2">
-                        <div class="">toggle</div>
-                        <div class="">view</div>
-                    </div>
-                </div>
-            </div>
-            <div v-for="student in students" :key="student.id"
-                class="user-row"
-                :class="'user-unselected'"
-            >
-                <div class="flex flex-row gap-4 justify-between items-center">
-                    <div class="flex flex-col min-w-0">
-                        <div class="text-md font-md text-zinc-700 dark:text-zinc-100">{{ student.title ? student.title : '' }} {{ student.first_name }} {{ student.last_name }}</div>
-                        <div class="text-xs font-normal text-zinc-600 dark:text-zinc-800 leading-tight truncate" :title="student.email">{{ student.email }}</div>
-                    </div>
-                    <div class="flex flex-col md:flex-row gap-2">
-                        <div class="">toggle</div>
+                        <Toggle
+                            :is-checked="user.is_in_dashboard"
+                            @toggle="(value) => handleUserToggle(user, user.is_in_dashboard, value)"
+                        />
                         <div class="">view</div>
                     </div>
                 </div>
@@ -51,33 +48,57 @@
 </template>
 
 <script setup>
-    import { useForm } from '@inertiajs/vue3';
+    import { Form, useForm } from '@inertiajs/vue3';
     import { labelTransition } from '@/Composables/useFormAnimations';
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
-    import { defineProps, inject, ref, provide } from 'vue';
-
+    import TextInput from '@/Components/UI/TextInput.vue';
+    import Toggle from '@/Components/UI/Toggle.vue';
+    import { defineProps, inject, ref, provide, computed } from 'vue';
 
     const props = defineProps({
         dashboard: Object,
-        dashboardUsers: Array,
-        students: Array,
+        usersCollection: Array,
         locale: String,
         translations: Object,
         errors: Object,
         flash: Object
     });
 
-    const form = useForm({
-        name: '',
-        description: '',
-        image: '',
-        is_active: false,
+    const searchQuery = ref('');
+
+    const filteredUsers = computed(() => {
+        if (!searchQuery.value.trim()) {
+            return props.usersCollection;
+        }
+
+        const query = searchQuery.value.toLowerCase().trim();
+        return props.usersCollection.filter(user => {
+            const fullName = `${user.title || ''} ${user.first_name} ${user.last_name}`.toLowerCase();
+            const email = user.email.toLowerCase();
+
+            return fullName.includes(query) || email.includes(query);
+        });
     });
 
-    const create = () => form.post(route('dashboard.store', { locale: props.locale }));
-    const activeView = inject('indexActiveView');
+    const handleUserToggle = (user, isCurrentlyInDashboard, newValue) => {
+        const form = useForm({
+            action: newValue ? 'attach' : 'detach'
+        });
 
+        form.put(route('dashboard.users.update', {
+            dashboard: props.dashboard.id,
+            user: user.id
+        }), {
+            onSuccess: () => {
+                user.is_in_dashboard = newValue;
+                // console.log(`User ${newValue ? 'added to' : 'removed from'} dashboard`);
+            },
+            onError: (errors) => {
+                console.error('Toggle failed:', errors);
+            }
+        });
+    };
     const createAction = inject('createAction');
     createAction.value = 'createUser';
 
-</script>
+ </script>

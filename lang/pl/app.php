@@ -57,6 +57,7 @@ return [
     'remove_user' => 'Usuń użytkownika',
     'user_assigned' => 'Użytkownik został pomyślnie przypisany do panelu!',
     'user_removed' => 'Użytkownik został pomyślnie usunięty z panelu!',
+    'search_users' => 'Szukaj użytkowników...',
 
     // General
     'name' => 'Nazwa',

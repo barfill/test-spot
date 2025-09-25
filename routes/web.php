@@ -19,7 +19,14 @@ Route::prefix('{locale}')
                 return redirect()->route('dashboard.index', ['locale' => app()->getLocale()]);
             });
             Route::resource('dashboard', DashboardController::class);
-            Route::resource('dashboard.users', DashboardUserController::class);
+            Route::resource('dashboard.users', DashboardUserController::class)
+                ->only(['index', 'update']);
+
+            // Route::post('dashboard/{dashboard}/user/{user}', [DashboardUserController::class, 'store'])
+            //     ->name('dashboard.users.store');
+            // Route::delete('dashboard/{dashboard}/user/{user}', [DashboardUserController::class, 'destroy'])
+            //     ->name('dashboard.users.destroy');
+
             Route::delete('logout', [AuthenticationController::class, 'destroy'])->name('logout');
         });
 
