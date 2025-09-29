@@ -30,7 +30,7 @@
             >
                 <div class="flex flex-row gap-4 justify-between items-center">
                     <div class="flex flex-col min-w-0">
-                        <div class="text-md font-md text-zinc-700 dark:text-zinc-100">{{ user.title ? user.title : '' }} {{ user.first_name }} {{ user.last_name }}</div>
+                        <div class="text-md font-md text-zinc-700 dark:text-zinc-100">{{ user.title ?? '' }} {{ user.first_name }} {{ user.last_name }}</div>
                         <div class="text-xs font-normal text-zinc-600 dark:text-zinc-800 leading-tight truncate" :title="user.email">{{ user.email }}</div>
                     </div>
                     <div class="flex flex-col md:flex-row gap-2">
@@ -73,7 +73,7 @@
 
         const query = searchQuery.value.toLowerCase().trim();
         return props.usersCollection.filter(user => {
-            const fullName = `${user.title || ''} ${user.first_name} ${user.last_name}`.toLowerCase();
+            const fullName = `${user.title ?? ''} ${user.first_name} ${user.last_name}`.toLowerCase();
             const email = user.email.toLowerCase();
 
             return fullName.includes(query) || email.includes(query);
@@ -91,7 +91,6 @@
         }), {
             onSuccess: () => {
                 user.is_in_dashboard = newValue;
-                // console.log(`User ${newValue ? 'added to' : 'removed from'} dashboard`);
             },
             onError: (errors) => {
                 console.error('Toggle failed:', errors);
