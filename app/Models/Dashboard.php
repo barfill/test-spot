@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Dashboard extends Model
 {
-    use HasFactory;
+    use HasFactory, AuthorizesRequests;
 
     protected $fillable = [
         'created_by',
@@ -22,5 +24,10 @@ class Dashboard extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
 }

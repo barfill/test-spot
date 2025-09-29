@@ -68,6 +68,7 @@
     import { useForm } from '@inertiajs/vue3';
     import { labelTransition } from '@/Composables/useFormAnimations';
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
+    import { defineProps, inject } from 'vue';
 
     const props = defineProps({
         locale: String,
@@ -84,6 +85,7 @@
     });
 
     const create = () => form.post(route('dashboard.store', { locale: props.locale }));
+    const activeView = inject('indexActiveView');
 </script>
 
 

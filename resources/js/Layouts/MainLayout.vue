@@ -36,8 +36,13 @@
                 <div class="text-heading">
                     <Link :href="route('dashboard.index', { locale })">TestSpot</Link>
                 </div>
-                <div class="flex gap-2">
-                    <Link :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create }} +</Link>
+                <div class="flex gap-2 items-center">
+                    <div v-if="(isStudent === false)">
+                        <Link v-if="(createAction === 'createDashboard')" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create_dashboard }} +</Link>
+                        <Link v-if="(createAction === 'createAssignment')" :href="route('dashboard.index', { locale })" class="btn-primary">{{ translations.create_assignment }} +</Link> <!-- Not implemented yet -->
+                        <Link v-if="(createAction === 'createUser')" :href="route('dashboard.index', { locale })" class="btn-primary">{{ translations.create_user }} +</Link>  <!-- Not implemented yet -->
+                    </div>
+                    <!-- <Link v-if="(isStudent === false)" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create }} +</Link> -->
                     <select :value="locale" @change="changeLanguage" class="select-dropdown">
                         <option value="en">🇺🇸 English</option>
                         <option value="pl">🇵🇱 Polski</option>
@@ -59,8 +64,8 @@
 </template>
 
 <script setup>
-    import { Link, usePage, router } from '@inertiajs/vue3';
-    import { computed, ref, onMounted, onUnmounted } from 'vue';
+    import { Link, usePage, router, useRemember } from '@inertiajs/vue3';
+    import { computed, ref, onMounted, onUnmounted, provide } from 'vue';
     import { useLanguage } from '@/Composables/useLanguage';
 
     defineProps({
@@ -72,6 +77,15 @@
     const successMessage = computed(() => page.props.flash?.success);
     const errorMessage = computed(() => page.props.flash?.error);
     const user = computed(() => page.props.user);
+
+    const indexActiveView = useRemember('assigned','dashboards.view');
+    const isStudent = ref(user.value.type === 'student');
+
+    provide('indexActiveView', indexActiveView);
+    provide('isStudent', isStudent);
+
+    const createAction = ref('createDashboard');
+    provide('createAction', createAction);
 
     const { changeLanguage } = useLanguage();
 
@@ -88,7 +102,6 @@
         if (!dropdownRef.value.contains(element.target)) {
             userDropdownEnabled.value = false;
         }
-        console.log('Clicked outside');
     }
 
     function handleKeydown(event) {

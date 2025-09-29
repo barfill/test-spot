@@ -52,6 +52,18 @@
     @apply border-orange-400 dark:border-orange-300;
 }
 
+.user-row {
+    @apply bg-zinc-100 dark:bg-zinc-400 border border-zinc-300 dark:border-zinc-300 shadow-md shadow-zinc-400 rounded-4xl px-8 py-2
+}
+
+.user-selected {
+    @apply opacity-100 font-medium
+}
+
+.user-unselected {
+    @apply opacity-60
+}
+
 .select-dropdown {
     @apply border border-gray-300 rounded px-3 py-2 bg-white dark:bg-zinc-700 dark:border-zinc-600 dark:text-white;
 }

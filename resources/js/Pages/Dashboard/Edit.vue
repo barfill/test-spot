@@ -66,7 +66,7 @@
 
 <script setup>
     import { useForm } from '@inertiajs/vue3';
-    import { onMounted, nextTick } from 'vue';
+    import { onMounted, nextTick, inject } from 'vue';
 
     import { labelTransition } from '@/Composables/useFormAnimations';
     import { initializeFormLabels } from '../../Composables/useFormAnimations';
@@ -93,6 +93,7 @@
     });
 
     const update = () => form.put(route('dashboard.update', { locale: props.locale, dashboard: props.dashboard.id }));
+    const activeView = inject('indexActiveView');
 </script>
 
 
