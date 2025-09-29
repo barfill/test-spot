@@ -8,6 +8,7 @@ use App\Http\Requests\DashboardRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Policies\DashboardPolicy;
+use App\Models\Assignment;
 
 
 class DashboardController extends Controller
@@ -105,8 +106,14 @@ class DashboardController extends Controller
         $this->authorize('view', $dashboard);
         $dashboard->load('owner');
 
+        $this->authorize('viewAny', Assignment::class);
+        $assignments = $dashboard->assignments()
+            ->latest('end_time')
+            ->get();
+
         return inertia('Dashboard/Show', [
             'dashboard' => $dashboard,
+            'assignments' => $assignments,
             'locale' => $locale,
             'translations' => [
                 'dashboards' => __('app.dashboards'),

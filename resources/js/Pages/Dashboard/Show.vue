@@ -24,8 +24,11 @@
         </div>
     </div>
 
-    <h2>{{ dashboard.name }}</h2>
-    <p>{{ dashboard.description }}</p>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <Card v-for="assignment in assignments" :key="assignment.id" class="flex flex-col justify-between p-4">
+            <h2>{{ assignment.name }}</h2>
+        </Card>
+    </div>
 </template>
 
 <script setup>
@@ -38,6 +41,7 @@
 
     defineProps({
         dashboard: Object,
+        assignments: Array,
         locale: String,
         translations: Object
     });
