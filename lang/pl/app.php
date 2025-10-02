@@ -33,6 +33,7 @@ return [
     'submit_assignment' => 'Zatwierdź Zadanie',
     'assignment_submitted' => 'Zadanie zostało pomyślnie zatwierdzone!',
     'assignment_due_date' => 'Termin Zadania',
+    'assignment_due_date_expires_in' => 'Termin upływa za :days dni',
     'assignment_due' => 'Termin',
     'assignment_overdue' => 'Spóźnione',
     'assignment_status' => 'Status Zadania',
@@ -42,6 +43,8 @@ return [
     'grade' => 'Ocena',
     'feedback' => 'Informacja zwrotna',
     'no_feedback' => 'Brak informacji zwrotnej',
+    'status_pending' => 'Oczekujące',
+    'status_completed' => 'Zakończone',
 
     //User
     'edit_profile' => 'Edytuj profil',
@@ -73,6 +76,9 @@ return [
     'save' => 'Zapisz',
     'cancel' => 'Anuluj',
     'back' => 'Wróć',
+    'days' => 'dni',
+    'left' => 'pozostało',
+
 
     // User types
     'teacher' => 'Nauczyciel',

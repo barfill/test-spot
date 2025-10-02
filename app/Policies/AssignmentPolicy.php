@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Assignment;
+use App\Models\Dashboard;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 

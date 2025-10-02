@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->dateTime('start_time');
             $table->dateTime('end_time');
-            $table->enum('status', Assignment::$statuses)->default('pending');
+            $table->enum('status', Assignment::$statuses)->default('open');
             $table->timestamps();
         });
     }

@@ -33,6 +33,7 @@ return [
     'submit_assignment' => 'Submit Assignment',
     'assignment_submitted' => 'Assignment submitted successfully!',
     'assignment_due_date' => 'Assignment Due Date',
+    'assignment_due_date_expires_in' => 'Due in :days days',
     'assignment_due' => 'Assignment Due',
     'assignment_overdue' => 'Assignment Overdue',
     'assignment_status' => 'Assignment Status',
@@ -42,6 +43,8 @@ return [
     'grade' => 'Grade',
     'feedback' => 'Feedback',
     'no_feedback' => 'No feedback available',
+    'status_pending' => 'Pending',
+    'status_completed' => 'Completed',
 
     //User
     'edit_profile' => 'Edit Profile',
@@ -74,6 +77,8 @@ return [
     'save' => 'Save',
     'cancel' => 'Cancel',
     'back' => 'Back',
+    'days' => 'days',
+    'left' => 'left',
 
     // User types
     'teacher' => 'Teacher',
