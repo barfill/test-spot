@@ -139,6 +139,10 @@
     overflow: hidden;
 }
 
+.card-disabled {
+    @apply opacity-50 pointer-events-none;
+}
+
 .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

@@ -113,7 +113,8 @@ class DashboardController extends Controller
         $assignments = $dashboard
             ->assignments()
             ->with('dashboard.owner')
-            ->latest('end_time')
+            ->orderBy('status', 'desc')
+            ->orderBy('end_time', 'asc')
             ->get()
             ->map(function ($assignment) use ($user, $dashboard) {
                 $assignment->can = [

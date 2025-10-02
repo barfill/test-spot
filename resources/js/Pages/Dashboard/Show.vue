@@ -26,10 +26,15 @@
 
     <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-8">
         <div v-for="assignment in assignments" :key="assignment.id" >
-            <div class="py-2">
-                <span class="text-md font-bold">{{ assignment.end_date_formatted }}</span>
-                <span class="mx-2"> | </span>
-                <span>{{ translations.left[0].toUpperCase() + translations.left.slice(1) }} : {{ assignment.ends_in }}</span>
+            <div class="py-2 flex justify-between">
+                    <div>
+                    <span class="text-md font-bold">{{ assignment.end_date_formatted }}</span>
+                    <span v-if="assignment.status === 'open'" class="mx-2"> | </span>
+                    <span v-if="assignment.status === 'open'">{{ translations.left[0].toUpperCase() + translations.left.slice(1) }} : {{ assignment.ends_in }}</span>
+                </div>
+                <div v-if="assignment.status === 'closed' && assignment.can.delete && assignment.can.update" class="">
+                    Restore button
+                </div>
             </div>
             <Card class="flex flex-col justify-between p-4"
                 :class="{'card-disabled': assignment.status === 'closed' }"
