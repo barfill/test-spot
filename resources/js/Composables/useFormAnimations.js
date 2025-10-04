@@ -103,3 +103,64 @@ export function initializeFormLabels() {
         }
     });
 }
+
+export function changeInputType(inputId, newType) {
+    const input = document.getElementById(inputId);
+
+    if(!input) return;
+
+    if(!input.classList.contains('input-type-transition')) {
+        input.classList.add('input-type-transition');
+        input.style.opacity = '0';
+    }
+
+    if (input.dataset.partialDatetime) {
+        input.value = input.dataset.partialDatetime;
+    }
+
+    if (input._openPickerHandler) {
+        input.removeEventListener('pointerdown', input._openPickerHandler);
+        input._openPickerHandler = null;
+    }
+
+    setTimeout(() => {
+        input.type = newType;
+
+        if(!input.classList.contains('input-type-transition')) {
+            input.style.opacity = '1';
+        }
+
+        if(newType === 'datetime-local') {
+            if(!input.hasDatetimeBlurListener) {
+                input.addEventListener('input', function() {
+                    input.dataset.partialDatetime = input.value;
+                });
+
+                input.addEventListener('blur', function() {
+                    if((!input.value || input.value.trim() === '')) {
+                        changeInputType(inputId, 'text');
+                    }
+                });
+                input.hasDatetimeBlurListener = true;
+            }
+
+
+        }
+
+        if (typeof input.showPicker === 'function') {
+            input._openPickerHandler = (e) => {
+            if (input.type === 'datetime-local') {
+                try {
+                    input.showPicker();
+                } catch (err) {
+                    console.error('Error showing picker:', err);
+                }
+            }
+            };
+
+            input.addEventListener('pointerdown', input._openPickerHandler, { passive: true });
+        }
+
+        input.style.opacity = '1';
+    }, 200)
+}

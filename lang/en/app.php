@@ -45,6 +45,10 @@ return [
     'no_feedback' => 'No feedback available',
     'status_pending' => 'Pending',
     'status_completed' => 'Completed',
+    'start_time' => 'Start Time',
+    'end_time' => 'End Time',
+    'closed' => 'Closed',
+    'open' => 'Open',
 
     //User
     'edit_profile' => 'Edit Profile',

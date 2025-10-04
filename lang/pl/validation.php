@@ -2,6 +2,9 @@
 
 
 return [
+    'after' => 'Pole :attribute musi zawierać datę późniejsza niż w polu :date.',
+    'after_or_equal' => 'Pole :attribute musi zawierać datę równą lub późniejsza od daty pola :date.',
+    'before' => 'Pole :attribute musi być datą przed :date.',
     'required' => 'Pole :attribute jest wymagane.',
     'min' => [
         'array' => 'Pole :attribute musi mieć co najmniej :min elementów.',
@@ -24,6 +27,8 @@ return [
         'is_active' => 'aktywny',
         'email' => 'email',
         'password' => 'hasło',
+        'start_time' => 'czas rozpoczęcia',
+        'end_time' => 'czas zakończenia',
     ]
 
 ];

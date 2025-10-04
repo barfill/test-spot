@@ -45,6 +45,10 @@ return [
     'no_feedback' => 'Brak informacji zwrotnej',
     'status_pending' => 'Oczekujące',
     'status_completed' => 'Zakończone',
+    'start_time' => 'Czas rozpoczęcia',
+    'end_time' => 'Czas zakończenia',
+    'closed' => 'Zamknięte',
+    'open' => 'Otwarte',
 
     //User
     'edit_profile' => 'Edytuj profil',
