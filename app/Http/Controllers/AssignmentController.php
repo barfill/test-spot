@@ -12,7 +12,7 @@ class AssignmentController extends Controller
 {
     public function create($locale, Dashboard $dashboard)
     {
-        $this->authorize('create', Assignment::class);
+        $this->authorize('create', [Assignment::class, $dashboard]);
 
         return inertia('Assignment/Create', [
             'locale' => $locale,
@@ -43,7 +43,7 @@ class AssignmentController extends Controller
      */
     public function store(AssignmentRequest $request, $locale, Dashboard $dashboard)
     {
-        $this->authorize('create', Assignment::class);
+        $this->authorize('create', [Assignment::class, $dashboard]);
 
         $validated = $request->validated();
         $validated['dashboard_id'] = $dashboard->id;
