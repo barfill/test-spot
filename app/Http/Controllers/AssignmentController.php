@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
-USE App\Models\Dashboard;
+use App\Models\Dashboard;
+use App\Models\AssignmentUser;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\AssignmentRequest;
-use PhpParser\Node\Expr\Assign;
 
 class AssignmentController extends Controller
 {
@@ -38,9 +40,6 @@ class AssignmentController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(AssignmentRequest $request, $locale, Dashboard $dashboard)
     {
         $this->authorize('create', [Assignment::class, $dashboard]);
@@ -53,17 +52,106 @@ class AssignmentController extends Controller
             ->with('success', $this->successMessage('create', 'assignment'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($locale, Dashboard $dashboard, Assignment $assignment)
     {
-        //
+        $user = Auth::user();
+
+        $isOwner = $dashboard->created_by === $user->id;
+        $isMember = $dashboard->users()->where('user_id', $user->id)->exists();
+
+        if (!$isOwner && !$isMember) {
+            abort(403, 'Access denied to this dashboard');
+        }
+
+        if ($user->type === 'student' && $isMember) {
+            return $this->showForStudent($locale, $dashboard, $assignment);
+        }
+
+        if ($user->type === 'teacher' && $isOwner) {
+            return $this->showForTeacher($locale, $dashboard, $assignment);
+        }
+
+        abort(403, 'Insufficient permissions');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    private function showForStudent($locale, Dashboard $dashboard, Assignment $assignment)
+    {
+        $user = Auth::user();
+
+        $assignmentUser = AssignmentUser::firstOrCreate(
+            [
+                'assignment_id' => $assignment->id,
+                'user_id' => $user->id,
+            ],
+            [
+                'status' => 'in_progress'
+            ]
+        );
+
+        return inertia('Assignment/StudentShow', [
+            'locale' => $locale,
+            'dashboard' => $dashboard,
+            'assignment' => $assignment,
+            'assignmentUser' => $assignmentUser,
+            'translations' => [
+                'assignment' => __('app.assignment'),
+                'submit_assignment' => __('app.submit_assignment'),
+                'file_upload' => __('app.file_upload'),
+                'status' => __('app.status'),
+                'grade' => __('app.grade'),
+                'comment' => __('app.comment'),
+                'submitted_at' => __('app.submitted_at'),
+                'submit' => __('app.submit'),
+                'back' => __('app.back'),
+                'contact_teacher' => __('app.contact_teacher'),
+            ]
+        ]);
+    }
+
+    private function showForTeacher($locale, Dashboard $dashboard, Assignment $assignment)
+    {
+        $dashboardStudents = $dashboard->users()->where('type', 'student')->get();
+
+        $submissions = AssignmentUser::with('user')
+            ->where('assignment_id', $assignment->id)
+            ->get()
+            ->keyBy('user_id');
+
+        $studentSubmissions = $dashboardStudents->map(function ($student) use ($submissions, $assignment) {
+            return [
+                'student' => $student,
+                'submission' => $submissions->get($student->id) ?: (object)[
+                    'status' => 'not_started',
+                    'submitted_at' => null,
+                    'grade' => null,
+                    'plagiarism_check_result' => null,
+                    'compilation_check_result' => null,
+                    'edge_cases_check_result' => null,
+                ]
+            ];
+        });
+
+        return inertia('Assignment/TeacherShow', [
+            'locale' => $locale,
+            'dashboard' => $dashboard,
+            'assignment' => $assignment,
+            'studentSubmissions' => $studentSubmissions,
+            'translations' => [
+                'assignment' => __('app.assignment'),
+                'students' => __('app.students'),
+                'submissions' => __('app.submissions'),
+                'status' => __('app.status'),
+                'grade' => __('app.grade'),
+                'plagiarism_check' => __('app.plagiarism_check'),
+                'compilation_check' => __('app.compilation_check'),
+                'edge_cases_check' => __('app.edge_cases_check'),
+                'mark_all_passed' => __('app.mark_all_passed'),
+                'back' => __('app.back'),
+            ]
+        ]);
+    }
+
+
     public function edit($locale, Dashboard $dashboard, Assignment $assignment)
     {
         $this->authorize('update', [$dashboard, $assignment]);

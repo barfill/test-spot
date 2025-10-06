@@ -58,5 +58,9 @@ class Assignment extends Model
         return $this->belongsTo(Dashboard::class);
     }
 
+    public function assignmentUsers()
+    {
+        return $this->hasMany(AssignmentUser::class);
+    }
 }
 
