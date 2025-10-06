@@ -24,8 +24,33 @@
         </div>
     </div>
 
-    <h2>{{ dashboard.name }}</h2>
-    <p>{{ dashboard.description }}</p>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-8">
+        <div v-for="assignment in assignments" :key="assignment.id" >
+            <div class="py-2 flex justify-between">
+                    <div>
+                    <span class="text-md font-bold">{{ assignment.end_date_formatted }}</span>
+                    <span v-if="assignment.status === 'open'" class="mx-2"> | </span>
+                    <span v-if="assignment.status === 'open'">{{ translations.left[0].toUpperCase() + translations.left.slice(1) }} : {{ assignment.ends_in }}</span>
+                </div>
+                <div v-if="assignment.status === 'closed' && assignment.can.delete && assignment.can.update" class="">
+                    Restore button
+                </div>
+            </div>
+            <Card class="flex flex-col justify-between p-4"
+                :class="{'card-disabled': assignment.status === 'closed' }"
+            >
+                <div>
+                    <Link :href="route('dashboard.assignments.show', { locale, dashboard: dashboard.id, assignment: assignment.id })" class="block card-hover">
+                        <AssignmentCard :dashboard="dashboard" :assignment="assignment" :translations="translations"/>
+                    </Link>
+                </div>
+                <div v-if="assignment.can.delete && assignment.can.update" class="border-t-3 border-zinc-300 flex justify-between pt-3">
+                    <Link :href="route('dashboard.assignments.edit', { locale, dashboard: dashboard.id, assignment: assignment.id })" class="btn-secondary">{{ translations.edit }}</Link>
+                    <Link :href="route('dashboard.assignments.destroy', { locale, dashboard: dashboard.id, assignment: assignment.id })" method="delete" as="button" class="btn-danger">{{ translations.delete }}</Link>
+                </div>
+            </Card>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -34,10 +59,12 @@
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
     import Card from '@/Components/UI/Card.vue';
     import { ref, inject } from 'vue';
+import AssignmentCard from '../../Components/UI/AssignmentCard.vue';
 
 
     defineProps({
         dashboard: Object,
+        assignments: Array,
         locale: String,
         translations: Object
     });

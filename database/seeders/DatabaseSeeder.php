@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Database\Seeders\DashboardSeeder;
 use App\Models\Dashboard;
+use App\Models\Assignment;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,11 +17,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $users = User::factory(20)->create();
-        $users->push(User::factory()->create([
-            'first_name' => 'Bartosz',
-            'last_name' => 'Filipczak',
-            'email' => 'bartek@example.com',
-        ]));
+
+        $me = User::firstOrCreate(
+            ['email' => 'bartek@example.com'],
+            [
+                'first_name' => 'Bartosz',
+                'last_name' => 'Filipczak',
+            ]
+        );
+
+        $users->push($me);
 
         $this->call(DashboardSeeder::class);
         $dashboards = Dashboard::all();
@@ -30,6 +36,15 @@ class DatabaseSeeder extends Seeder
             $user->userDashboards()->syncWithoutDetaching(
                 $dashboards->random($count)->pluck('id')
             );
+        }
+
+        foreach ($dashboards as $dashboard) {
+            $count = rand(1, 5);
+            for ($i = 0; $i < $count; $i++) {
+                Assignment::factory()->create([
+                    'dashboard_id' => $dashboard->id,
+                ]);
+            }
         }
     }
 }

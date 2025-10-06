@@ -8,6 +8,8 @@ use App\Http\Requests\DashboardRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Policies\DashboardPolicy;
+use App\Models\Assignment;
+use Illuminate\Support\Facades\Gate;
 
 
 class DashboardController extends Controller
@@ -102,16 +104,40 @@ class DashboardController extends Controller
 
     public function show($locale, Dashboard $dashboard)
     {
+        $user = Auth::user();
+
         $this->authorize('view', $dashboard);
         $dashboard->load('owner');
 
+        $this->authorize('viewAny', Assignment::class);
+        $assignments = $dashboard
+            ->assignments()
+            ->with('dashboard.owner')
+            ->orderBy('status', 'desc')
+            ->orderBy('end_time', 'asc')
+            ->get()
+            ->map(function ($assignment) use ($user, $dashboard) {
+                $assignment->can = [
+                    'update' => Gate::allows('update', $dashboard),
+                    'delete' => Gate::allows('delete', $dashboard),
+                    'view'   => Gate::allows('view', $dashboard),
+                ];
+                return $assignment;
+            });
+
+        // dd($assignments->toArray());
+
         return inertia('Dashboard/Show', [
             'dashboard' => $dashboard,
+            'assignments' => $assignments,
             'locale' => $locale,
             'translations' => [
                 'dashboards' => __('app.dashboards'),
                 'create' => __('app.create'),
                 'create_assignment' => __('app.create_assignment'),
+                'assignment_due_date_expires_in' => __('app.assignment_due_date_expires_in'),
+                'days' => __('app.days'),
+                'left' => __('app.left'),
                 'assign_users' => __('app.assign_users'),
                 'dashboard' => __('app.dashboard'),
                 'name' => __('app.name'),
@@ -120,7 +146,10 @@ class DashboardController extends Controller
                 'delete' => __('app.delete'),
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
-                'edit_profile' => __('app.edit_profile')
+                'edit_profile' => __('app.edit_profile'),
+                'no_images' => __('app.no_images'),
+                'status_pending' => __('app.status_pending'),
+                'status_completed' => __('app.status_completed'),
             ]
         ]);
     }

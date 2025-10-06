@@ -4,7 +4,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\AssignmentController;
 use App\Models\Dashboard;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +23,8 @@ Route::prefix('{locale}')
             Route::resource('dashboard', DashboardController::class);
             Route::resource('dashboard.users', DashboardUserController::class)
                 ->only(['index', 'update']);
+            Route::resource('dashboard.assignments', AssignmentController::class)
+                ->except(['index']);
 
             // Route::post('dashboard/{dashboard}/user/{user}', [DashboardUserController::class, 'store'])
             //     ->name('dashboard.users.store');

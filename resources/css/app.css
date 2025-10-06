@@ -72,6 +72,23 @@
     @apply block w-full p-4 border border-gray-300 dark:border-zinc-600 rounded-md shadow-md;
 }
 
+.input-type-transition {
+    @apply transition-opacity duration-200 ease-in-out;
+}
+
+.input[type="datetime-local"] {
+    @apply cursor-pointer;
+}
+
+.input[type="datetime-local"]::-webkit-datetime-edit-year-field,
+.input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+.input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+.input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+.input[type="datetime-local"]::-webkit-datetime-edit-minute-field {
+  padding: 0;
+  margin: 0;
+}
+
 .checkbox {
     @apply w-6 h-6 bg-white dark:bg-zinc-700 border-2 border-gray-300 rounded focus:ring-zinc-300 focus:ring-1 cursor-pointer;
     transition: all 0.2s ease;
@@ -139,6 +156,10 @@
     overflow: hidden;
 }
 
+.card-disabled {
+    @apply opacity-50 pointer-events-none;
+}
+
 .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -154,5 +175,11 @@
 
 [title] {
     overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
 }
 
