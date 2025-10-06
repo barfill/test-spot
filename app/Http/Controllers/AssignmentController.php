@@ -66,15 +66,49 @@ class AssignmentController extends Controller
      */
     public function edit($locale, Dashboard $dashboard, Assignment $assignment)
     {
+        $this->authorize('update', [$dashboard, $assignment]);
 
+        return inertia('Assignment/Edit', [
+            'locale' => $locale,
+            'dashboard' => $dashboard,
+            'assignment' => $assignment,
+            'translations' => [
+                'dashboards' => __('app.dashboards'),
+                'image' => __('app.image'),
+                'open' => __('app.open'),
+                'closed' => __('app.closed'),
+                'start_time' => __('app.start_time'),
+                'end_time' => __('app.end_time'),
+                'create' => __('app.create'),
+                'update' => __('app.update'),
+                'edit' => __('app.edit'),
+                'create_dashboard' => __('app.create_dashboard'),
+                'create_assignment' => __('app.create_assignment'),
+                'name' => __('app.name'),
+                'description' => __('app.description'),
+                'save' => __('app.save'),
+                'cancel' => __('app.cancel'),
+                'required' => __('validation.required'),
+                'sign_in' => __('auth.sign_in'),
+                'sign_out' => __('auth.sign_out'),
+                'edit_profile' => __('app.edit_profile')
+            ]
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Assignment $assignment)
+    public function update(AssignmentRequest $request, $locale, Dashboard $dashboard, Assignment $assignment)
     {
-        //
+        $this->authorize('update', [$dashboard, $assignment]);
+
+        $validated = $request->validated();
+
+        $assignment->update($validated);
+
+        return redirect()->route('dashboard.show', ['locale' => $locale, 'dashboard' => $dashboard->id])
+            ->with('success', $this->successMessage('update', 'assignment'));
     }
 
     /**
@@ -82,10 +116,15 @@ class AssignmentController extends Controller
      */
     public function destroy($locale, Dashboard $dashboard,Assignment $assignment)
     {
-        //
+        $this->authorize('delete', [$dashboard, $assignment]);
+
+        $assignment->delete();
+
+         return redirect()->route('dashboard.show', ['locale' => $locale, 'dashboard' => $dashboard->id])
+            ->with('success', $this->successMessage('delete', 'assignment'));
     }
 
     private function successMessage($action, $attribute) {
-        return __("messages.$action"."_success", ['attribute' => __("app.$attribute")]);
+        return __("messages.assignment_".$action."_success", ['attribute' => __("app.$attribute")]);
     }
 }

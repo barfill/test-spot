@@ -104,19 +104,21 @@ export function initializeFormLabels() {
     });
 }
 
-export function changeInputType(inputId, newType) {
+export function changeInputType(inputId, newType, dateISO = null, dateForTextInput = null) {
     const input = document.getElementById(inputId);
 
     if(!input) return;
 
     if(!input.classList.contains('input-type-transition')) {
-        input.classList.add('input-type-transition');
-        input.style.opacity = '0';
+        if (!dateISO) {
+            input.classList.add('input-type-transition');
+            input.style.opacity = '0';
+        }
     }
 
-    if (input.dataset.partialDatetime) {
-        input.value = input.dataset.partialDatetime;
-    }
+    // if (input.dataset.partialDatetime) {
+    //     input.value = input.dataset.partialDatetime;
+    // }
 
     if (input._openPickerHandler) {
         input.removeEventListener('pointerdown', input._openPickerHandler);
@@ -126,6 +128,10 @@ export function changeInputType(inputId, newType) {
     setTimeout(() => {
         input.type = newType;
 
+        if (dateISO) {
+            input.value = dateISO;
+        }
+
         if(!input.classList.contains('input-type-transition')) {
             input.style.opacity = '1';
         }
@@ -133,11 +139,18 @@ export function changeInputType(inputId, newType) {
         if(newType === 'datetime-local') {
             if(!input.hasDatetimeBlurListener) {
                 input.addEventListener('input', function() {
-                    input.dataset.partialDatetime = input.value;
+                    input.dataset.partialDatetime = formatDateTimeForInputForTextInputs(input.value);
                 });
 
                 input.addEventListener('blur', function() {
-                    if((!input.value || input.value.trim() === '')) {
+                    if (dateISO || dateForTextInput) {
+                        changeInputType(inputId, 'text');
+                        setTimeout(() => {
+                            if (input.value && input.value.trim() !== '') {
+                                input.value = formatDateTimeForInputForTextInputs(input.value);
+                            }
+                        }, 205);
+                    } else if((!input.value || input.value.trim() === '')) {
                         changeInputType(inputId, 'text');
                     }
                 });
@@ -163,4 +176,38 @@ export function changeInputType(inputId, newType) {
 
         input.style.opacity = '1';
     }, 200)
+}
+
+export function formatDateTimeForInputToISO(dateString) {
+    if (!dateString) return '';
+
+    if (dateString.includes('T')) {
+        return dateString.slice(0, 16);
+    }
+
+    if (dateString.includes('.') && dateString.includes(' ')) {
+        const [datePart, timePart] = dateString.split(' ');
+        const [day, month, year] = datePart.split('.');
+
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${timePart}`;
+    }
+
+    return dateString.slice(0, 16);
+}
+
+export function formatDateTimeForInputForTextInputs(dateString) {
+    if (!dateString) return '';
+
+    dateString = dateString.slice(0, 16);
+
+    const day = dateString.match(/(\d{2})T/g);
+    day[0] = day[0].replace('T', '');
+    const year = dateString.match(/(\d{4})/g);
+
+    dateString = dateString.replace(year[0], day[0]);
+    dateString = dateString.replace(day[0] + 'T', year[0] + ' ');
+
+    dateString = dateString.replaceAll('-', '.');
+
+    return dateString;
 }
