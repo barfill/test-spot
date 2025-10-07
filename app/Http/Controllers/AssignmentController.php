@@ -155,11 +155,17 @@ class AssignmentController extends Controller
     public function edit($locale, Dashboard $dashboard, Assignment $assignment)
     {
         $this->authorize('update', [$dashboard, $assignment]);
-
         return inertia('Assignment/Edit', [
             'locale' => $locale,
             'dashboard' => $dashboard,
-            'assignment' => $assignment,
+            'assignment' => [
+                'id' => $assignment->id,
+                'name' => $assignment->name,
+                'description' => $assignment->description,
+                'start_time' => $assignment->start_time?->format('Y-m-d\TH:i'),
+                'end_time' => $assignment->end_time?->format('Y-m-d\TH:i'),
+                'status' => $assignment->status,
+            ],
             'translations' => [
                 'dashboards' => __('app.dashboards'),
                 'image' => __('app.image'),
