@@ -8,6 +8,7 @@ use App\Models\AssignmentUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AssignmentRequest;
 
 class AssignmentController extends Controller
@@ -63,11 +64,12 @@ class AssignmentController extends Controller
             abort(403, 'Access denied to this dashboard');
         }
 
-        if ($user->type === 'student' && $isMember) {
+        // if ($user->type === 'student' && $isMember) {
+        if ($isMember && $assignment->status === 'open') {
             return $this->showForStudent($locale, $dashboard, $assignment);
         }
 
-        if ($user->type === 'teacher' && $isOwner) {
+        if ($user->type === 'teacher' && $isOwner && $assignment->status === 'open') {
             return $this->showForTeacher($locale, $dashboard, $assignment);
         }
 
@@ -94,15 +96,24 @@ class AssignmentController extends Controller
             'assignment' => $assignment,
             'assignmentUser' => $assignmentUser,
             'translations' => [
+                'dashboards' => __('app.dashboards'),
                 'assignment' => __('app.assignment'),
                 'submit_assignment' => __('app.submit_assignment'),
+                'submitting' => __('app.submitting'),
+                'add_file' => __('app.add_file'),
                 'file_upload' => __('app.file_upload'),
+                'add_file' => __('app.add_file'),
+                'choose_file' => __('app.choose_file'),
+                'accepted_formats' => __('app.accepted_formats'),
                 'status' => __('app.status'),
                 'grade' => __('app.grade'),
                 'comment' => __('app.comment'),
+                'optional' => __('app.optional'),
+                'user_comment' => __('app.user_comment'),
                 'submitted_at' => __('app.submitted_at'),
                 'submit' => __('app.submit'),
                 'back' => __('app.back'),
+                'cancel' => __('app.cancel'),
                 'contact_teacher' => __('app.contact_teacher'),
             ]
         ]);
@@ -220,5 +231,49 @@ class AssignmentController extends Controller
 
     private function successMessage($action, $attribute) {
         return __("messages.assignment_".$action."_success", ['attribute' => __("app.$attribute")]);
+    }
+
+
+    public function submit(Request $request, $locale, Dashboard $dashboard, Assignment $assignment)
+    {
+        $request->validate([
+            'code_file' => 'required|file|extensions:cpp,cc,cxx,c,h,hpp|max:5120|min:1', // max 5MB, min 1B, allowed extensions
+            'user_comment' => 'nullable|string|max:1000',
+        ]);
+
+        $user = Auth::user();
+
+        $assignmentUser = AssignmentUser::where('assignment_id', $assignment->id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$assignmentUser) {
+            abort(404, 'Assignment not found for this user');
+        }
+
+        if ($assignmentUser->file_path && Storage::exists($assignmentUser->file_path)) {
+            Storage::delete($assignmentUser->file_path);
+        }
+
+        $fileName = time() . '_' . $request->file('code_file')->getClientOriginalName();
+        $path = $request->file('code_file')->storeAs("submissions/{$assignment->id}/{$user->id}", $fileName);
+
+        $assignmentUser->update([
+            'file_path' => $path,
+            'user_comment' => $request->user_comment,
+            'status' => 'pending',
+            'submitted_at' => now(),
+            'compilation_check_result' => null,
+            'plagiarism_check_result' => null,
+            'edge_cases_check_result' => null,
+            'grade' => null,
+            'review_comment' => null,
+        ]);
+
+        return redirect()->route('dashboard.assignments.show', [
+            'locale' => $locale,
+            'dashboard' => $dashboard->id,
+            'assignment' => $assignment->id
+        ])->with('success', __('messages.submission_success'));
     }
 }

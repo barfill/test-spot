@@ -26,10 +26,8 @@ Route::prefix('{locale}')
             Route::resource('dashboard.assignments', AssignmentController::class)
                 ->except(['index']);
 
-            // Route::post('dashboard/{dashboard}/user/{user}', [DashboardUserController::class, 'store'])
-            //     ->name('dashboard.users.store');
-            // Route::delete('dashboard/{dashboard}/user/{user}', [DashboardUserController::class, 'destroy'])
-            //     ->name('dashboard.users.destroy');
+            Route::post('dashboard/{dashboard}/assignment/{assignment}/submit', [AssignmentController::class, 'submit'])
+                ->name('assignment.submit');
 
             Route::delete('logout', [AuthenticationController::class, 'destroy'])->name('logout');
         });

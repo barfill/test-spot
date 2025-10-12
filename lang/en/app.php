@@ -14,6 +14,9 @@ return [
     'dashboard_created' => 'Dashboard created successfully!',
     'dashboard_updated' => 'Dashboard updated successfully!',
     'dashboard_deleted' => 'Dashboard deleted successfully!',
+    'sent' => 'Sent',
+    'grade' => 'Grade',
+    'not_sent' => 'Not Sent',
 
     // Assignment
     'assignment' => 'Assignment',
@@ -45,10 +48,23 @@ return [
     'no_feedback' => 'No feedback available',
     'status_pending' => 'Pending',
     'status_completed' => 'Completed',
+    'status_failed' => 'Failed',
     'start_time' => 'Start Time',
     'end_time' => 'End Time',
     'closed' => 'Closed',
     'open' => 'Open',
+    'file_upload' => 'File Upload',
+    'add_file' => 'Add File',
+    'comment' => 'Comment',
+    'user_comment' => 'Your comment...',
+    'user_comment_placeholder' => 'Any notes or questions for your teacher...',
+    'choose_file' => 'Choose File',
+    'optional' => 'Optional',
+    'characters' => 'characters',
+    'submitting' => 'Submitting',
+    'contact_teacher' => 'Contact Teacher',
+    'submit' => 'Submit',
+    'accepted_formats' => 'Accepted formats',
 
     //User
     'edit_profile' => 'Edit Profile',

@@ -10,14 +10,13 @@ class AssignmentUser extends Model
     /** @use HasFactory<\Database\Factories\AssignmentUserFactory> */
     use HasFactory;
 
-    public $incrementing = false;
-    protected $primaryKey = ['assignment_id', 'user_id'];
-    public $keyType = 'array';
+    protected $table = 'assignment_users';
 
     protected $fillable = [
         'assignment_id',
         'user_id',
         'file_path',
+        'user_comment',
         'submitted_at',
         'status',
         'grade',
@@ -33,6 +32,9 @@ class AssignmentUser extends Model
     protected $casts = [
         'submitted_at' => 'datetime',
         'grade' => 'integer',
+        'plagiarism_check_result' => 'array',
+        'compilation_check_result' => 'array',
+        'edge_cases_check_result' => 'array',
     ];
 
     public function assignment() {

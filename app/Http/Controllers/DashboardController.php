@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Policies\DashboardPolicy;
 use App\Models\Assignment;
+use App\Models\AssignmentUser;
 use Illuminate\Support\Facades\Gate;
 
 
@@ -21,20 +22,30 @@ class DashboardController extends Controller
         $this->authorize('viewAny', Dashboard::class);
 
         $user = Auth::user();
-        $userAssignedDashboards = $user->userDashboards()->with('owner')->get()->map(function ($d) use ($user) {
-            $d->can = [
-                'update' => $user->can('update', $d),
-                'delete' => $user->can('delete', $d),
-                'view'   => $user->can('view', $d),
-            ];
-            return $d;
-        });
+        $userAssignedDashboards = $user->userDashboards()
+            ->where('is_active', true)
+            ->with('owner')
+            ->get()
+            ->map(function ($d) use ($user) {
+                $d->can = [
+                    // 'update' => $user->can('update', $d),
+                    // 'delete' => $user->can('delete', $d),
+                    // 'view'   => $user->can('view', $d),
+                    'update' => Gate::allows('update', $d),
+                    'delete' => Gate::allows('delete', $d),
+                    'view'   => Gate::allows('view', $d),
+                ];
+                return $d;
+            });
 
         $userCreatedDashboards = ($user->type === 'admin') || ($user->type === 'teacher') ? $user->dashboards()->with('owner')->get()->map(function ($d) use ($user) {
             $d->can = [
-                'update' => $user->can('update', $d),
-                'delete' => $user->can('delete', $d),
-                'view'   => $user->can('view', $d),
+                // 'update' => $user->can('update', $d),
+                // 'delete' => $user->can('delete', $d),
+                // 'view'   => $user->can('view', $d),
+                'update' => Gate::allows('update', $d),
+                'delete' => Gate::allows('delete', $d),
+                'view'   => Gate::allows('view', $d),
             ];
             return $d;
         }) : null;
@@ -125,11 +136,14 @@ class DashboardController extends Controller
                 return $assignment;
             });
 
-        // dd($assignments->toArray());
+        $userAssignments = AssignmentUser::where('user_id', $user->id)
+            ->get()
+            ->keyBy('assignment_id');
 
         return inertia('Dashboard/Show', [
             'dashboard' => $dashboard,
             'assignments' => $assignments,
+            'userAssignments' => $userAssignments,
             'locale' => $locale,
             'translations' => [
                 'dashboards' => __('app.dashboards'),
@@ -138,6 +152,9 @@ class DashboardController extends Controller
                 'assignment_due_date_expires_in' => __('app.assignment_due_date_expires_in'),
                 'days' => __('app.days'),
                 'left' => __('app.left'),
+                'sent' => __('app.sent'),
+                'grade' => __('app.grade'),
+                'not_sent' => __('app.not_sent'),
                 'assign_users' => __('app.assign_users'),
                 'dashboard' => __('app.dashboard'),
                 'name' => __('app.name'),
@@ -150,6 +167,7 @@ class DashboardController extends Controller
                 'no_images' => __('app.no_images'),
                 'status_pending' => __('app.status_pending'),
                 'status_completed' => __('app.status_completed'),
+                'status_failed' => __('app.status_failed'),
             ]
         ]);
     }

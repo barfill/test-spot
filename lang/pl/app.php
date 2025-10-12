@@ -14,6 +14,9 @@ return [
     'dashboard_created' => 'Panel został utworzony pomyślnie!',
     'dashboard_updated' => 'Panel został zaktualizowany pomyślnie!',
     'dashboard_deleted' => 'Panel został usunięty pomyślnie!',
+    'sent' => 'Wysłano',
+    'grade' => 'Ocena',
+    'not_sent' => 'Nie wysłano',
 
     // Assignment
     'assignment' => 'Zadanie',
@@ -45,10 +48,24 @@ return [
     'no_feedback' => 'Brak informacji zwrotnej',
     'status_pending' => 'Oczekujące',
     'status_completed' => 'Zakończone',
+    'status_failed' => 'Niezaliczone',
     'start_time' => 'Czas rozpoczęcia',
     'end_time' => 'Czas zakończenia',
     'closed' => 'Zamknięte',
     'open' => 'Otwarte',
+    'file_upload' => 'Przesyłanie plików',
+    'add_file' => 'Dodaj plik',
+    'comment' => 'Komentarz',
+    'user_comment' => 'Twój komentarz...',
+    'user_comment_placeholder' => 'Jakiekolwiek uwagi lub pytania do nauczyciela...',
+    'choose_file' => 'Wybierz plik',
+    'optional' => 'Opcjonalne',
+    'characters' => 'znaki',
+    'submitting' => 'Przesyłanie',
+    'contact_teacher' => 'Skontaktuj się z nauczycielem',
+    'submit' => 'Zatwierdź',
+    'accepted_formats' => 'Akceptowane formaty',
+
 
     //User
     'edit_profile' => 'Edytuj profil',
