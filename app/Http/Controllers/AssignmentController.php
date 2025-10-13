@@ -115,6 +115,12 @@ class AssignmentController extends Controller
                 'back' => __('app.back'),
                 'cancel' => __('app.cancel'),
                 'contact_teacher' => __('app.contact_teacher'),
+                'assignment_reviewing' => __('app.assignment_reviewing'),
+                'review_results' => __('app.review_results'),
+                'assignment_status' => __('app.assignment_status'),
+                'status_completed' => __('app.status_completed'),
+                'status_failed' => __('app.status_failed'),
+                'review_comment' => __('app.review_comment'),
             ]
         ]);
     }

@@ -65,6 +65,10 @@ return [
     'contact_teacher' => 'Contact Teacher',
     'submit' => 'Submit',
     'accepted_formats' => 'Accepted formats',
+    'assignment_reviewing' => 'The assignment is currently being reviewed. You will be notified once the review is complete.',
+    'review_results' => 'Review results',
+    'assignment_status' => 'Assignment Status',
+    'review_comment' => 'Review Comment',
 
     //User
     'edit_profile' => 'Edit Profile',

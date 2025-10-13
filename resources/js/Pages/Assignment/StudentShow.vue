@@ -74,6 +74,41 @@
             </form>
         </Card>
 
+        <Card v-if="assignmentUser.submitted_at && assignmentUser.status === 'pending'" class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
+            <div class="flex flex-col gap-6 items-center">
+                <div>{{ translations.assignment_reviewing }}</div>
+                <button type="button" @click="$inertia.visit(route('dashboard.show', { locale, dashboard: dashboard.id }))" class="w-full btn-form-secondary">
+                    {{ translations.back }}
+                </button>
+            </div>
+        </Card>
+
+        <Card v-if="assignmentUser.submitted_at && (assignmentUser.status === 'graded_passed' || assignmentUser.status === 'graded_failed')" class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
+            <div class="flex flex-col gap-2 mb-6">
+                <div class="text-xl font-bold mb-4">{{ translations.review_results }}</div>
+                <div class="w-1/2 flex justify-between">
+                    <span class="text-md">{{ translations.assignment_status }}:</span>
+                    <span :class="assignmentUser.status === 'graded_passed' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+                        {{ assignmentUser.status === 'graded_passed' ? translations.status_completed : translations.status_failed }}
+                    </span>
+                </div>
+                <div class="w-1/2 flex justify-between mb-4">
+                    <span class="text-md">{{ translations.grade }}:</span>
+                    <span :class="assignmentUser.status === 'graded_passed' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+                        {{assignmentUser.grade}}
+                    </span>
+                </div>
+                <div class="w-full flex flex-col">
+                    <span class="text-md font-semibold mb-2">{{ translations.review_comment }}:</span>
+                    <span class="input text-sm h-auto whitespace-pre-wrap">
+                        {{ assignmentUser.review_comment }}
+                    </span>
+                </div>
+            </div>
+            <button type="button" @click="$inertia.visit(route('dashboard.show', { locale, dashboard: dashboard.id }))" class="w-full btn-form-secondary">
+                    {{ translations.back }}
+            </button>
+        </Card>
 
     </div>
 </template>

@@ -65,6 +65,11 @@ return [
     'contact_teacher' => 'Skontaktuj się z nauczycielem',
     'submit' => 'Zatwierdź',
     'accepted_formats' => 'Akceptowane formaty',
+    'assignment_reviewing' => 'Zadanie jest obecnie w trakcie przeglądu. Zostaniesz powiadomiony, gdy przegląd zostanie zakończony.',
+    'review_results' => 'Wyniki przeglądu',
+    'assignment_status' => 'Status Zadania',
+    'review_comment' => 'Komentarz zwrotny',
+
 
 
     //User
