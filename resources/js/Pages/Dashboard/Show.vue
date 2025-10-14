@@ -30,6 +30,7 @@
                     <div>
                     <span class="text-md font-bold">{{ assignment.end_date_formatted }}</span>
                     <span v-if="assignment.status === 'open'" class="mx-2"> | </span>
+                    <span class="font-bold text-red-400" v-if="assignment.status === 'open' && !userAssignments[assignment.id] && !isOwner">{{ translations.not_displayed.toUpperCase() + ' - ' + translations.left.toUpperCase() + ' ' + assignment.ends_in }}</span>
                     <span v-if="assignment.status === 'open' && (userAssignments[assignment.id]?.status === 'in_progress' || isOwner)">{{ translations.left[0].toUpperCase() + translations.left.slice(1) }} : {{ assignment.ends_in }}</span>
                     <span v-if="assignment.status === 'open' && userAssignments[assignment.id]?.status === 'pending'">{{ translations.status_pending }}</span>
                     <span v-if="assignment.status === 'open' && userAssignments[assignment.id]?.status === 'graded_passed'">{{ translations.status_completed }}</span>
@@ -61,7 +62,8 @@
     import DashboardCard from '@/Components/UI/DashboardCard.vue';
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
     import Card from '@/Components/UI/Card.vue';
-    import { ref, computed, inject } from 'vue';
+    import { ref, computed, inject, } from 'vue';
+
     import AssignmentCard from '../../Components/UI/AssignmentCard.vue';
 
 

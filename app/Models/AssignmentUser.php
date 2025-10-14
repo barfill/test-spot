@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class AssignmentUser extends Model
 {
@@ -29,6 +30,8 @@ class AssignmentUser extends Model
     public static array $status = ['in_progress', 'pending', 'graded_passed', 'graded_failed'];
     public static array $checkResults = ['passed', 'failed', 'suspended'];
 
+    protected $appends = ['submitted_at_formatted'];
+
     protected $casts = [
         'submitted_at' => 'datetime',
         'grade' => 'integer',
@@ -36,6 +39,12 @@ class AssignmentUser extends Model
         'compilation_check_result' => 'array',
         'edge_cases_check_result' => 'array',
     ];
+
+    public function getSubmittedAtFormattedAttribute(): ?string {
+        if (!$this->submitted_at) return null;
+
+        return $this->submitted_at->format('d.m.Y H:i');
+    }
 
     public function assignment() {
         return $this->belongsTo(Assignment::class);

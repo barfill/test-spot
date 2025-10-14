@@ -127,33 +127,21 @@ class AssignmentController extends Controller
 
     private function showForTeacher($locale, Dashboard $dashboard, Assignment $assignment)
     {
-        $dashboardStudents = $dashboard->users()->where('type', 'student')->get();
-
-        $submissions = AssignmentUser::with('user')
+        $userPendingAssignments = AssignmentUser::with('user', 'assignment')
             ->where('assignment_id', $assignment->id)
+            ->where('status', 'pending')
             ->get()
-            ->keyBy('user_id');
+            ->keyBy('submitted_at');
 
-        $studentSubmissions = $dashboardStudents->map(function ($student) use ($submissions, $assignment) {
-            return [
-                'student' => $student,
-                'submission' => $submissions->get($student->id) ?: (object)[
-                    'status' => 'not_started',
-                    'submitted_at' => null,
-                    'grade' => null,
-                    'plagiarism_check_result' => null,
-                    'compilation_check_result' => null,
-                    'edge_cases_check_result' => null,
-                ]
-            ];
-        });
+        // dd($userPendingAssignments);
 
         return inertia('Assignment/TeacherShow', [
             'locale' => $locale,
             'dashboard' => $dashboard,
             'assignment' => $assignment,
-            'studentSubmissions' => $studentSubmissions,
+            'userAssignments' => $userPendingAssignments,
             'translations' => [
+                'dashboards' => __('app.dashboards'),
                 'assignment' => __('app.assignment'),
                 'students' => __('app.students'),
                 'submissions' => __('app.submissions'),
@@ -164,6 +152,13 @@ class AssignmentController extends Controller
                 'edge_cases_check' => __('app.edge_cases_check'),
                 'mark_all_passed' => __('app.mark_all_passed'),
                 'back' => __('app.back'),
+                'submitted' => __('app.submitted'),
+                'plagiarism_check' => __('app.plagiarism_check'),
+                'compilation_check' => __('app.compilation_check'),
+                'edge_cases_check' => __('app.edge_cases_check'),
+                'test_passed' => __('app.test_passed'),
+                'test_failed' => __('app.test_failed'),
+                'test_not_run' => __('app.test_not_run'),
             ]
         ]);
     }

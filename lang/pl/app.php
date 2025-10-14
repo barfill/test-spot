@@ -69,8 +69,14 @@ return [
     'review_results' => 'Wyniki przeglądu',
     'assignment_status' => 'Status Zadania',
     'review_comment' => 'Komentarz zwrotny',
-
-
+    'not_displayed' => 'Nie wyświetlono',
+    'submitted' => 'Przesłano',
+    'plagiarism_check' => 'Sprawdzanie plagiatu',
+    'compilation_check' => 'Kompilacja',
+    'edge_cases_check' => 'Przypadki brzegowe',
+    'test_passed' => 'Zaliczono ✓',
+    'test_failed' => 'Nie zaliczono ✗',
+    'test_not_run' => 'Nie uruchomiono',
 
     //User
     'edit_profile' => 'Edytuj profil',

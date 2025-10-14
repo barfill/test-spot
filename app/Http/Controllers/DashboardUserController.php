@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Dashboard;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use App\Policies\DashboardPolicy;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardUserController extends Controller
 {
@@ -15,6 +17,8 @@ class DashboardUserController extends Controller
     public function index($locale, $dashboardId)
     {
         $dashboard = Dashboard::findOrFail($dashboardId);
+        $this->authorize('update', $dashboard);
+
         $usersCollection = User::dashboardUsersAndNoAssignedStudentsWithMembershipFlag($dashboardId)->get();
 
         return inertia('DashboardUser/Index', [
@@ -49,22 +53,25 @@ class DashboardUserController extends Controller
         ]);
     }
 
-    public function update(Request $request, $locale, $dashboard, $user)
+    public function update(Request $request, $locale, $dashboardId, $user)
     {
+        $dashboard = Dashboard::findOrFail($dashboardId);
+        $this->authorize('update', $dashboard);
+
         $userModel = User::findOrFail($user);
         $action = $request->input('action');
 
         if ($action === 'attach') {
-            $userModel->userDashboards()->syncWithoutDetaching([$dashboard]);
-            Log::info("User {$user} added to dashboard {$dashboard}");
+            $userModel->userDashboards()->syncWithoutDetaching([$dashboardId]);
+            Log::info("User {$user} added to dashboard {$dashboardId}");
             return back();
         } elseif ($action === 'detach') {
-            $userModel->userDashboards()->detach($dashboard);
-            Log::info("User {$user} removed from dashboard {$dashboard}");
+            $userModel->userDashboards()->detach($dashboardId);
+            Log::info("User {$user} removed from dashboard {$dashboardId}");
             return back();
         }
 
-        Log::warning("Invalid action '{$action}' for user {$user} and dashboard {$dashboard}");
+        Log::warning("Invalid action '{$action}' for user {$user} and dashboard {$dashboardId}");
         return response()->noContent(400);
     }
 }

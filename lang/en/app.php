@@ -69,6 +69,14 @@ return [
     'review_results' => 'Review results',
     'assignment_status' => 'Assignment Status',
     'review_comment' => 'Review Comment',
+    'not_displayed' => 'Not displayed',
+    'submitted' => 'Submitted',
+    'plagiarism_check' => 'Plagiarism Check',
+    'compilation_check' => 'Compilation',
+    'edge_cases_check' => 'Edge Cases',
+    'test_passed' => 'Passed ✓',
+    'test_failed' => 'Failed ✗',
+    'test_not_run' => 'Not run yet',
 
     //User
     'edit_profile' => 'Edit Profile',
