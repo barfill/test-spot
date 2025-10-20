@@ -78,6 +78,13 @@ return [
     'test_failed' => 'Failed ✗',
     'test_not_run' => 'Not run yet',
 
+    //Assignment User
+    'assignment_description' => 'Assignment Description',
+    'email' => 'Email',
+    'student_comment' => 'Student Comment',
+    'assignment_assessment' => 'Assignment Assessment',
+    'assignment_file' => 'Assignment File',
+
     //User
     'edit_profile' => 'Edit Profile',
     'create_user' => 'Create User',

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between items-center p-2 mb-8">
         <Breadcrumbs
                 :breadcrumbs="[
                     { label: dashboard.name, link: route('dashboard.show', { locale, dashboard }) },
@@ -13,7 +13,7 @@
     <div class="grid sm:grid-cols-2 gap-8">
         <Card v-if="userAssignments" v-for="userAssignment in userAssignments" :key="userAssignment.id" class="flex flex-col justify-between p-4">
             <div>
-                <Link :href="route('dashboard.show', { locale, dashboard: dashboard.id })" class="block card-hover">
+                <Link :href="route('dashboard.assignment.submissions.show', { locale, dashboard: dashboard.id, assignment: assignment.id, assignmentUser: userAssignment.id })" class="block card-hover">
                     <Card>
                         <div class="flex flex-row justify-between gap-2 p-2">
                             <div class="flex flex-col justify-center items-center p-2">
