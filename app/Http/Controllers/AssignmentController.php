@@ -238,7 +238,7 @@ class AssignmentController extends Controller
     public function submit(Request $request, $locale, Dashboard $dashboard, Assignment $assignment)
     {
         $request->validate([
-            'code_file' => 'required|file|extensions:cpp,cc,cxx,c,h,hpp|max:5120|min:1', // max 5MB, min 1B, allowed extensions
+            'code_file' => 'required|file|extensions:cpp,cc,cxx,c,h,hpp|max:5120|min:1',
             'user_comment' => 'nullable|string|max:1000',
         ]);
 

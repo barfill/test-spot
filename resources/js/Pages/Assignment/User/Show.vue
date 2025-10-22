@@ -33,11 +33,19 @@
                 <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{{ assignmentUser.user_comment }}</p>
             </div>
 
-            <pre class="bg-gray-100 p-4"><code>test</code></pre>
+            <div class="mt-6">
+                <h5 class="text-zinc-900 dark:text-zinc-100 text-md font-bold mb-2">
+                    {{ translations.file_content }}
+                </h5>
+                <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ fileContent }}</code></pre>
+                <div v-else class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded text-yellow-800 dark:text-yellow-200">
+                    ⚠️ {{ translations.no_file }}
+                </div>
+            </div>
 
             <div class="w-full mt-6">
-                <span class="w-full flex items-center justify-center gap-4 mt-2">
-                     <Link class="btn-secondary">
+                <div class="flex flex-wrap justify-center gap-4">
+                     <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
                                 <span>{{ translations.plagiarism_check }}</span>
@@ -50,7 +58,7 @@
                             <span class="w-full">loading</span>
                         </div>
                     </Link>
-                    <Link class="btn-secondary">
+                    <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
                                 <span>{{ translations.compilation_check }}</span>
@@ -63,7 +71,7 @@
                             <span class="w-full">loading</span>
                         </div>
                     </Link>
-                      <Link class="btn-secondary">
+                      <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
                                 <span>{{ translations.edge_cases_check }}</span>
@@ -76,7 +84,7 @@
                             <span class="w-full">loading</span>
                         </div>
                     </Link>
-                </span>
+                </div>
             </div>
         </Card>
 
@@ -88,8 +96,21 @@
                 <h2 class="text-xl font-semibold mb-6">{{ translations.assignment_assessment }}</h2>
 
                 <div class="mb-6">
-                    <label for="grade" class="label label-enabled">{{ translations.grade }}</label>
+                    <!-- <label for="grade" class="label label-enabled">{{ translations.grade }}</label>
                     <input type="number" min="2" max="5" id="grade" name="grade" v-model="form.grade" class="input"/>
+                    <div v-if="form.errors.grade" class="text-error mt-1">
+                        {{ form.errors.grade }}
+                    </div> -->
+
+                    <label for="grade" class="label label-enabled">{{ translations.grade }}</label>
+                    <select id="grade" v-model="form.grade" class="select">
+                        <option value="" disabled hidden selected>{{ translations.select_grade }}</option>
+                         <!-- <option value="0" disabled hidden selected>0</option> -->
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                     <div v-if="form.errors.grade" class="text-error mt-1">
                         {{ form.errors.grade }}
                     </div>
@@ -109,7 +130,7 @@
                 </div>
 
                 <div class="flex gap-3">
-                    <button type="submit" :disabled="form.processing || !form.grade" class="btn-form-primary flex-1" :class="{ 'opacity-50 cursor-not-allowed': form.processing || !form.code_file }">
+                    <button type="submit" :disabled="form.processing || !form.grade" class="btn-form-primary flex-1" :class="{ 'opacity-50 cursor-not-allowed': form.processing || !form.grade }">
                         <span v-if="form.processing">⏳ {{ translations.submitting }}...</span>
                         <span v-else>✓ {{ translations.submit }}</span>
                     </button>
@@ -125,24 +146,31 @@
 </template>
 
 <script setup>
-    import { useForm, Link,   } from '@inertiajs/vue3';
-    import { defineProps, inject } from 'vue';
+    import { useForm, Link } from '@inertiajs/vue3';
+    import { defineProps, inject, onMounted } from 'vue';
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
     import Card from '@/Components/UI/Card.vue';
     import TestStatusIcon from '@/Components/UI/TestStatusIcon.vue';
+
+    import Prism from 'prismjs';
+    import 'prismjs/themes/prism-tomorrow.css';
+    import 'prismjs/components/prism-clike';
+    import 'prismjs/components/prism-c';
+    import 'prismjs/components/prism-cpp';
 
     const props = defineProps({
         locale: String,
         dashboard: Object,
         assignment: Object,
         assignmentUser: Object,
+        fileContent: String,
         translations: Object,
         errors: Object,
         flash: Object
     });
 
     const form = useForm({
-        grade: null,
+        grade: '',
         review_comment: ''
     });
 
@@ -151,7 +179,11 @@
         createAction.value = 'null';
     }
 
-     const submit = () => {
+    onMounted(() => {
+        Prism.highlightAll();
+    });
+
+    const submit = () => {
         form.post(route('assignment.submit', {
             locale: props.locale,
             dashboard: props.dashboard.id,
@@ -164,3 +196,18 @@
         });
     };
 </script>
+
+<style scoped>
+pre[class*="language-"] {
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+}
+
+code[class*="language-"] {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+}
+</style>

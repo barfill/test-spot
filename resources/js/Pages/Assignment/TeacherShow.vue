@@ -10,7 +10,7 @@
         />
     </div>
 
-    <div class="grid sm:grid-cols-2 gap-8">
+    <div class="grid lg:grid-cols-2 gap-8">
         <Card v-if="userAssignments" v-for="userAssignment in userAssignments" :key="userAssignment.id" class="flex flex-col justify-between p-4">
             <div>
                 <Link :href="route('dashboard.assignment.submissions.show', { locale, dashboard: dashboard.id, assignment: assignment.id, assignmentUser: userAssignment.id })" class="block card-hover">

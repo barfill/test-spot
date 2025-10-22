@@ -84,6 +84,10 @@ return [
     'student_comment' => 'Student Comment',
     'assignment_assessment' => 'Assignment Assessment',
     'assignment_file' => 'Assignment File',
+    'code_file' => 'Code File',
+    'file_content' => 'File Content',
+    'no_file' => 'No file to display.',
+    'select_grade' => 'Select Grade',
 
     //User
     'edit_profile' => 'Edit Profile',

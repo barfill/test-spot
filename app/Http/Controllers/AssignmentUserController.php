@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Dashboard;
 use App\Models\Assignment;
 use App\Models\AssignmentUser;
+use Illuminate\Support\Facades\Storage;
 
 class AssignmentUserController extends Controller
 {
@@ -41,13 +42,19 @@ class AssignmentUserController extends Controller
         $this->authorize('update', [Assignment::class, $dashboard, $assignment]);
 
         $assignmentUser->load('user');
-        // dd($assignmentUser);
+
+        $fileContent = null;
+        if ($assignmentUser->file_path && Storage::exists($assignmentUser->file_path)) {
+            $fileContent = Storage::get($assignmentUser->file_path);
+            // dd($fileContent);
+        }
 
         return inertia('Assignment/User/Show', [
             'locale' => $locale,
             'dashboard' => $dashboard,
             'assignment' => $assignment,
             'assignmentUser' => $assignmentUser,
+            'fileContent' => $fileContent,
             'translations' => [
                 'dashboards' => __('app.dashboards'),
                 'assignment' => __('app.assignment'),
@@ -57,6 +64,9 @@ class AssignmentUserController extends Controller
                 'student_comment' => __('app.student_comment'),
                 'assignment_assessment' => __('app.assignment_assessment'),
                 'submitting' => __('app.submitting'),
+                'code_file' => __('app.code_file'),
+                'file_content' => __('app.file_content'),
+                'no_file'  => __('app.no_file'),
                 'add_file' => __('app.add_file'),
                 'file_upload' => __('app.file_upload'),
                 'add_file' => __('app.add_file'),
@@ -67,6 +77,7 @@ class AssignmentUserController extends Controller
                 'accepted_formats' => __('app.accepted_formats'),
                 'status' => __('app.status'),
                 'grade' => __('app.grade'),
+                'select_grade' => __('app.select_grade'),
                 'comment' => __('app.comment'),
                 'optional' => __('app.optional'),
                 'user_comment' => __('app.user_comment'),

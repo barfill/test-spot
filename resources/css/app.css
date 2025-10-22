@@ -93,6 +93,15 @@
   margin: 0;
 }
 
+.select {
+    @apply block w-full border border-gray-300 dark:border-zinc-600 rounded-md shadow-md p-4 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 cursor-pointer;
+}
+
+.select:hover,
+.select:focus {
+    @apply bg-zinc-100 dark:bg-zinc-600 border-zinc-600 dark:border-gray-200;
+}
+
 .checkbox {
     @apply w-6 h-6 bg-white dark:bg-zinc-700 border-2 border-gray-300 rounded focus:ring-zinc-300 focus:ring-1 cursor-pointer;
     transition: all 0.2s ease;
@@ -185,5 +194,17 @@
     input[type="datetime-local"]::-webkit-calendar-picker-indicator {
         filter: invert(1);
     }
+}
+
+pre[class*="language-"] {
+    background: oklch(44.2% 0.017 285.786) !important;
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-width: 100%;
+    max-height: 500px;
+    white-space: pre;
 }
 

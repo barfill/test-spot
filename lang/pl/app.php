@@ -78,6 +78,17 @@ return [
     'test_failed' => 'Nie zaliczono ✗',
     'test_not_run' => 'Nie uruchomiono',
 
+    //Assignment User
+    'assignment_description' => 'Opis Zadania',
+    'email' => 'Email',
+    'student_comment' => 'Komentarz Ucznia',
+    'assignment_assessment' => 'Ocena Zadania',
+    'assignment_file' => 'Plik Zadania',
+    'code_file' => 'Plik Kodu',
+    'file_content' => 'Zawartość Pliku',
+    'no_file' => 'Brak pliku do wyświetlenia.',
+    'select_grade' => 'Wybierz ocenę',
+
     //User
     'edit_profile' => 'Edytuj profil',
     'create_user' => 'Utwórz użytkownika',
