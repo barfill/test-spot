@@ -16,29 +16,45 @@
                 <span class="text-sm text-zinc-500">{{ dashboard.name }}</span>
             </div>
         </div>
-        <!-- <div v-if="assignment.status === 'in_progress'" class="col-span-12">
-            <Bar :duration="assignment.duration_days" :remainingDays="assignment.ends_in" />
-        </div>
-        <div v-if="assignment.status === 'pending'" class="col-span-12">
-            <div class="w-full flex justify-between">
-                <div class="bg-yellow-500 dark:bg-yellow-500 p-2 font-medium rounded-md text-zinc-50 dark:text-zinc-100">
-                    {{translations.status_pending}}
-                </div>
-                <div class="border border-zinc-200 dark:border-zinc-50 text-zinc-500 dark:text-zinc-50 bg-zinc-100 dark:bg-zinc-600 p-2 font-light rounded-md">
-                    Przesłano 06.12.2025
+
+        <template v-if="assignment.status !== 'closed' && userAssignment">
+            <div v-if="userAssignment?.status === 'in_progress'" class="col-span-12">
+                <Bar :duration="assignment.duration_days" :remainingDays="assignment.ends_in" />
+            </div>
+
+            <div v-if="!userAssignment" class="col-span-12">
+                <div class="w-full flex justify-center">
+                    <div class="bg-gray-400 dark:bg-gray-500 p-2 font-medium rounded-md text-zinc-50 dark:text-zinc-100">
+                        {{ translations.not_sent }}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div v-if="assignment.status === 'completed'" class="col-span-12">
-            <div class="w-full flex justify-between">
-                <div class="bg-green-500 p-2 rounded-md text-zinc-50 dark:text-zinc-100">
-                    {{ translations.status_completed }}
-                </div>
-                <div class="border border-zinc-200 dark:border-zinc-50 text-zinc-500 dark:text-zinc-50 bg-zinc-100 dark:bg-zinc-600 p-2 font-light rounded-md">
-                    Ocena...[wartość]
+
+            <div v-if="userAssignment?.status === 'pending'" class="col-span-12 mx-2">
+                <div class="w-full flex justify-between">
+                    <div class="bg-yellow-500 dark:bg-yellow-500 p-2 font-medium rounded-md text-zinc-50 dark:text-zinc-100">
+                        {{ translations.status_pending }}
+                    </div>
+                    <div class="border border-zinc-200 dark:border-zinc-50 text-zinc-500 dark:text-zinc-50 bg-zinc-100 dark:bg-zinc-600 p-2 font-light rounded-md">
+                        {{ translations.sent }} {{ new Date(userAssignment.submitted_at).toLocaleDateString('pl-PL') }}
+                    </div>
                 </div>
             </div>
-        </div> -->
+
+            <div v-if="userAssignment?.status === 'graded_passed' || userAssignment?.status === 'graded_failed'" class="col-span-12 mx-2">
+                <div class="w-full flex justify-between">
+                    <div
+                        class="p-2 rounded-md text-zinc-50 dark:text-zinc-100"
+                        :class="userAssignment.status === 'graded_passed' ? 'bg-green-500' : 'bg-red-500'"
+                    >
+                        {{ userAssignment.status === 'graded_passed' ? translations.status_completed : translations.status_failed }}
+                    </div>
+                    <div class="border border-zinc-200 dark:border-zinc-50 text-zinc-500 dark:text-zinc-50 bg-zinc-100 dark:bg-zinc-600 p-2 font-light rounded-md">
+                        {{ translations.grade }}: {{ userAssignment.grade || translations.not_sent }}
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 
 </template>
@@ -51,11 +67,13 @@
     import Card from '@/Components/UI/Card.vue';
     import { ref, inject } from 'vue';
 
-    defineProps({
+    const props = defineProps({
         dashboard: Object,
         assignment: Object,
+        userAssignment: Object,
         locale: String,
         translations: Object
     });
+
 
 </script>

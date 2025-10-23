@@ -31,9 +31,77 @@ class Assignment extends Model
         'end_time'   => 'datetime',
     ];
 
+    public function getStartTimeAttribute($value)
+    {
+        if (!$value) return null;
+
+        return Carbon::createFromFormat('Y-m-d H:i:s', $value, 'UTC')
+            ->setTimezone('Europe/Warsaw');
+    }
+
+    public function getEndTimeAttribute($value)
+    {
+        if (!$value) return null;
+
+        return Carbon::createFromFormat('Y-m-d H:i:s', $value, 'UTC')
+            ->setTimezone('Europe/Warsaw');
+    }
+
+    public function setStartTimeAttribute($value)
+    {
+        if ($value) {
+            $this->attributes['start_time'] = Carbon::parse($value, 'Europe/Warsaw')
+                ->utc()
+                ->format('Y-m-d H:i:s');
+        }
+    }
+
+    public function setEndTimeAttribute($value)
+    {
+        if ($value) {
+            $this->attributes['end_time'] = Carbon::parse($value, 'Europe/Warsaw')
+                ->utc()
+                ->format('Y-m-d H:i:s');
+        }
+    }
+
     public function getEndsInAttribute(): ?string
     {
-        return $this->end_time?->diffForHumans(now(), true);
+        if (!$this->end_time) {
+            return null;
+        }
+
+        $now = now();
+        $end = $this->end_time;
+        $locale = app()->getLocale();
+
+        if ($end->isPast()) {
+            return $locale === 'pl' ? 'Zakończone' : 'Ended';
+        }
+
+        $diff = $now->diffAsCarbonInterval($end);
+
+        $weeks = (int) floor($diff->days / 7);
+        $days = (int) ($diff->days % 7);
+        $hours = (int) $diff->h;
+        $minutes = (int) $diff->i;
+        $seconds = (int) $diff->s;
+
+        $parts = [];
+        if ($weeks > 0) $parts[] = $locale === 'pl' ? "{$weeks} tyg" : "{$weeks} weeks";
+        if ($days > 0) $parts[] = $locale === 'pl' ? "{$days} dni" : "{$days} days";
+        if ($hours > 0) $parts[] = $locale === 'pl' ? "{$hours} h" : "{$hours} hrs";
+        if ($minutes > 0) $parts[] = $locale === 'pl' ? "{$minutes} min" : "{$minutes} mins";
+
+        if ($weeks === 0 && $days === 0 && $hours === 0 && $minutes === 0) {
+            if ($seconds > 0) {
+                return $locale === 'pl' ? 'mniej niż minutę' : 'less than a minute';
+            } else {
+                return $locale === 'pl' ? 'Zakończone' : 'Ended';
+            }
+        }
+
+        return " " . implode(' ', $parts);
     }
 
     public function getDurationDaysAttribute(): ?int
@@ -58,5 +126,9 @@ class Assignment extends Model
         return $this->belongsTo(Dashboard::class);
     }
 
+    public function assignmentUsers()
+    {
+        return $this->hasMany(AssignmentUser::class);
+    }
 }
 

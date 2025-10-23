@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\AssignmentUserController;
 use App\Models\Dashboard;
 
 use Illuminate\Support\Facades\Route;
@@ -25,11 +26,15 @@ Route::prefix('{locale}')
                 ->only(['index', 'update']);
             Route::resource('dashboard.assignments', AssignmentController::class)
                 ->except(['index']);
+            Route::resource('dashboard.assignment.submissions', AssignmentUserController::class)
+                ->parameters(['submissions' => 'assignmentUser']);
 
-            // Route::post('dashboard/{dashboard}/user/{user}', [DashboardUserController::class, 'store'])
-            //     ->name('dashboard.users.store');
-            // Route::delete('dashboard/{dashboard}/user/{user}', [DashboardUserController::class, 'destroy'])
-            //     ->name('dashboard.users.destroy');
+            Route::post('dashboard/{dashboard}/assignment/{assignment}/submissions/{assignmentUser}/run-check',
+                [AssignmentUserController::class, 'runCheck']
+            )->name('assignment.submissions.run-check');
+
+            Route::post('dashboard/{dashboard}/assignment/{assignment}/submit', [AssignmentController::class, 'submit'])
+                ->name('assignment.submit');
 
             Route::delete('logout', [AuthenticationController::class, 'destroy'])->name('logout');
         });

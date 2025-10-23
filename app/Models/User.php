@@ -63,6 +63,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Dashboard::class)->withTimestamps();
     }
 
+    public function assignmentUsers()
+    {
+        return $this->hasMany(AssignmentUser::class);
+    }
+
     public function scopeDashboardUsersAndNoAssignedStudentsWithMembershipFlag($query, $dashboardId) {
         return $query
             ->select(

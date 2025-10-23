@@ -30,7 +30,11 @@
                     <div>
                     <span class="text-md font-bold">{{ assignment.end_date_formatted }}</span>
                     <span v-if="assignment.status === 'open'" class="mx-2"> | </span>
-                    <span v-if="assignment.status === 'open'">{{ translations.left[0].toUpperCase() + translations.left.slice(1) }} : {{ assignment.ends_in }}</span>
+                    <span class="font-bold text-red-400" v-if="assignment.status === 'open' && !userAssignments[assignment.id] && !isOwner">{{ translations.not_displayed.toUpperCase() + ' - ' + translations.left.toUpperCase() + ' ' + assignment.ends_in }}</span>
+                    <span v-if="assignment.status === 'open' && (userAssignments[assignment.id]?.status === 'in_progress' || isOwner)">{{ translations.left[0].toUpperCase() + translations.left.slice(1) }} : {{ assignment.ends_in }}</span>
+                    <span v-if="assignment.status === 'open' && userAssignments[assignment.id]?.status === 'pending'">{{ translations.status_pending }}</span>
+                    <span v-if="assignment.status === 'open' && userAssignments[assignment.id]?.status === 'graded_passed'">{{ translations.status_completed }}</span>
+                    <span v-if="assignment.status === 'open' && userAssignments[assignment.id]?.status === 'graded_failed'">{{ translations.status_failed }}</span>
                 </div>
                 <div v-if="assignment.status === 'closed' && assignment.can.delete && assignment.can.update" class="">
                     Restore button
@@ -41,7 +45,7 @@
             >
                 <div>
                     <Link :href="route('dashboard.assignments.show', { locale, dashboard: dashboard.id, assignment: assignment.id })" class="block card-hover">
-                        <AssignmentCard :dashboard="dashboard" :assignment="assignment" :translations="translations"/>
+                        <AssignmentCard :dashboard="dashboard" :assignment="assignment" :userAssignment="userAssignments[assignment.id]" :translations="translations"/>
                     </Link>
                 </div>
                 <div v-if="assignment.can.delete && assignment.can.update" class="border-t-3 border-zinc-300 flex justify-between pt-3">
@@ -58,13 +62,16 @@
     import DashboardCard from '@/Components/UI/DashboardCard.vue';
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
     import Card from '@/Components/UI/Card.vue';
-    import { ref, inject } from 'vue';
-import AssignmentCard from '../../Components/UI/AssignmentCard.vue';
+    import { ref, computed, inject, } from 'vue';
+
+    import AssignmentCard from '../../Components/UI/AssignmentCard.vue';
+
 
 
     defineProps({
         dashboard: Object,
         assignments: Array,
+        userAssignments: Object,
         locale: String,
         translations: Object
     });

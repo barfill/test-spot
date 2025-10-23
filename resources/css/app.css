@@ -26,6 +26,10 @@
     @apply bg-zinc-500 dark:bg-zinc-500 hover:bg-zinc-600 dark:hover:bg-zinc-400 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded;
 }
 
+.btn-form-secondary {
+    @apply bg-zinc-100 dark:bg-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-500 text-zinc-500 dark:text-zinc-100 font-medium p-4 rounded border border-gray-300 dark:border-zinc-400;
+}
+
 .btn-danger {
     @apply bg-red-500 dark:bg-red-400 hover:bg-red-400 dark:hover:bg-red-300 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded;
 }
@@ -87,6 +91,15 @@
 .input[type="datetime-local"]::-webkit-datetime-edit-minute-field {
   padding: 0;
   margin: 0;
+}
+
+.select {
+    @apply block w-full border border-gray-300 dark:border-zinc-600 rounded-md shadow-md p-4 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 cursor-pointer;
+}
+
+.select:hover,
+.select:focus {
+    @apply bg-zinc-100 dark:bg-zinc-600 border-zinc-600 dark:border-gray-200;
 }
 
 .checkbox {
@@ -181,5 +194,17 @@
     input[type="datetime-local"]::-webkit-calendar-picker-indicator {
         filter: invert(1);
     }
+}
+
+pre[class*="language-"] {
+    background: oklch(44.2% 0.017 285.786) !important;
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-width: 100%;
+    max-height: 500px;
+    white-space: pre;
 }
 

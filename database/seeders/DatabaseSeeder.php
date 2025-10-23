@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\DashboardSeeder;
 use App\Models\Dashboard;
 use App\Models\Assignment;
+use App\Models\AssignmentUser;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,6 +24,9 @@ class DatabaseSeeder extends Seeder
             [
                 'first_name' => 'Bartosz',
                 'last_name' => 'Filipczak',
+                'title' => 'Mgr',
+                'type' => 'teacher',
+                'password' => 'password',
             ]
         );
 
@@ -46,5 +50,42 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        // Create assignment submissions for students
+        $students = User::where('type', 'student')->get();
+        $assignments = Assignment::all();
+
+        foreach ($assignments as $assignment) {
+            $dashboardStudents = $assignment->dashboard->users()->where('type', 'student')->get();
+
+            foreach ($dashboardStudents as $student) {
+                if (rand(1, 100) <= 80) {
+                    $statusChance = rand(1, 100);
+
+                    if ($statusChance <= 30) {
+                        AssignmentUser::factory()->inProgress()->create([
+                            'assignment_id' => $assignment->id,
+                            'user_id' => $student->id,
+                        ]);
+                    } elseif ($statusChance <= 50) {
+                        AssignmentUser::factory()->pending()->create([
+                            'assignment_id' => $assignment->id,
+                            'user_id' => $student->id,
+                        ]);
+                    } elseif ($statusChance <= 85) {
+                        AssignmentUser::factory()->gradedPassed()->create([
+                            'assignment_id' => $assignment->id,
+                            'user_id' => $student->id,
+                        ]);
+                    } else {
+                        AssignmentUser::factory()->gradedFailed()->create([
+                            'assignment_id' => $assignment->id,
+                            'user_id' => $student->id,
+                        ]);
+                    }
+                }
+            }
+        }
+
     }
 }

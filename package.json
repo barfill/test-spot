@@ -17,6 +17,7 @@
         "vite": "^7.0.4"
     },
     "dependencies": {
-        "@inertiajs/vue3": "^2.1.2"
+        "@inertiajs/vue3": "^2.1.2",
+        "prismjs": "^1.30.0"
     }
 }
