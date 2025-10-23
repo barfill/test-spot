@@ -10,25 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class AssignmentUserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser)
     {
         $this->authorize('update', [Assignment::class, $dashboard, $assignment]);
@@ -38,7 +19,6 @@ class AssignmentUserController extends Controller
         $fileContent = null;
         if ($assignmentUser->file_path && Storage::exists($assignmentUser->file_path)) {
             $fileContent = Storage::get($assignmentUser->file_path);
-            // dd($fileContent);
         }
 
         return inertia('Assignment/User/Show', [
@@ -123,27 +103,5 @@ class AssignmentUserController extends Controller
         ])->with('success', 'Assignment graded successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

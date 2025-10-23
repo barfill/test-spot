@@ -10,7 +10,9 @@
         />
 
         <div class="flex flex-row gap-2">
-            <Link class="btn-secondary w-full">
+            <Link class="btn-secondary w-full"
+
+            >
                 <div class="flex flex-col p-1">
                     <div class="flex justify-between items-center gap-4">
                         <span>{{ translations.plagiarism_check }}</span>
@@ -22,7 +24,9 @@
                     <!-- jeżeli przeprocesowane to pasek zielony -->
                 </div>
             </Link>
-            <Link class="btn-secondary w-full">
+            <Link class="btn-secondary w-full"
+                @click="compileAll()"
+            >
                 <div class="flex flex-col p-1">
                     <div class="flex justify-between items-center gap-4">
                         <span>{{ translations.compilation_check }}</span>
@@ -85,8 +89,9 @@
     import Card from '@/Components/UI/Card.vue';
     import TestStatusIcon from '@/Components/UI/TestStatusIcon.vue';
     import { defineProps, inject } from 'vue';
+    import axios from 'axios';
 
-    defineProps({
+    const props = defineProps({
         locale: String,
         dashboard: Object,
         assignment: Object,
@@ -99,5 +104,18 @@
     const createAction = inject('createAction', null);
     if (createAction) {
         createAction.value = 'null';
+    }
+
+    const compileAll = async () => {
+        try {
+            const response = await axios.post(route('dashboard.assignment.compile', {
+                locale: props.locale,
+                dashboard: props.dashboard.id,
+                assignment: props.assignment.id
+            }));
+            router.reload();
+        } catch (error) {
+            console.error('Compilation error:', error);
+        }
     }
 </script>

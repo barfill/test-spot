@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             \App\Http\Middleware\Language::class,
         ]);
+        // Wyłączenie CSRF dla API compile
+        $middleware->validateCsrfTokens(except: [
+            '*/dashboard/*/assignments/*/compile',
+        ]);
         $middleware->redirectGuestsTo(function($request) {
             $locale = $request->route('locale')
                 ?? $request->session()->get('locale')

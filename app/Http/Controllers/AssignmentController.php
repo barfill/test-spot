@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AssignmentRequest;
+use App\Services\CompilationService;
 
 class AssignmentController extends Controller
 {
@@ -276,5 +277,18 @@ class AssignmentController extends Controller
             'dashboard' => $dashboard->id,
             'assignment' => $assignment->id
         ])->with('success', __('messages.submission_success'));
+    }
+
+    public function compileSubmissions($locale, Dashboard $dashboard, Assignment $assignment, CompilationService $compilationService)
+    {
+        // $this->authorize('update', [$dashboard, $assignment]);
+
+        $results = $compilationService->compileAllSubmissions($assignment);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Compilation completed',
+            'results' => $results
+        ]);
     }
 }
