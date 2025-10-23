@@ -71,7 +71,7 @@ return [
     'review_comment' => 'Komentarz zwrotny',
     'not_displayed' => 'Nie wyświetlono',
     'submitted' => 'Przesłano',
-    'plagiarism_check' => 'Sprawdzanie plagiatu',
+    'plagiarism_check' => 'Plagiat',
     'compilation_check' => 'Kompilacja',
     'edge_cases_check' => 'Przypadki brzegowe',
     'test_passed' => 'Zaliczono ✓',

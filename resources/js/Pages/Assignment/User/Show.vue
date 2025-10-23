@@ -45,7 +45,7 @@
 
             <div class="w-full mt-6">
                 <div class="flex flex-wrap justify-center gap-4">
-                     <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
+                    <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
                                 <span>{{ translations.plagiarism_check }}</span>

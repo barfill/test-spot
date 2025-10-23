@@ -71,7 +71,7 @@ return [
     'review_comment' => 'Review Comment',
     'not_displayed' => 'Not displayed',
     'submitted' => 'Submitted',
-    'plagiarism_check' => 'Plagiarism Check',
+    'plagiarism_check' => 'Plagiarism',
     'compilation_check' => 'Compilation',
     'edge_cases_check' => 'Edge Cases',
     'test_passed' => 'Passed ✓',
