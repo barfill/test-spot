@@ -55,7 +55,7 @@
                                     :translations="translations"
                                 />
                             </div>
-                            <span class="w-full">loading</span>
+                            <!-- <span class="w-full">loading</span> -->
                         </div>
                     </Link>
                     <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
@@ -68,7 +68,7 @@
                                     :translations="translations"
                                 />
                             </div>
-                            <span class="w-full">loading</span>
+                            <!-- <span class="w-full">loading</span> -->
                         </div>
                     </Link>
                       <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
@@ -81,7 +81,7 @@
                                         :translations="translations"
                                 />
                             </div>
-                            <span class="w-full">loading</span>
+                            <!-- <span class="w-full">loading</span> -->
                         </div>
                     </Link>
                 </div>
@@ -96,16 +96,9 @@
                 <h2 class="text-xl font-semibold mb-6">{{ translations.assignment_assessment }}</h2>
 
                 <div class="mb-6">
-                    <!-- <label for="grade" class="label label-enabled">{{ translations.grade }}</label>
-                    <input type="number" min="2" max="5" id="grade" name="grade" v-model="form.grade" class="input"/>
-                    <div v-if="form.errors.grade" class="text-error mt-1">
-                        {{ form.errors.grade }}
-                    </div> -->
-
                     <label for="grade" class="label label-enabled">{{ translations.grade }}</label>
                     <select id="grade" v-model="form.grade" class="select">
                         <option value="" disabled hidden selected>{{ translations.select_grade }}</option>
-                         <!-- <option value="0" disabled hidden selected>0</option> -->
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
@@ -184,14 +177,14 @@
     });
 
     const submit = () => {
-        form.post(route('assignment.submit', {
+        form.put(route('dashboard.assignment.submissions.update', {
             locale: props.locale,
             dashboard: props.dashboard.id,
-            assignment: props.assignment.id
+            assignment: props.assignment.id,
+            assignmentUser: props.assignmentUser.id
         }), {
             onSuccess: () => {
                 form.reset();
-                clearFile();
             }
         });
     };

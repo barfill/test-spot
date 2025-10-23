@@ -27,14 +27,6 @@ class AssignmentUserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser)
@@ -97,6 +89,40 @@ class AssignmentUserController extends Controller
         ]);
     }
 
+    public function update(Request $request, $locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser)
+    {
+        $this->authorize('update', [Assignment::class, $dashboard, $assignment]);
+
+        $request->validate([
+            'grade' => 'required|integer|min:2|max:5',
+            'review_comment' => 'nullable|string|max:1000',
+        ]);
+
+        if ($assignmentUser->status !== 'pending') {
+            return redirect()->back()->with('error', 'This submission cannot be graded. Current status: ' . $assignmentUser->status);
+        }
+
+        $grade = $request->input('grade');
+        $review_comment = $request->input('review_comment');
+        $graded_status = ($grade >= 3) && ($grade <= 5) ? 'graded_passed' : 'graded_failed';
+
+        if ($dashboard->users()->where('user_id', $assignmentUser->user_id)->doesntExist()) {
+            return redirect()->back()->with('error', 'Assignment user does not belong to the dashboard.');
+        }
+
+        $assignmentUser->update([
+            'grade' => $grade,
+            'review_comment' => $review_comment,
+            'status' => $graded_status,
+        ]);
+
+        return redirect()->route('dashboard.assignments.show', [
+            'locale' => $locale,
+            'dashboard' => $dashboard->id,
+            'assignment' => $assignment->id
+        ])->with('success', 'Assignment graded successfully.');
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -108,7 +134,7 @@ class AssignmentUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function store(Request $request)
     {
         //
     }
