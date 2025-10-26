@@ -35,8 +35,19 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4.867 19.125h.008v.008h-.008v-.008Z" />
                         </svg>
                     </div>
-                    <!-- <span class="w-full">loading</span> -->
-                    <!-- jeżeli przeprocesowane to pasek zielony -->
+                    <div v-if="compilationStatus" class="w-full mt-2 h-1 rounded-full transition-all duration-300"
+                        :class="{
+                            'bg-zinc-400 dark:bg-zinc-100 animate-pulse': compilationStatus === 'loading',
+                            'bg-green-500 dark:bg-green-400': compilationStatus === 'success',
+                            'bg-red-500 dark:bg-red-400': compilationStatus === 'compilation_error',
+                            'bg-orange-500 dark:bg-orange-400': compilationStatus === 'network_error'
+                        }">
+                    </div>
+                    <div v-else class="w-full mt-2 h-1 rounded-full transition-all duration-300"
+                        :class="{
+                            'bg-zinc-300': compilationStatus === null
+                        }">
+                    </div>
                 </div>
             </button>
         </div>
@@ -106,13 +117,24 @@
         createAction.value = 'null';
     }
 
+    const compilationStatus = ref(null);
+
     const compileAll = async () => {
+        compilationStatus.value = 'loading';
+
         try {
             const response = await axios.post(route('dashboard.assignment.compile', {
                 locale: props.locale,
                 dashboard: props.dashboard.id,
                 assignment: props.assignment.id
             }));
+
+            if (response.data.results.successful) {
+                compilationStatus.value = 'success';
+            } else {
+                compilationStatus.value = 'compilation_error';
+            }
+
             router.reload();
         } catch (error) {
             console.error('Compilation error:', error);

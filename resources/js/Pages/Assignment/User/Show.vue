@@ -73,12 +73,12 @@
                                 />
                             </div>
                             <div v-if="compilationStatus" class="w-full mt-2 h-1 rounded-full transition-all duration-300"
-                            :class="{
-                                'bg-zinc-400 dark:bg-zinc-100 animate-pulse': compilationStatus === 'loading',
-                                'bg-green-500 dark:bg-green-400': compilationStatus === 'success',
-                                'bg-red-500 dark:bg-red-400': compilationStatus === 'compilation_error',
-                                'bg-orange-500 dark:bg-orange-400': compilationStatus === 'network_error'
-                            }">
+                                :class="{
+                                    'bg-zinc-400 dark:bg-zinc-100 animate-pulse': compilationStatus === 'loading',
+                                    'bg-green-500 dark:bg-green-400': compilationStatus === 'success',
+                                    'bg-red-500 dark:bg-red-400': compilationStatus === 'compilation_error',
+                                    'bg-orange-500 dark:bg-orange-400': compilationStatus === 'network_error'
+                                }">
                             </div>
                             <div v-else class="w-full mt-2 h-1 rounded-full transition-all duration-300"
                             :class="{
@@ -251,7 +251,6 @@
                 assignmentUser: props.assignmentUser.id
             }));
 
-            console.log('Compilation response:', response.data);
             if (response.data.results.successful) {
                 compilationStatus.value = 'success';
             } else {
