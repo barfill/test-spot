@@ -45,7 +45,7 @@
 
             <div class="w-full mt-6">
                 <div class="flex flex-wrap justify-center gap-4">
-                    <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
+                    <button type="button" class="btn-form-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
                          @click="checkPlagiarism(assignmentUser.id)"
                     >
                         <div class="flex flex-col p-1">
@@ -59,8 +59,10 @@
                             </div>
                             <!-- <span class="w-full">loading</span> -->
                         </div>
-                    </Link>
-                    <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
+                    </button>
+                    <button type="button" class="btn-form-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
+                        @click="compile()"
+                    >
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
                                 <span>{{ translations.compilation_check }}</span>
@@ -70,10 +72,23 @@
                                     :translations="translations"
                                 />
                             </div>
-                            <!-- <span class="w-full">loading</span> -->
+                            <div v-if="compilationStatus" class="w-full mt-2 h-1 rounded-full transition-all duration-300"
+                            :class="{
+                                'bg-zinc-400 dark:bg-zinc-100 animate-pulse': compilationStatus === 'loading',
+                                'bg-green-500 dark:bg-green-400': compilationStatus === 'success',
+                                'bg-red-500 dark:bg-red-400': compilationStatus === 'compilation_error',
+                                'bg-orange-500 dark:bg-orange-400': compilationStatus === 'network_error'
+                            }">
+                            </div>
+                            <div v-else class="w-full mt-2 h-1 rounded-full transition-all duration-300"
+                            :class="{
+                                'bg-zinc-300': compilationStatus === null
+                            }">
+                            </div>
+
                         </div>
-                    </Link>
-                      <Link class="btn-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
+                    </button>
+                    <button type="button" class="btn-form-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
                                 <span>{{ translations.edge_cases_check }}</span>
@@ -85,13 +100,40 @@
                             </div>
                             <!-- <span class="w-full">loading</span> -->
                         </div>
-                    </Link>
+                    </button>
                 </div>
             </div>
         </Card>
 
         <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
             <h3 class="text-lg font-semibold mb-4">Errors</h3>
+            <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
+                <h5 class="text-md text-zinc-500 dark:text-zinc-300 mb-2">{{  translations.plagiarism_check_error }}</h5>
+                <div v-if="assignmentUser.plagiarism_check_result">
+                    <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ assignmentUser.plagiarism_check_result }}</code></pre>
+                </div>
+                <div v-else>
+                    <EmptyCard :translations="translations" :locale="locale" :name="'errors'"/>
+                </div>
+            </Card>
+            <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
+                <h5 class="text-md text-zinc-500 dark:text-zinc-300 mb-2">{{  translations.compilation_check_error }}</h5>
+                <div v-if="assignmentUser.compilation_check_result?.success === false">
+                    <pre class="language-json"><code class="language-json">{{ JSON.stringify(assignmentUser.compilation_check_result, null, 2) }}</code></pre>
+                </div>
+                <div v-else>
+                    <EmptyCard :translations="translations" :locale="locale" :name="'errors'"/>
+                </div>
+            </Card>
+            <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
+                <h5 class="text-md text-gray-500 dark:text-zinc-300 mb-2">{{  translations.edge_cases_check_error }}</h5>
+                <div v-if="assignmentUser.edge_cases_check_result">
+                    <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ assignmentUser.edge_cases_check_result }}</code></pre>
+                </div>
+                <div v-else>
+                    <EmptyCard :translations="translations" :locale="locale" :name="'errors'"/>
+                </div>
+            </Card>
         </Card>
 
 
@@ -143,18 +185,20 @@
 </template>
 
 <script setup>
-    import { useForm, Link } from '@inertiajs/vue3';
-    import { defineProps, inject, onMounted } from 'vue';
+    import { useForm, router, Link } from '@inertiajs/vue3';
+    import { defineProps, inject, onMounted, ref } from 'vue';
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
     import Card from '@/Components/UI/Card.vue';
     import TestStatusIcon from '@/Components/UI/TestStatusIcon.vue';
-
+    import EmptyCard from '@/Components/UI/EmptyCard.vue';
+    import axios from 'axios';
 
     import Prism from 'prismjs';
     import 'prismjs/themes/prism-tomorrow.css';
     import 'prismjs/components/prism-clike';
     import 'prismjs/components/prism-c';
     import 'prismjs/components/prism-cpp';
+    import 'prismjs/components/prism-json';
 
     const props = defineProps({
         locale: String,
@@ -193,6 +237,41 @@
             }
         });
     };
+
+    const compilationStatus = ref(null);
+
+    const compile = async () => {
+        compilationStatus.value = 'loading';
+
+        try {
+            const response = await axios.post(route('dashboard.assignment.submission.compile', {
+                locale: props.locale,
+                dashboard: props.dashboard.id,
+                assignment: props.assignment.id,
+                assignmentUser: props.assignmentUser.id
+            }));
+
+            console.log('Compilation response:', response.data);
+            if (response.data.results.successful) {
+                compilationStatus.value = 'success';
+            } else {
+                compilationStatus.value = 'compilation_error';
+            }
+
+            router.reload({
+                only: ['assignmentUser'],
+                preserveScroll: true,
+                onSuccess: () => {
+                    setTimeout(() => {
+                        Prism.highlightAll();
+                    }, 100);
+                }
+            });
+        } catch (error) {
+            compilationStatus.value = 'network_error';
+            console.error('Network error:', error);
+        }
+    }
 </script>
 
 <style scoped>

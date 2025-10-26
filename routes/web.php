@@ -36,6 +36,8 @@ Route::prefix('{locale}')
             )->name('assignment.submissions.run-check');
             // Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
             //     ->name('dashboard.assignment.compile');
+            Route::post('dashboard/{dashboard}/assignments/{assignment}/compile/{assignmentUser}', [AssignmentUserController::class, 'compileSubmission'])
+                ->name('dashboard.assignment.submission.compile');
             Route::post('dashboard/{dashboard}/assignment/{assignment}/submit', [AssignmentController::class, 'submit'])
                 ->name('assignment.submit');
 

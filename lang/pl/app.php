@@ -4,6 +4,7 @@ return [
     // Dashboard
     'dashboard' => 'Panel',
     'dashboards' => 'Panele',
+    'dashboards_e' => 'paneli',
     'my_dashboards' => 'Moje Panele',
     'all_dashboards' => 'Wszystkie Panele',
     'assigned_dashboards' => 'Przypisane Panele',
@@ -21,6 +22,7 @@ return [
     // Assignment
     'assignment' => 'Zadanie',
     'assignments' => 'Zadania',
+    'assignments_e' => 'zadań',
     'my_assignments' => 'Moje Zadania',
     'all_assignments' => 'Wszystkie Zadania',
     'assigned_assignments' => 'Przypisane Zadania',
@@ -74,6 +76,9 @@ return [
     'plagiarism_check' => 'Plagiat',
     'compilation_check' => 'Kompilacja',
     'edge_cases_check' => 'Przypadki brzegowe',
+    'plagiarism_check_error' => 'Błędy plagiatu',
+    'compilation_check_error' => 'Błędy kompilacji',
+    'edge_cases_check_error' => 'Błędy przypadków brzegowych',
     'test_passed' => 'Zaliczono ✓',
     'test_failed' => 'Nie zaliczono ✗',
     'test_not_run' => 'Nie uruchomiono',
@@ -107,6 +112,8 @@ return [
 
     // General
     'name' => 'Nazwa',
+    'errors_e' => 'błędów',
+    'no_items' => 'Brak :items do wyświetlenia.',
     'description' => 'Opis',
     'image' => 'Zdjęcie',
     'no_images' => 'Brak zdjęcia',

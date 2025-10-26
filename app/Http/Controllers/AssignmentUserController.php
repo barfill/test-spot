@@ -7,6 +7,7 @@ use App\Models\Dashboard;
 use App\Models\Assignment;
 use App\Models\AssignmentUser;
 use Illuminate\Support\Facades\Storage;
+use App\Services\CompilationService;
 
 class AssignmentUserController extends Controller
 {
@@ -45,6 +46,13 @@ class AssignmentUserController extends Controller
                 'plagiarism_check' => __('app.plagiarism_check'),
                 'compilation_check' => __('app.compilation_check'),
                 'edge_cases_check' => __('app.edge_cases_check'),
+                'plagiarism_check_error' => __('app.plagiarism_check_error'),
+                'compilation_check_error' => __('app.compilation_check_error'),
+                'edge_cases_check_error' => __('app.edge_cases_check_error'),
+                'no_items' => __('app.no_items'),
+                'dashboards_e' => __('app.dashboards_e'),
+                'assignments_e' => __('app.assignments_e'),
+                'errors_e' => __('app.errors_e'),
                 'choose_file' => __('app.choose_file'),
                 'accepted_formats' => __('app.accepted_formats'),
                 'status' => __('app.status'),
@@ -103,5 +111,16 @@ class AssignmentUserController extends Controller
         ])->with('success', 'Assignment graded successfully.');
     }
 
+    public function compileSubmission($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser, CompilationService $compilationService)
+    {
+        $this->authorize('update', [$dashboard, $assignment]);
 
+        $results = $compilationService->compileSingleSubmission($assignmentUser);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Compilation completed',
+            'results' => $results
+        ]);
+    }
 }

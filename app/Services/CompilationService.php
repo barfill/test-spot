@@ -142,6 +142,55 @@ class CompilationService
         return $results;
     }
 
+    public function compileSingleSubmission(AssignmentUser $assignmentUser): array
+    {
+        $results = [
+            'total' => 1,
+            'successful' => 0,
+            'failed' => 0,
+            'processed' => [],
+        ];
+
+        try {
+                $compilationResult = $this->compileUserAssignment($assignmentUser);
+
+                $assignmentUser->update([
+                    'compilation_check_result' => $compilationResult
+                ]);
+
+                if ($compilationResult['success']) {
+                    $results['successful']++;
+                } else {
+                    $results['failed']++;
+                }
+
+                $results['processed'][] = [
+                    'assignment_user_id' => $assignmentUser->id,
+                    'user_name' => $assignmentUser->user->first_name . ' ' . $assignmentUser->user->last_name,
+                    'success' => $compilationResult['success'],
+                    'status' => $compilationResult['status'],
+                ];
+            } catch (Exception $e) {
+                Log::error('Compilation failed for user assignment', [
+                    'assignment_user_id' => $assignmentUser->id,
+                    'user_id' => $assignmentUser->user_id,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+
+                $results['failed']++;
+                $results['processed'][] = [
+                    'assignment_user_id' => $assignmentUser->id,
+                    'user_name' => $assignmentUser->user->first_name . ' ' . $assignmentUser->user->last_name,
+                    'success' => false,
+                    'status' => 'error',
+                    'message' => 'Exception: ' . $e->getMessage(),
+                ];
+            }
+
+         return $results;
+    }
+
     private function createSuccessResult(string $output, string $compiler): array
     {
         return [

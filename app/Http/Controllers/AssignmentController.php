@@ -281,7 +281,7 @@ class AssignmentController extends Controller
 
     public function compileSubmissions($locale, Dashboard $dashboard, Assignment $assignment, CompilationService $compilationService)
     {
-        // $this->authorize('update', [$dashboard, $assignment]);
+        $this->authorize('update', [$dashboard, $assignment]);
 
         $results = $compilationService->compileAllSubmissions($assignment);
 

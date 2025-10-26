@@ -10,7 +10,7 @@
         />
 
         <div class="flex flex-row gap-2">
-            <Link class="btn-secondary w-full"
+            <button type="button" class="btn-secondary w-full"
 
             >
                 <div class="flex flex-col p-1">
@@ -23,8 +23,8 @@
                     <!-- <span class="w-full">loading</span> -->
                     <!-- jeżeli przeprocesowane to pasek zielony -->
                 </div>
-            </Link>
-            <Link class="btn-secondary w-full"
+            </button>
+            <button type="button" class="btn-secondary w-full"
                 @click="compileAll()"
             >
                 <div class="flex flex-col p-1">
@@ -38,7 +38,7 @@
                     <!-- <span class="w-full">loading</span> -->
                     <!-- jeżeli przeprocesowane to pasek zielony -->
                 </div>
-            </Link>
+            </button>
         </div>
     </div>
 
@@ -88,7 +88,7 @@
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
     import Card from '@/Components/UI/Card.vue';
     import TestStatusIcon from '@/Components/UI/TestStatusIcon.vue';
-    import { defineProps, inject } from 'vue';
+    import { defineProps, inject, onMounted, ref } from 'vue';
     import axios from 'axios';
 
     const props = defineProps({
