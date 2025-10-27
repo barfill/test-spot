@@ -17,6 +17,8 @@ Route::get('/', function () {
 Route::prefix('{locale}')
     ->where(['locale' => implode('|', config('app.supported_locales'))])
     ->group(function() {
+        Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
+                ->name('dashboard.assignment.compile'); // Bez autentykacji pod postmana
         Route::middleware('auth')->group(function() {
             Route::get('/', function() {
                 return redirect()->route('dashboard.index', ['locale' => app()->getLocale()]);
@@ -32,7 +34,10 @@ Route::prefix('{locale}')
             Route::post('dashboard/{dashboard}/assignment/{assignment}/submissions/{assignmentUser}/run-check',
                 [AssignmentUserController::class, 'runCheck']
             )->name('assignment.submissions.run-check');
-
+            // Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
+            //     ->name('dashboard.assignment.compile');
+            Route::post('dashboard/{dashboard}/assignments/{assignment}/compile/{assignmentUser}', [AssignmentUserController::class, 'compileSubmission'])
+                ->name('dashboard.assignment.submission.compile');
             Route::post('dashboard/{dashboard}/assignment/{assignment}/submit', [AssignmentController::class, 'submit'])
                 ->name('assignment.submit');
 

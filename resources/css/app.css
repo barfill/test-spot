@@ -56,6 +56,14 @@
     @apply border-orange-400 dark:border-orange-300;
 }
 
+.btn-compiled-success {
+    @apply border-1 rounded-md border-green-500 dark:border-green-400;
+}
+
+.btn-compiled-failed {
+    @apply border-1 rounded-md border-red-500 dark:border-red-400;
+}
+
 .user-row {
     @apply bg-zinc-100 dark:bg-zinc-400 border border-zinc-300 dark:border-zinc-300 shadow-md shadow-zinc-400 rounded-4xl px-8 py-2
 }

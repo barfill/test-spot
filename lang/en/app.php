@@ -74,6 +74,9 @@ return [
     'plagiarism_check' => 'Plagiarism',
     'compilation_check' => 'Compilation',
     'edge_cases_check' => 'Edge Cases',
+    'plagiarism_check_error' => 'Plagiarism errors',
+    'compilation_check_error' => 'Compilation errors',
+    'edge_cases_check_error' => 'Edge cases errors',
     'test_passed' => 'Passed ✓',
     'test_failed' => 'Failed ✗',
     'test_not_run' => 'Not run yet',
@@ -108,6 +111,8 @@ return [
 
     // General
     'name' => 'Name',
+    'errors_e' => 'errors',
+    'no_items' => 'No :items to display.',
     'description' => 'Description',
     'image' => 'Image',
     'no_images' => 'No Image',
