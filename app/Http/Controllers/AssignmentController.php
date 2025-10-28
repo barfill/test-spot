@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AssignmentRequest;
 use App\Services\CompilationService;
+use App\Services\PlagiarismService;
 
 class AssignmentController extends Controller
 {
@@ -288,6 +289,19 @@ class AssignmentController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Compilation completed',
+            'results' => $results
+        ]);
+    }
+
+    public function checkPlagiarismInAssignment($locale, Dashboard $dashboard, Assignment $assignment, PlagiarismService $plagiarismService)
+    {
+        // $this->authorize('update', [$dashboard, $assignment]);
+
+        $results = $plagiarismService->checkAssignment($assignment);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Plagiarism check completed',
             'results' => $results
         ]);
     }

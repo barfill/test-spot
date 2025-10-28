@@ -17,8 +17,11 @@ Route::get('/', function () {
 Route::prefix('{locale}')
     ->where(['locale' => implode('|', config('app.supported_locales'))])
     ->group(function() {
+         // Bez autentykacji pod postmana
         Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
-                ->name('dashboard.assignment.compile'); // Bez autentykacji pod postmana
+                ->name('dashboard.assignment.compile');
+        Route::post('dashboard/{dashboard}/assignments/{assignment}/check-plagiarism', [AssignmentController::class, 'checkPlagiarismInAssignment'])
+                ->name('dashboard.assignment.check-plagiarism');
         Route::middleware('auth')->group(function() {
             Route::get('/', function() {
                 return redirect()->route('dashboard.index', ['locale' => app()->getLocale()]);
