@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AssignmentRequest;
 use App\Services\CompilationService;
 use App\Services\PlagiarismService;
+use App\AiAgents\TestAgent;
 
 class AssignmentController extends Controller
 {
@@ -304,5 +305,12 @@ class AssignmentController extends Controller
             'message' => 'Plagiarism check completed',
             'results' => $results
         ]);
+    }
+
+    public function testAgent()
+    {
+        $agent = TestAgent::for('test');
+        $response = $agent->respond('Hello, are you working?');
+        return response()->json(['response' => $response]);
     }
 }

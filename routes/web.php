@@ -22,6 +22,7 @@ Route::prefix('{locale}')
                 ->name('dashboard.assignment.compile');
         Route::post('dashboard/{dashboard}/assignments/{assignment}/check-plagiarism', [AssignmentController::class, 'checkPlagiarismInAssignment'])
                 ->name('dashboard.assignment.check-plagiarism');
+        Route::get('test-agent', [AssignmentController::class, 'testAgent']);
         Route::middleware('auth')->group(function() {
             Route::get('/', function() {
                 return redirect()->route('dashboard.index', ['locale' => app()->getLocale()]);

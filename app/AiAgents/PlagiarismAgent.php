@@ -7,13 +7,15 @@ use LarAgent\Agent;
 class PlagiarismAgent extends Agent
 {
     // protected $model = 'gpt-4.1-nano';
-    protected $model = 'gpt-4o-mini';
+    // protected $model = 'gpt-4o-mini';
+    // protected $model = 'gemini-pro';
 
     protected $temperature = 0.3;
 
     protected $history = 'in_memory';
 
-    protected $provider = 'default';
+    // protected $provider = 'default';
+    protected $provider = 'gemini';
 
     protected $tools = [];
 

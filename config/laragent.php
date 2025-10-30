@@ -7,7 +7,8 @@ return [
      * Default driver to use, binded in service provider
      * with \LarAgent\Core\Contracts\LlmDriver interface
      */
-    'default_driver' => \LarAgent\Drivers\OpenAi\OpenAiCompatible::class,
+    // 'default_driver' => \LarAgent\Drivers\OpenAi\OpenAiCompatible::class,
+    'default_driver' => \LarAgent\Drivers\OpenAi\GeminiDriver::class,
 
     /**
      * Default chat history to use, binded in service provider
@@ -46,6 +47,8 @@ return [
         'gemini' => [
             'label' => 'gemini',
             'api_key' => env('GEMINI_API_KEY'),
+            // 'model'   => 'gemini-2.5-pro',
+            'model'   => 'gemini-2.5-flash',
             'driver' => \LarAgent\Drivers\OpenAi\GeminiDriver::class,
             'default_context_window' => 1000000,
             'default_max_completion_tokens' => 10000,

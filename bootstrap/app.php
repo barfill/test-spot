@@ -20,7 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Wyłączenie CSRF dla API compile, check-plagiarism pod postmana
         $middleware->validateCsrfTokens(except: [
             '*/dashboard/*/assignments/*/compile',
-            '*/dashboard/*/assignments/*/check-plagiarism'
+            '*/dashboard/*/assignments/*/check-plagiarism',
+            '*/test-agent',
         ]);
         $middleware->redirectGuestsTo(function($request) {
             $locale = $request->route('locale')

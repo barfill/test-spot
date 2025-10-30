@@ -28,9 +28,11 @@ class PlagiarismService
 
         ];
 
+        $seenPairs = [];
+
         foreach ($assignmentUsers as $assignmentUser) {
             try {
-                $plagiarismCheckResult = $this->checkSubmission($assignmentUser, $assignmentUsers);
+                $plagiarismCheckResult = $this->checkSubmission($assignmentUser, $assignmentUsers, $seenPairs);
 
                 $assignmentUser->update([
                     'plagiarism_check_result' => $plagiarismCheckResult
@@ -71,11 +73,14 @@ class PlagiarismService
         return $results;
     }
 
-    private function checkSubmission(AssignmentUser $current, $other): array
+    private function checkSubmission(AssignmentUser $current, $other, array &$seenPairs = []): array
     {
-        $currentCode = Storage::get($current->file_path);
+        $currentCodeRaw = Storage::get($current->file_path);
+        $currentCode = $this->normalizeCode($currentCodeRaw);
         $currentUserId = $current->user_id;
+
         $matches = [];
+        $matches[$currentUserId] = [];
 
         foreach ($other as $otherSubmission) {
             $otherUserId = $otherSubmission->user_id;
@@ -84,7 +89,17 @@ class PlagiarismService
                 continue;
             }
 
-            $otherCode = Storage::get($otherSubmission->file_path);
+            $pairKey = min($currentUserId, $otherUserId) . '-' . max($currentUserId, $otherUserId);
+
+            if (isset($seenPairs[$pairKey])) {
+                continue;
+            }
+            $seenPairs[$pairKey] = true;
+
+            $otherCodeRaw = Storage::get($otherSubmission->file_path);
+            $otherCode = $this->normalizeCode($otherCodeRaw);
+
+            usleep(150_000);
 
             $aiCheckResult = $this->checkPlagiarismWithAgent(
                 $currentUserId,
@@ -92,10 +107,6 @@ class PlagiarismService
                 $otherUserId,
                 $otherCode
             );
-
-            if (isset($matches[$currentUserId])) {
-                $matches[$currentUserId] = [];
-            }
 
             $matches[$currentUserId][] = $aiCheckResult;
         }
