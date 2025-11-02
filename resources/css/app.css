@@ -30,6 +30,10 @@
     @apply bg-zinc-100 dark:bg-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-500 text-zinc-500 dark:text-zinc-100 font-medium p-4 rounded border border-gray-300 dark:border-zinc-400;
 }
 
+.btn-teacher-secondary {
+    @apply bg-zinc-100 dark:bg-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-500 text-zinc-500 dark:text-zinc-100 font-medium px-4 py-2 rounded;
+}
+
 .btn-danger {
     @apply bg-red-500 dark:bg-red-400 hover:bg-red-400 dark:hover:bg-red-300 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded;
 }

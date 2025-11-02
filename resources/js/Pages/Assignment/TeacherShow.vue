@@ -10,8 +10,12 @@
         />
 
         <div class="flex flex-row gap-2">
-            <button type="button" class="btn-secondary w-full"
-
+            <button type="button" class="btn-teacher-secondary border-1 w-full"
+                @click="plagiaristCheckAll()"
+                :class="{
+                    'border-orange-500 dark:border-orange-400 animate-pulse': plagiaristCheckStatus === 'loading',
+                    'border-zinc-300 dark:border-zinc-600': plagiaristCheckStatus !== 'loading',
+                }"
             >
                 <div class="flex flex-col p-1">
                     <div class="flex justify-between items-center gap-4">
@@ -20,12 +24,26 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
                         </svg>
                     </div>
-                    <!-- <span class="w-full">loading</span> -->
-                    <!-- jeżeli przeprocesowane to pasek zielony -->
+                    <div v-if="plagiaristCheckStatus" class="w-full mt-2 h-1 rounded-full transition-all duration-300"
+                        :class="{
+                            'bg-zinc-400 dark:bg-zinc-100 animate-pulse': plagiaristCheckStatus === 'loading',
+                            'bg-green-500 dark:bg-green-400': plagiaristCheckStatus === 'success',
+                            'bg-red-500 dark:bg-red-400': plagiaristCheckStatus === 'error',
+                        }">
+                    </div>
+                    <div v-else class="w-full mt-2 h-1 rounded-full transition-all duration-300"
+                        :class="{
+                            'bg-zinc-300': plagiaristCheckStatus === null
+                        }">
+                    </div>
                 </div>
             </button>
-            <button type="button" class="btn-secondary w-full"
+            <button type="button" class="btn-teacher-secondary border-1 w-full"
                 @click="compileAll()"
+                :class="{
+                    'border-orange-500 dark:border-orange-400 animate-pulse': compilationStatus === 'loading',
+                    'border-zinc-300 dark:border-zinc-600': compilationStatus !== 'loading',
+                }"
             >
                 <div class="flex flex-col p-1">
                     <div class="flex justify-between items-center gap-4">
@@ -118,7 +136,6 @@
     }
 
     const compilationStatus = ref(null);
-
     const compileAll = async () => {
         compilationStatus.value = 'loading';
 
@@ -140,4 +157,30 @@
             console.error('Compilation error:', error);
         }
     }
+
+    const plagiaristCheckStatus = ref(null);
+    const plagiaristCheckAll = async() => {
+        plagiaristCheckStatus.value = 'loading';
+
+        try {
+            const response = await axios.post(route('dashboard.assignment.check-plagiarism', {
+                locale: props.locale,
+                dashboard: props.dashboard.id,
+                assignment: props.assignment.id
+            }));
+
+            if (response.data.results.successful) {
+                plagiaristCheckStatus.value = 'success';
+            } else {
+                plagiaristCheckStatus.value = 'error';
+            }
+
+            router.reload();
+        } catch (error) {
+            console.error('Plagiarism check error:', error);
+        }
+
+    }
+
+
 </script>

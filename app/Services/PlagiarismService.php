@@ -5,6 +5,7 @@ namespace App\Services;
 use App\AiAgents\PlagiarismAgent;
 use App\Models\Assignment;
 use App\Models\AssignmentUser;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -28,11 +29,9 @@ class PlagiarismService
 
         ];
 
-        $seenPairs = [];
-
         foreach ($assignmentUsers as $assignmentUser) {
             try {
-                $plagiarismCheckResult = $this->checkSubmission($assignmentUser, $assignmentUsers, $seenPairs);
+                $plagiarismCheckResult = $this->checkSubmission($assignmentUser, $assignmentUsers);
 
                 $assignmentUser->update([
                     'plagiarism_check_result' => $plagiarismCheckResult
@@ -73,7 +72,7 @@ class PlagiarismService
         return $results;
     }
 
-    private function checkSubmission(AssignmentUser $current, $other, array &$seenPairs = []): array
+    private function checkSubmission(AssignmentUser $current, $other): array
     {
         $currentCodeRaw = Storage::get($current->file_path);
         $currentCode = $this->normalizeCode($currentCodeRaw);
@@ -81,6 +80,7 @@ class PlagiarismService
 
         $matches = [];
         $matches[$currentUserId] = [];
+        $isPlagiarismDetected = false;
 
         foreach ($other as $otherSubmission) {
             $otherUserId = $otherSubmission->user_id;
@@ -89,17 +89,10 @@ class PlagiarismService
                 continue;
             }
 
-            $pairKey = min($currentUserId, $otherUserId) . '-' . max($currentUserId, $otherUserId);
-
-            if (isset($seenPairs[$pairKey])) {
-                continue;
-            }
-            $seenPairs[$pairKey] = true;
-
             $otherCodeRaw = Storage::get($otherSubmission->file_path);
             $otherCode = $this->normalizeCode($otherCodeRaw);
 
-            usleep(150_000);
+            usleep(15_000);
 
             $aiCheckResult = $this->checkPlagiarismWithAgent(
                 $currentUserId,
@@ -108,14 +101,17 @@ class PlagiarismService
                 $otherCode
             );
 
+            if ($aiCheckResult['is_plagiarism']) {
+                $isPlagiarismDetected = true;
+            }
+
             $matches[$currentUserId][] = $aiCheckResult;
         }
 
         return [
-            'success' => true,
-            'status' => count($matches) > 0 ? 'suspicious' : 'clean',
-            'matches' => $matches,
-            'total_comparisons' => count($other) - 1,
+            'success' => !$isPlagiarismDetected,
+            'status' => $isPlagiarismDetected ? 'suspicious' : 'clean',
+            'matches' => $matches[$currentUserId],
         ];
     }
 
@@ -125,13 +121,16 @@ class PlagiarismService
         $prompt = $this->createPrompt($userId1, $code1, $userId2, $code2);
         $response = $agent->respond(($prompt));
 
-        $responseJson = preg_match('/\{.*?\}/s', $response, $matches) ? $matches[0] : null;
-        if ($responseJson) {
-            return json_decode($responseJson, true);
-        }
+        $responseJson = json_decode(preg_match('/\{.*?\}/s', $response, $matches) ? $matches[0] : null, true);
+
+        $user = User::find($userId2);
+        $userName = $user ? ($user->first_name . ' ' . $user->last_name) : 'Unknown';
+        $userEmail = $user ? $user->email : 'Unknown';
 
         return [
             'comparison_user_id' => $userId2,
+            'comparison_user_name' => $userName,
+            'comparison_user_email' => $userEmail,
             'similarity_score' => $responseJson['similarity_score'] ?? 0,
             'is_plagiarism' => $responseJson['is_plagiarism'] ?? false,
             'details' => $responseJson['details'] ?? 'Brak szczegółów w odpowiedzi agenta.',

@@ -73,6 +73,9 @@ class AssignmentUserController extends Controller
                 'status_completed' => __('app.status_completed'),
                 'status_failed' => __('app.status_failed'),
                 'review_comment' => __('app.review_comment'),
+                'test_passed' => __('app.test_passed'),
+                'test_failed' => __('app.test_failed'),
+                'test_not_run' => __('app.test_not_run'),
             ]
         ]);
     }
