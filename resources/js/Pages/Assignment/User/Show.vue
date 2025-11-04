@@ -34,9 +34,22 @@
             </div>
 
             <div class="mt-6">
-                <h5 class="text-zinc-900 dark:text-zinc-100 text-md font-bold mb-2">
-                    {{ translations.file_content }}
-                </h5>
+                <div class="flex flex-row justify-between items-center gap-2">
+                    <h5 class="text-zinc-900 dark:text-zinc-100 text-md font-bold mb-2">
+                        {{ translations.file_content }}
+                    </h5>
+                        <Link
+                            class="btn-primary cursor-pointer mb-2"
+                            :title="translations.download_file"
+                            @click="fileDownload()"
+                        >
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                            </span>
+                        </Link>
+                </div>
                 <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ fileContent }}</code></pre>
                 <div v-else class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded text-yellow-800 dark:text-yellow-200">
                     ⚠️ {{ translations.no_file }}
@@ -45,8 +58,12 @@
 
             <div class="w-full mt-6">
                 <div class="flex flex-wrap justify-center gap-4">
-                    <button type="button" class="btn-form-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
-                         @click="checkPlagiarism(assignmentUser.id)"
+                    <button type="button" class="btn-teacher-secondary-lg border-1 w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
+                         @click="plagiaristCheckAll()"
+                         :class="{
+                            'border-orange-500 dark:border-orange-400 animate-pulse': plagiaristCheckStatus === 'loading',
+                            'border-zinc-300 dark:border-zinc-400': plagiaristCheckStatus !== 'loading',
+                        }"
                     >
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
@@ -57,11 +74,26 @@
                                     :translations="translations"
                                 />
                             </div>
-                            <!-- <span class="w-full">loading</span> -->
+                            <div v-if="plagiaristCheckStatus" class="w-full mt-2 h-1 rounded-full transition-all duration-300"
+                                :class="{
+                                    'bg-zinc-400 dark:bg-zinc-100 animate-pulse': plagiaristCheckStatus === 'loading',
+                                    'bg-green-500 dark:bg-green-400': plagiaristCheckStatus === 'success',
+                                    'bg-red-500 dark:bg-red-400': plagiaristCheckStatus === 'error',
+                                }">
+                            </div>
+                            <div v-else class="w-full mt-2 h-1 rounded-full transition-all duration-300"
+                                :class="{
+                                    'bg-zinc-300': plagiaristCheckStatus === null
+                                }">
+                            </div>
                         </div>
                     </button>
-                    <button type="button" class="btn-form-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
+                    <button type="button" class="btn-teacher-secondary-lg border-1 w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
                         @click="compile()"
+                        :class="{
+                            'border-orange-500 dark:border-orange-400 animate-pulse': compilationStatus === 'loading',
+                            'border-zinc-300 dark:border-zinc-400': compilationStatus !== 'loading',
+                        }"
                     >
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
@@ -88,7 +120,7 @@
 
                         </div>
                     </button>
-                    <button type="button" class="btn-form-secondary w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
+                    <button type="button" class="btn-teacher-secondary-lg border-1 w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
                                 <span>{{ translations.edge_cases_check }}</span>
@@ -106,11 +138,13 @@
         </Card>
 
         <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
-            <h3 class="text-lg font-semibold mb-4">Errors</h3>
+            <h3 class="text-lg font-semibold mb-4">{{ translations.Errors_e }}</h3>
             <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
                 <h5 class="text-md text-zinc-500 dark:text-zinc-300 mb-2">{{  translations.plagiarism_check_error }}</h5>
-                <div v-if="assignmentUser.plagiarism_check_result">
-                    <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ assignmentUser.plagiarism_check_result }}</code></pre>
+                <div v-if="formattedPlagiarismResult && formattedPlagiarismResult.matches.length > 0">
+                    <!-- <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ JSON.stringify(assignmentUser.plagiarism_check_result, null, 2) }}</code></pre> -->
+                    <!-- <pre class="language-json"><code class="language-json">{{ JSON.stringify(assignmentUser.plagiarism_check_result, null, 2) }}</code></pre> -->
+                    <pre class="language-json"><code class="language-json">{{ JSON.stringify(formattedPlagiarismResult, null, 2) }}</code></pre>
                 </div>
                 <div v-else>
                     <EmptyCard :translations="translations" :locale="locale" :name="'errors'"/>
@@ -186,7 +220,7 @@
 
 <script setup>
     import { useForm, router, Link } from '@inertiajs/vue3';
-    import { defineProps, inject, onMounted, ref } from 'vue';
+    import { defineProps, inject, onMounted, ref, watch, nextTick, computed } from 'vue';
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
     import Card from '@/Components/UI/Card.vue';
     import TestStatusIcon from '@/Components/UI/TestStatusIcon.vue';
@@ -271,6 +305,83 @@
             console.error('Network error:', error);
         }
     }
+
+    const plagiaristCheckStatus = ref(null);
+    const plagiaristCheckAll = async() => {
+        plagiaristCheckStatus.value = 'loading';
+
+        try {
+            const response = await axios.post(route('dashboard.assignment.check-plagiarism', {
+                locale: props.locale,
+                dashboard: props.dashboard.id,
+                assignment: props.assignment.id
+            }));
+
+            if (response.data.results.successful) {
+                plagiaristCheckStatus.value = 'success';
+            } else {
+                plagiaristCheckStatus.value = 'error';
+            }
+
+            router.reload({
+                only: ['assignmentUser'],
+                preserveScroll: true,
+                onSuccess: () => {
+                    setTimeout(() => {
+                        Prism.highlightAll();
+                    }, 100);
+                }
+            });
+        } catch (error) {
+            console.error('Plagiarism check error:', error);
+        }
+
+    }
+
+    const formatPlagiarismErrors = (errors) => {
+        const filtered = errors.matches.filter(error => error.is_plagiarism === true);
+        return {
+            ...errors,
+            matches: filtered
+        };
+    };
+
+    const formattedPlagiarismResult = computed(() => {
+        if (!props.assignmentUser.plagiarism_check_result?.matches) {
+            return null;
+        }
+        return formatPlagiarismErrors(props.assignmentUser.plagiarism_check_result);
+    });
+
+    watch(formattedPlagiarismResult, (newValue) => {
+        if (newValue && newValue.matches.length > 0) {
+            nextTick(() => {
+                Prism.highlightAll();
+            });
+        }
+    });
+
+    const fileDownload = () => {
+        if (!props.fileContent) {
+            return;
+        }
+
+        const blob = new Blob([props.fileContent], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        const date = new Date();
+        const currentDate = date.toISOString().split('T')[0];
+        a.href = url;
+        a.download = `${currentDate}_${props.assignmentUser.user.last_name}_${props.assignment.name}.cpp`;
+
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }
+
 </script>
 
 <style scoped>

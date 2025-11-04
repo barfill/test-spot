@@ -7,8 +7,8 @@ return [
      * Default driver to use, binded in service provider
      * with \LarAgent\Core\Contracts\LlmDriver interface
      */
-    // 'default_driver' => \LarAgent\Drivers\OpenAi\OpenAiCompatible::class,
-    'default_driver' => \LarAgent\Drivers\OpenAi\GeminiDriver::class,
+    'default_driver' => \LarAgent\Drivers\OpenAi\OpenAiDriver::class,
+    // 'default_driver' => \LarAgent\Drivers\OpenAi\GeminiDriver::class,
 
     /**
      * Default chat history to use, binded in service provider
@@ -38,6 +38,7 @@ return [
         'default' => [
             'label' => 'openai',
             'api_key' => env('OPENAI_API_KEY'),
+            'model'   => 'gpt-4o-mini',
             'driver' => \LarAgent\Drivers\OpenAi\OpenAiDriver::class,
             'default_context_window' => 50000,
             'default_max_completion_tokens' => 10000,

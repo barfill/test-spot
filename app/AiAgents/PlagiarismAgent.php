@@ -8,7 +8,10 @@ class PlagiarismAgent extends Agent
 {
     // protected $model = 'gpt-4.1-nano';
     // protected $model = 'gpt-4o-mini';
-    // protected $model = 'gemini-pro';
+    // protected $model = 'gemini-2.0-flash-exp';
+    // protected $model = 'gemini-2.5-flash';
+    protected $model = 'gemini-2.5-flash-lite';
+
 
     protected $temperature = 0.3;
 

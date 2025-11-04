@@ -18,10 +18,10 @@ Route::prefix('{locale}')
     ->where(['locale' => implode('|', config('app.supported_locales'))])
     ->group(function() {
          // Bez autentykacji pod postmana
-        Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
-                ->name('dashboard.assignment.compile');
-        Route::post('dashboard/{dashboard}/assignments/{assignment}/check-plagiarism', [AssignmentController::class, 'checkPlagiarismInAssignment'])
-                ->name('dashboard.assignment.check-plagiarism');
+        // Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
+        //         ->name('dashboard.assignment.compile');
+        // Route::post('dashboard/{dashboard}/assignments/{assignment}/check-plagiarism', [AssignmentController::class, 'checkPlagiarismInAssignment'])
+        //         ->name('dashboard.assignment.check-plagiarism');
         Route::get('test-agent', [AssignmentController::class, 'testAgent']);
         Route::middleware('auth')->group(function() {
             Route::get('/', function() {
@@ -38,10 +38,15 @@ Route::prefix('{locale}')
             Route::post('dashboard/{dashboard}/assignment/{assignment}/submissions/{assignmentUser}/run-check',
                 [AssignmentUserController::class, 'runCheck']
             )->name('assignment.submissions.run-check');
-            // Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
-            //     ->name('dashboard.assignment.compile');
+
+            Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
+                ->name('dashboard.assignment.compile');
             Route::post('dashboard/{dashboard}/assignments/{assignment}/compile/{assignmentUser}', [AssignmentUserController::class, 'compileSubmission'])
                 ->name('dashboard.assignment.submission.compile');
+
+            Route::post('dashboard/{dashboard}/assignments/{assignment}/check-plagiarism', [AssignmentController::class, 'checkPlagiarismInAssignment'])
+                ->name('dashboard.assignment.check-plagiarism');
+
             Route::post('dashboard/{dashboard}/assignment/{assignment}/submit', [AssignmentController::class, 'submit'])
                 ->name('assignment.submit');
 

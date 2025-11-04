@@ -14,7 +14,7 @@
                 @click="plagiaristCheckAll()"
                 :class="{
                     'border-orange-500 dark:border-orange-400 animate-pulse': plagiaristCheckStatus === 'loading',
-                    'border-zinc-300 dark:border-zinc-600': plagiaristCheckStatus !== 'loading',
+                    'border-zinc-300 dark:border-zinc-400': plagiaristCheckStatus !== 'loading',
                 }"
             >
                 <div class="flex flex-col p-1">
@@ -42,7 +42,7 @@
                 @click="compileAll()"
                 :class="{
                     'border-orange-500 dark:border-orange-400 animate-pulse': compilationStatus === 'loading',
-                    'border-zinc-300 dark:border-zinc-600': compilationStatus !== 'loading',
+                    'border-zinc-300 dark:border-zinc-400': compilationStatus !== 'loading',
                 }"
             >
                 <div class="flex flex-col p-1">
