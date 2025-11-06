@@ -93,6 +93,8 @@ return [
     'file_content' => 'Zawartość Pliku',
     'no_file' => 'Brak pliku do wyświetlenia.',
     'select_grade' => 'Wybierz ocenę',
+    'Errors_e' => 'Błędy',
+    'download_file' => 'Pobierz plik',
 
     //User
     'edit_profile' => 'Edytuj profil',

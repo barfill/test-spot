@@ -91,6 +91,8 @@ return [
     'file_content' => 'File Content',
     'no_file' => 'No file to display.',
     'select_grade' => 'Select Grade',
+    'Errors_e' => 'Errors',
+    'download_file' => 'Download File',
 
     //User
     'edit_profile' => 'Edit Profile',

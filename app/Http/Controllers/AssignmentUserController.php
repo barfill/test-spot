@@ -50,9 +50,11 @@ class AssignmentUserController extends Controller
                 'compilation_check_error' => __('app.compilation_check_error'),
                 'edge_cases_check_error' => __('app.edge_cases_check_error'),
                 'no_items' => __('app.no_items'),
+                'download_file' => __('app.download_file'),
                 'dashboards_e' => __('app.dashboards_e'),
                 'assignments_e' => __('app.assignments_e'),
                 'errors_e' => __('app.errors_e'),
+                'Errors_e' => __('app.Errors_e'),
                 'choose_file' => __('app.choose_file'),
                 'accepted_formats' => __('app.accepted_formats'),
                 'status' => __('app.status'),
@@ -73,6 +75,9 @@ class AssignmentUserController extends Controller
                 'status_completed' => __('app.status_completed'),
                 'status_failed' => __('app.status_failed'),
                 'review_comment' => __('app.review_comment'),
+                'test_passed' => __('app.test_passed'),
+                'test_failed' => __('app.test_failed'),
+                'test_not_run' => __('app.test_not_run'),
             ]
         ]);
     }
