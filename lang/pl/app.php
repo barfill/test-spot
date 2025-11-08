@@ -86,6 +86,7 @@ return [
     'test_not_run' => 'Nie uruchomiono',
     'test_in_progress' => 'W trakcie...',
     'for' => 'Dla',
+    'generate_ai_report' => 'Generuj raport AI',
 
     //Assignment User
     'assignment_description' => 'Opis Zadania',

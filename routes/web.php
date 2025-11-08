@@ -22,10 +22,12 @@ Route::prefix('{locale}')
         //         ->name('dashboard.assignment.compile');
         // Route::post('dashboard/{dashboard}/assignments/{assignment}/check-plagiarism', [AssignmentController::class, 'checkPlagiarismInAssignment'])
         //         ->name('dashboard.assignment.check-plagiarism');
-        Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/random', [AssignmentUserController::class, 'testRandom'])
-            ->name('dashboard.assignment.test-cases.random');
-        Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/edge', [AssignmentUserController::class, 'testEdge'])
-            ->name('dashboard.assignment.test-cases.edge');
+        // Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/random', [AssignmentUserController::class, 'testRandom'])
+        //     ->name('dashboard.assignment.test-cases.random');
+        // Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/edge', [AssignmentUserController::class, 'testEdge'])
+        //     ->name('dashboard.assignment.test-cases.edge');
+        // Route::post('dashboard/{dashboard}/assignment/{assignment}/generate-report/{assignmentUser}', [AssignmentUserController::class, 'generateAiReport'])
+        //     ->name('dashboard.assignment.generate-report');
         Route::get('test-agent', [AssignmentController::class, 'testAgent']);
         Route::middleware('auth')->group(function() {
             Route::get('/', function() {
@@ -51,10 +53,13 @@ Route::prefix('{locale}')
             Route::post('dashboard/{dashboard}/assignments/{assignment}/check-plagiarism', [AssignmentController::class, 'checkPlagiarismInAssignment'])
                 ->name('dashboard.assignment.check-plagiarism');
 
-            // Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/random', [AssignmentUserController::class, 'testRandom'])
-            //     ->name('dashboard.assignment.test-cases.random');
-            // Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/edge', [AssignmentUserController::class, 'testEdge'])
-            //     ->name('dashboard.assignment.test-cases.edge');
+            Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/random', [AssignmentUserController::class, 'testRandom'])
+                ->name('dashboard.assignment.test-cases.random');
+            Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/edge', [AssignmentUserController::class, 'testEdge'])
+                ->name('dashboard.assignment.test-cases.edge');
+
+            Route::post('dashboard/{dashboard}/assignment/{assignment}/generate-report/{assignmentUser}', [AssignmentUserController::class, 'generateAiReport'])
+            ->name('dashboard.assignment.generate-report');
 
             Route::post('dashboard/{dashboard}/assignment/{assignment}/submit', [AssignmentController::class, 'submit'])
                 ->name('assignment.submit');

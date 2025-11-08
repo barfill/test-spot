@@ -38,17 +38,19 @@
                     <h5 class="text-zinc-900 dark:text-zinc-100 text-md font-bold mb-2">
                         {{ translations.file_content }}
                     </h5>
-                        <Link
-                            class="btn-primary cursor-pointer mb-2"
-                            :title="translations.download_file"
-                            @click="fileDownload()"
-                        >
-                            <span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                </svg>
-                            </span>
-                        </Link>
+                    <div class="flex flex-row gap-4">
+                    <Link
+                        class="btn-primary cursor-pointer mb-2"
+                        :title="translations.download_file"
+                        @click="fileDownload()"
+                    >
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                        </span>
+                    </Link>
+                    </div>
                 </div>
                 <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ fileContent }}</code></pre>
                 <div v-else class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded text-yellow-800 dark:text-yellow-200">
@@ -56,7 +58,7 @@
                 </div>
             </div>
 
-            <div class="w-full mt-6">
+            <div class="w-full mt-6 mb-6">
                 <div class="flex flex-wrap justify-center gap-4">
                     <button type="button" class="btn-teacher-secondary-lg border-1 w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
                          @click="plagiaristCheckAll()"
@@ -122,7 +124,9 @@
                     </button>
                     <button type="button"
                         @click="isTestCasesOpen = !isTestCasesOpen"
-                        class="btn-teacher-secondary-lg border-1 w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
+                        class="btn-teacher-secondary-lg border-1 w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]"
+                        :class="'border-zinc-300 dark:border-zinc-400'"
+                        >
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
                                 <span>{{ translations.test_cases_check }}</span>
@@ -145,7 +149,7 @@
                     <Card v-if="isTestCasesOpen" class="bg-white dark:bg-zinc-700 rounded-lg shadow p-4 w-full">
                         <div class="flex flex-col gap-3">
                             <div class="flex items-center gap-4">
-                                <button type="button" class="btn-teacher-secondary w-2/3 whitespace-nowrap overflow-hidden text-ellipsis"
+                                <button type="button" class="btn-teacher-secondary border-1 w-2/3 whitespace-nowrap overflow-hidden text-ellipsis"
                                     @click="testRandom()"
                                     :class="{
                                         'border-orange-500 dark:border-orange-400 animate-pulse': testRandomResult === 'loading',
@@ -164,7 +168,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-4">
-                                <button type="button" class="btn-teacher-secondary w-2/3 whitespace-nowrap overflow-hidden text-ellipsis"
+                                <button type="button" class="btn-teacher-secondary border-1 w-2/3 whitespace-nowrap overflow-hidden text-ellipsis"
                                     @click="testEdge()"
                                     :class="{
                                         'border-orange-500 dark:border-orange-400 animate-pulse': testEdgeResult === 'loading',
@@ -186,6 +190,26 @@
                     </Card>
                 </div>
             </div>
+            <div class="flex flex-row">
+                <Link
+                    class="w-full btn-primary mb-2 flex flex-row justify-center items-center"
+                    :class="{
+                        'opacity-50 cursor-not-allowed pointer-events-none': !isGenerateAiButtonActive
+                    }"
+                    :title="translations.generate_ai_report"
+                    @click="isGenerateAiButtonActive && generateAiReport()"
+                >
+                    <span class="flex flex-row justify-around items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                            <path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" />
+                            <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                        </svg>
+                        {{ translations.generate_ai_report }}
+                    </span>
+
+
+                </Link>
+            </div>
         </Card>
 
         <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
@@ -193,8 +217,6 @@
             <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
                 <h5 class="text-md text-zinc-500 dark:text-zinc-300 mb-2">{{  translations.plagiarism_check_error }}</h5>
                 <div v-if="formattedPlagiarismResult && formattedPlagiarismResult.matches.length > 0">
-                    <!-- <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ JSON.stringify(assignmentUser.plagiarism_check_result, null, 2) }}</code></pre> -->
-                    <!-- <pre class="language-json"><code class="language-json">{{ JSON.stringify(assignmentUser.plagiarism_check_result, null, 2) }}</code></pre> -->
                     <pre class="language-json"><code class="language-json">{{ JSON.stringify(formattedPlagiarismResult, null, 2) }}</code></pre>
                 </div>
                 <div v-else>
@@ -505,6 +527,65 @@
             });
         } catch (error) {
             console.error('Test edge error:', error);
+        }
+    }
+
+    const isGenerateAiButtonActive = computed(() => {
+        return !!(
+            props.assignmentUser.plagiarism_check_result ||
+            props.assignmentUser.compilation_check_result ||
+            props.assignmentUser.test_cases_results
+        );
+    });
+
+    const generateAiReportResult = ref(null);
+    const generateAiReport = async () => {
+        generateAiReportResult.value = 'loading';
+
+        try {
+            const response = await axios.post(route('dashboard.assignment.generate-report', {
+                locale: props.locale,
+                dashboard: props.dashboard.id,
+                assignment: props.assignment.id,
+                assignmentUser: props.assignmentUser.id
+            }));
+
+            if (response.data.success) {
+                generateAiReportResult.value = 'success';
+
+                const reportData = response.data.results;
+                const reportText = JSON.stringify(reportData, null, 2);
+
+                const blob = new Blob([reportText], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                const date = new Date();
+                const currentDate = date.toISOString().split('T')[0];
+                a.href = url;
+                a.download = `${currentDate}_AI_Report_${props.assignmentUser.user.last_name}_${props.assignment.name}.txt`;
+
+                document.body.appendChild(a);
+                a.click();
+
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } else {
+                generateAiReportResult.value = 'error';
+            }
+
+            router.reload({
+                only: ['assignmentUser'],
+                preserveScroll: true,
+                onSuccess: () => {
+                    setTimeout(() => {
+                        Prism.highlightAll();
+                    }, 100);
+                }
+            });
+        } catch (error) {
+            generateAiReportResult.value = 'error';
+            console.error('Generate AI report error:', error);
         }
     }
 </script>

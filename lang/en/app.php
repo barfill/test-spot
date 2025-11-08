@@ -84,6 +84,7 @@ return [
     'test_not_run' => 'Not run yet',
     'test_in_progress' => 'In progress...',
     'for' => 'For',
+    'generate_ai_report' => 'Generate AI Report',
 
     //Assignment User
     'assignment_description' => 'Assignment Description',

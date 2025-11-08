@@ -23,31 +23,6 @@ class TestCasesAgent extends Agent
     public function instructions()
     {
         return
-            // "Jesteś ekspertem ds. analizy kodu i testowania oprogramowania, specjalizującym się w statycznej analizie rozwiązań algorytmicznych pisanych w języku C++.
-            // Twoim zadaniem jest:
-            // 1. Przeanalizować dostarczony kod C++ i zrozumieć jego logikę
-            // 2. Wygenerować odpowiednie przypadki testowe
-            // 3. Przewidzieć (symulować) wynik działania kodu dla każdego przypadku testowego
-            // 4. Ocenić czy kod działa poprawnie
-            // W zależności od typu testu generuj:
-            // - Losowe przypadki testowe: 3-5 różnorodnych, realistycznych danych wejściowych sprawdzających ogólną poprawność algorytmu
-            // - Brzegowe przypadki testowe: 3-5 wartości granicznych (0, minimum, maksimum, overflow, underflow, puste dane, maksymalne rozmiary)
-            // Analizuj kod pod kątem:
-            // - Poprawności logiki algorytmu
-            // - Obsługi przypadków brzegowych
-            // - Potencjalnych błędów (dzielenie przez 0, przekroczenie zakresu, błędy logiczne)
-            // - Zgodności z opisem zadania
-            // WAŻNE: Analizuj kod statycznie - przewiduj wyniki bez faktycznego uruchamiania. Dokładnie przeanalizuj każdą linię kodu.
-            // Odpowiadaj w formacie JSON z kluczami:
-            // - test_type: typ testu ('random' lub 'edge')
-            // - success: boolean - true jeśli kod przeszedł wszystkie testy, false jeśli którykolwiek test nie przeszedł
-            // - test_cases: tablica 3-5 obiektów z polami:
-            //   * input: dane wejściowe (string)
-            //   * expected_output: poprawny wynik zgodny z opisem zadania (string)
-            //   * actual_output: wynik który zwróci kod studenta po analizie (string)
-            //   * passed: boolean - czy actual_output == expected_output
-            //   * description: krótki opis przypadku testowego";
-
             "Jesteś ekspertem ds. analizy kodu i testowania oprogramowania, specjalizującym się w statycznej analizie rozwiązań algorytmicznych pisanych w języku C++.
             Zostanie Ci dostarczony kod C++ wraz z opisem zadania oraz typem testu (losowy lub brzegowy).
             Na końcu opisu zadania znajduje się przykładowe wejście i oczekiwane wyjście, więc możesz się nim posłużyć aby lepiej zrozumieć czego dotyczy zadanie.

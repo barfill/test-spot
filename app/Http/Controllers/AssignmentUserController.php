@@ -9,6 +9,7 @@ use App\Models\AssignmentUser;
 use Illuminate\Support\Facades\Storage;
 use App\Services\CompilationService;
 use App\Services\TestCasesService;
+use App\Services\ReportGeneratorService;
 
 class AssignmentUserController extends Controller
 {
@@ -83,6 +84,7 @@ class AssignmentUserController extends Controller
                 'test_not_run' => __('app.test_not_run'),
                 'test_in_progress' => __('app.test_in_progress'),
                 'for' => __('app.for'),
+                'generate_ai_report' => __('app.generate_ai_report'),
             ]
         ]);
     }
@@ -156,6 +158,19 @@ class AssignmentUserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Edge test cases executed',
+            'results' => $results
+        ]);
+    }
+
+    public function generateAiReport($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser, ReportGeneratorService $reportGeneratorService)
+    {
+        // $this->authorize('update', [$dashboard, $assignment]);
+
+        $results = $reportGeneratorService->generateReport($assignmentUser);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'AI report generated',
             'results' => $results
         ]);
     }
