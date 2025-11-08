@@ -21,6 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             '*/dashboard/*/assignments/*/compile',
             '*/dashboard/*/assignments/*/check-plagiarism',
+            '*/dashboard/*/assignment/*/test-cases/*/random',
+            '*/dashboard/*/assignment/*/test-cases/*/edge',
             '*/test-agent',
         ]);
         $middleware->redirectGuestsTo(function($request) {

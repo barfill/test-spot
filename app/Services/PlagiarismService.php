@@ -123,6 +123,10 @@ class PlagiarismService
 
         $responseJson = json_decode(preg_match('/\{.*?\}/s', $response, $matches) ? $matches[0] : null, true);
 
+        $similarityScore = $responseJson['similarity_score'] ?? 0;
+        $aiPlagiarismOpinion = $responseJson['is_plagiarism'] ?? false;
+        $isPlagiarism = $aiPlagiarismOpinion && ($similarityScore >= 80);
+
         $user = User::find($userId2);
         $userName = $user ? ($user->first_name . ' ' . $user->last_name) : 'Unknown';
         $userEmail = $user ? $user->email : 'Unknown';
@@ -131,8 +135,8 @@ class PlagiarismService
             'comparison_user_id' => $userId2,
             'comparison_user_name' => $userName,
             'comparison_user_email' => $userEmail,
-            'similarity_score' => $responseJson['similarity_score'] ?? 0,
-            'is_plagiarism' => $responseJson['is_plagiarism'] ?? false,
+            'similarity_score' => $similarityScore,
+            'is_plagiarism' => $isPlagiarism,
             'details' => $responseJson['details'] ?? 'Brak szczegółów w odpowiedzi agenta.',
         ];
     }

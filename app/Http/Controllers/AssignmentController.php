@@ -158,7 +158,7 @@ class AssignmentController extends Controller
                 'submitted' => __('app.submitted'),
                 'plagiarism_check' => __('app.plagiarism_check'),
                 'compilation_check' => __('app.compilation_check'),
-                'edge_cases_check' => __('app.edge_cases_check'),
+                'test_cases_check' => __('app.test_cases_check'),
                 'test_passed' => __('app.test_passed'),
                 'test_failed' => __('app.test_failed'),
                 'test_not_run' => __('app.test_not_run'),
@@ -241,7 +241,8 @@ class AssignmentController extends Controller
     public function submit(Request $request, $locale, Dashboard $dashboard, Assignment $assignment)
     {
         $request->validate([
-            'code_file' => 'required|file|extensions:cpp,cc,cxx,c,h,hpp|max:5120|min:1',
+            // 'code_file' => 'required|file|extensions:cpp,cc,cxx,c,h,hpp|max:5120|min:1',
+            'code_file' => 'required|file|extensions:cpp,cc,cxx,c,h,hpp|max:5120',
             'user_comment' => 'nullable|string|max:1000',
         ]);
 
@@ -269,7 +270,7 @@ class AssignmentController extends Controller
             'submitted_at' => now(),
             'compilation_check_result' => null,
             'plagiarism_check_result' => null,
-            'edge_cases_check_result' => null,
+            'test_cases_results' => null,
             'grade' => null,
             'review_comment' => null,
         ]);
