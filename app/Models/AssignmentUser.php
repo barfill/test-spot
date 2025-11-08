@@ -24,7 +24,7 @@ class AssignmentUser extends Model
         'review_comment',
         'plagiarism_check_result',
         'compilation_check_result',
-        'edge_cases_check_result',
+        'test_cases_results',
     ];
 
     public static array $status = ['in_progress', 'pending', 'graded_passed', 'graded_failed'];
@@ -37,7 +37,7 @@ class AssignmentUser extends Model
         'grade' => 'integer',
         'plagiarism_check_result' => 'array',
         'compilation_check_result' => 'array',
-        'edge_cases_check_result' => 'array',
+        'test_cases_results' => 'array',
     ];
 
     public function getSubmittedAtFormattedAttribute(): ?string {

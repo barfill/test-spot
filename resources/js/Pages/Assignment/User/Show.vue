@@ -120,19 +120,70 @@
 
                         </div>
                     </button>
-                    <button type="button" class="btn-teacher-secondary-lg border-1 w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
+                    <button type="button"
+                        @click="isTestCasesOpen = !isTestCasesOpen"
+                        class="btn-teacher-secondary-lg border-1 w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)]">
                         <div class="flex flex-col p-1">
                             <div class="flex justify-between items-center gap-4">
-                                <span>{{ translations.edge_cases_check }}</span>
+                                <span>{{ translations.test_cases_check }}</span>
                                 <TestStatusIcon
-                                      :check_result="assignmentUser.edge_cases_check_result"
-                                        :label="translations.edge_cases_check"
+                                        :check_result="assignmentUser.test_cases_results"
+                                        :label="translations.test_cases_check"
                                         :translations="translations"
                                 />
                             </div>
-                            <!-- <span class="w-full">loading</span> -->
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6 transition-transform duration-300"
+                                :class="{ 'rotate-180': isTestCasesOpen }">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
                         </div>
                     </button>
+
+                    <Card v-if="isTestCasesOpen" class="bg-white dark:bg-zinc-700 rounded-lg shadow p-4 w-full">
+                        <div class="flex flex-col gap-3">
+                            <div class="flex items-center gap-4">
+                                <button type="button" class="btn-teacher-secondary w-2/3 whitespace-nowrap overflow-hidden text-ellipsis"
+                                    @click="testRandom()"
+                                    :class="{
+                                        'border-orange-500 dark:border-orange-400 animate-pulse': testRandomResult === 'loading',
+                                        'border-zinc-300 dark:border-zinc-400': testRandomResult !== 'loading',
+                                    }"
+                                >
+                                    {{ translations.random_cases_check }}
+                                </button>
+                                <div class="flex items-center w-1/3 justify-around gap-2">
+                                    <span class="text-sm">Status:</span>
+                                    <TestStatusIcon
+                                        :check_result="assignmentUser.test_cases_results?.tests?.random"
+                                        :label="translations.test_cases_check"
+                                        :translations="translations"
+                                    />
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <button type="button" class="btn-teacher-secondary w-2/3 whitespace-nowrap overflow-hidden text-ellipsis"
+                                    @click="testEdge()"
+                                    :class="{
+                                        'border-orange-500 dark:border-orange-400 animate-pulse': testEdgeResult === 'loading',
+                                        'border-zinc-300 dark:border-zinc-400': testEdgeResult !== 'loading',
+                                    }"
+                                >
+                                    {{ translations.edge_cases_check }}
+                                </button>
+                                <div class="flex items-center w-1/3 justify-around gap-2">
+                                    <span class="text-sm">Status:</span>
+                                    <TestStatusIcon
+                                        :check_result="assignmentUser.test_cases_results?.tests?.edge"
+                                        :label="translations.test_cases_check"
+                                        :translations="translations"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
                 </div>
             </div>
         </Card>
@@ -160,9 +211,19 @@
                 </div>
             </Card>
             <Card class="bg-white dark:bg-zinc-700 rounded-lg shadow p-6 mb-6">
-                <h5 class="text-md text-gray-500 dark:text-zinc-300 mb-2">{{  translations.edge_cases_check_error }}</h5>
-                <div v-if="assignmentUser.edge_cases_check_result">
-                    <pre v-if="fileContent" class="language-cpp"><code class="language-cpp">{{ assignmentUser.edge_cases_check_result }}</code></pre>
+                <h5 class="text-md text-gray-500 dark:text-zinc-300 mb-2">{{  translations.test_cases_check_error }}</h5>
+                <div v-if="assignmentUser.test_cases_results?.general_success === false || (assignmentUser.test_cases_results?.general_success === 'partial' && (assignmentUser.test_cases_results?.tests?.edge?.success === false || assignmentUser.test_cases_results?.tests?.random?.success === false))">
+                    <pre v-if="
+                        fileContent && assignmentUser.test_cases_results?.tests?.edge?.success === false &&
+                        assignmentUser.test_cases_results?.tests?.random?.success === null"
+                        class="language-json"><code class="language-json">{{ JSON.stringify(assignmentUser.test_cases_results?.tests?.edge, null, 2) }}</code></pre>
+                    <pre v-else-if="
+                        fileContent && assignmentUser.test_cases_results?.tests?.random?.success === false &&
+                        fileContent && assignmentUser.test_cases_results?.tests?.edge?.success === null"
+                        class="language-json"><code class="language-json">{{ JSON.stringify(assignmentUser.test_cases_results?.tests?.random, null, 2) }}</code></pre>
+                    <pre v-else="
+                        fileContent"
+                        class="language-json"><code class="language-json">{{ JSON.stringify(assignmentUser.test_cases_results?.tests, null, 2) }}</code></pre>
                 </div>
                 <div v-else>
                     <EmptyCard :translations="translations" :locale="locale" :name="'errors'"/>
@@ -273,6 +334,7 @@
     };
 
     const compilationStatus = ref(null);
+    const isTestCasesOpen = ref(false);
 
     const compile = async () => {
         compilationStatus.value = 'loading';
@@ -382,6 +444,69 @@
         window.URL.revokeObjectURL(url);
     }
 
+    const testRandomResult = ref(null);
+    const testRandom = async () => {
+        testRandomResult.value = 'loading';
+
+        try {
+            const response = await axios.post(route('dashboard.assignment.test-cases.random', {
+                locale: props.locale,
+                dashboard: props.dashboard.id,
+                assignment: props.assignment.id,
+                assignmentUser: props.assignmentUser.id
+            }));
+
+            if (response.data.results.successful) {
+                testRandomResult.value = 'success';
+            } else {
+                testRandomResult.value = 'error';
+            }
+
+            router.reload({
+                only: ['assignmentUser'],
+                preserveScroll: true,
+                onSuccess: () => {
+                    setTimeout(() => {
+                        Prism.highlightAll();
+                    }, 100);
+                }
+            });
+        } catch (error) {
+            console.error('Test random error:', error);
+        }
+    }
+
+    const testEdgeResult = ref(null);
+    const testEdge = async () => {
+        testEdgeResult.value = 'loading';
+
+        try {
+            const response = await axios.post(route('dashboard.assignment.test-cases.edge', {
+                locale: props.locale,
+                dashboard: props.dashboard.id,
+                assignment: props.assignment.id,
+                assignmentUser: props.assignmentUser.id
+            }));
+
+            if (response.data.results.successful) {
+                testEdgeResult.value = 'success';
+            } else {
+                testEdgeResult.value = 'error';
+            }
+
+            router.reload({
+                only: ['assignmentUser'],
+                preserveScroll: true,
+                onSuccess: () => {
+                    setTimeout(() => {
+                        Prism.highlightAll();
+                    }, 100);
+                }
+            });
+        } catch (error) {
+            console.error('Test edge error:', error);
+        }
+    }
 </script>
 
 <style scoped>

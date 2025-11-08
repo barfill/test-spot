@@ -8,6 +8,7 @@ use App\Models\Assignment;
 use App\Models\AssignmentUser;
 use Illuminate\Support\Facades\Storage;
 use App\Services\CompilationService;
+use App\Services\TestCasesService;
 
 class AssignmentUserController extends Controller
 {
@@ -45,10 +46,12 @@ class AssignmentUserController extends Controller
                 'add_file' => __('app.add_file'),
                 'plagiarism_check' => __('app.plagiarism_check'),
                 'compilation_check' => __('app.compilation_check'),
-                'edge_cases_check' => __('app.edge_cases_check'),
+                'test_cases_check' => __('app.test_cases_check'),
                 'plagiarism_check_error' => __('app.plagiarism_check_error'),
                 'compilation_check_error' => __('app.compilation_check_error'),
-                'edge_cases_check_error' => __('app.edge_cases_check_error'),
+                'test_cases_check_error' => __('app.test_cases_check_error'),
+                'random_cases_check' => __('app.random_cases_check'),
+                'edge_cases_check' => __('app.edge_cases_check'),
                 'no_items' => __('app.no_items'),
                 'download_file' => __('app.download_file'),
                 'dashboards_e' => __('app.dashboards_e'),
@@ -78,6 +81,8 @@ class AssignmentUserController extends Controller
                 'test_passed' => __('app.test_passed'),
                 'test_failed' => __('app.test_failed'),
                 'test_not_run' => __('app.test_not_run'),
+                'test_in_progress' => __('app.test_in_progress'),
+                'for' => __('app.for'),
             ]
         ]);
     }
@@ -125,6 +130,32 @@ class AssignmentUserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Compilation completed',
+            'results' => $results
+        ]);
+    }
+
+    public function testRandom($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser, TestCasesService $testCasesService)
+    {
+        // $this->authorize('update', [$dashboard, $assignment]);
+
+        $results = $testCasesService->analyzeCode($assignmentUser, 'random');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Random test cases executed',
+            'results' => $results
+        ]);
+    }
+
+    public function testEdge($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser, TestCasesService $testCasesService)
+    {
+        // $this->authorize('update', [$dashboard, $assignment]);
+
+        $results = $testCasesService->analyzeCode($assignmentUser, 'edge');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Edge test cases executed',
             'results' => $results
         ]);
     }

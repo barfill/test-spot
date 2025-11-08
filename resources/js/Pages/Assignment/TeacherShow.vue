@@ -95,8 +95,8 @@
                                         :translations="translations"
                                     />
                                     <TestStatusIcon
-                                        :check_result="userAssignment.edge_cases_check_result"
-                                        :label="translations.edge_cases_check"
+                                        :check_result="userAssignment.test_cases_results"
+                                        :label="translations.test_cases_check"
                                         :translations="translations"
                                     />
                                 </span>
