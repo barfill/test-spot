@@ -19,7 +19,7 @@
 
         <template v-if="assignment.status !== 'closed' && userAssignment">
             <div v-if="userAssignment?.status === 'in_progress'" class="col-span-12">
-                <Bar :duration="assignment.duration_days" :remainingDays="assignment.ends_in" />
+                <Bar :startTime="assignment.start_time_formatted" :endTime="assignment.end_time_formatted" :remainingDays="assignment.ends_in" />
             </div>
 
             <div v-if="!userAssignment" class="col-span-12">

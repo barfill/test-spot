@@ -220,6 +220,17 @@ class AssignmentController extends Controller
             ->with('success', $this->successMessage('update', 'assignment'));
     }
 
+    public function restore($locale, Dashboard $dashboard, Assignment $assignment)
+    {
+        $this->authorize('update', [$dashboard, $assignment]);
+
+        $assignment->status = 'open';
+        $assignment->save();
+
+        return redirect()->route('dashboard.show', ['locale' => $locale, 'dashboard' => $dashboard->id])
+            ->with('success', $this->successMessage('restore', 'assignment'));
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -229,14 +240,13 @@ class AssignmentController extends Controller
 
         $assignment->delete();
 
-         return redirect()->route('dashboard.show', ['locale' => $locale, 'dashboard' => $dashboard->id])
+        return redirect()->route('dashboard.show', ['locale' => $locale, 'dashboard' => $dashboard->id])
             ->with('success', $this->successMessage('delete', 'assignment'));
     }
 
     private function successMessage($action, $attribute) {
         return __("messages.assignment_".$action."_success", ['attribute' => __("app.$attribute")]);
     }
-
 
     public function submit(Request $request, $locale, Dashboard $dashboard, Assignment $assignment)
     {

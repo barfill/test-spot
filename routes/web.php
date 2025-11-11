@@ -38,6 +38,8 @@ Route::prefix('{locale}')
                 ->only(['index', 'update']);
             Route::resource('dashboard.assignments', AssignmentController::class)
                 ->except(['index']);
+            Route::patch('dashboard/{dashboard}/assignments/{assignment}/restore', [AssignmentController::class, 'restore'])
+                ->name('dashboard.assignments.restore');
             Route::resource('dashboard.assignment.submissions', AssignmentUserController::class)
                 ->parameters(['submissions' => 'assignmentUser']);
 

@@ -25,7 +25,7 @@
     </div>
 
     <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-8">
-        <div v-for="assignment in assignments" :key="assignment.id" >
+        <div v-for="assignment in filteredAssignments" :key="assignment.id" >
             <div class="py-2 flex justify-between">
                     <div>
                     <span class="text-md font-bold">{{ assignment.end_date_formatted }}</span>
@@ -36,9 +36,16 @@
                     <span v-if="assignment.status === 'open' && userAssignments[assignment.id]?.status === 'graded_passed'">{{ translations.status_completed }}</span>
                     <span v-if="assignment.status === 'open' && userAssignments[assignment.id]?.status === 'graded_failed'">{{ translations.status_failed }}</span>
                 </div>
-                <div v-if="assignment.status === 'closed' && assignment.can.delete && assignment.can.update" class="">
-                    Restore button
-                </div>
+                <Link
+                    v-if="assignment.status === 'closed' && assignment.can.delete && assignment.can.update"
+                    class="cursor-pointer hover:underline text-orange-500 dark:text-orange-400"
+                    :title="translations.restore"
+                    :href="route('dashboard.assignments.restore', { locale, dashboard: dashboard.id, assignment: assignment.id })"
+                    method="patch"
+                    as="button"
+                >
+                    {{ translations.restore }}
+                </Link>
             </div>
             <Card class="flex flex-col justify-between p-4"
                 :class="{'card-disabled': assignment.status === 'closed' }"
@@ -68,7 +75,7 @@
 
 
 
-    defineProps({
+    const props = defineProps({
         dashboard: Object,
         assignments: Array,
         userAssignments: Object,
@@ -90,4 +97,24 @@
     } else {
         createAction.value = 'null';
     }
+
+    const filteredAssignments = computed(() => {
+        if (isOwner) {
+            return props.assignments;
+        }
+
+        return props.assignments.filter(assignment => {
+            const isInTimeRange = assignment.status === 'open' &&
+                new Date(assignment.start_time) <= new Date() &&
+                new Date(assignment.end_time) >= new Date();
+
+
+            const isPendingOrCompleted = props.userAssignments[assignment.id] &&
+                (props.userAssignments[assignment.id].status === 'pending' ||
+                 props.userAssignments[assignment.id].status === 'graded_passed' ||
+                 props.userAssignments[assignment.id].status === 'graded_failed');
+
+            return isInTimeRange || isPendingOrCompleted;
+        });
+    })
 </script>

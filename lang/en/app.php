@@ -85,6 +85,7 @@ return [
     'test_in_progress' => 'In progress...',
     'for' => 'For',
     'generate_ai_report' => 'Generate AI Report',
+    'restore' => 'Restore',
 
     //Assignment User
     'assignment_description' => 'Assignment Description',

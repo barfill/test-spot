@@ -168,7 +168,8 @@ class DashboardController extends Controller
                 'status_pending' => __('app.status_pending'),
                 'status_completed' => __('app.status_completed'),
                 'status_failed' => __('app.status_failed'),
-                'not_displayed' => __('app.not_displayed')
+                'not_displayed' => __('app.not_displayed'),
+                'restore' => __('app.restore'),
             ]
         ]);
     }

@@ -18,14 +18,24 @@
     import { defineProps, computed } from 'vue';
 
     const props = defineProps({
+        startTime: String,
+        endTime: String,
         duration: Number,
         remainingDays: Number
     });
 
     const completedDaysPercentage = computed(() => {
-        const days = parseInt(props.remainingDays.match(/\d+/));
-        return (props.duration - days) * 100 / props.duration;
+        const startDate = new Date(props.startTime);
+        const endDate = new Date(props.endTime);
+        const now = new Date();
 
+        const totalDuration = (endDate - startDate) / (1000 * 60 * 60 * 24);
+        const elapsedDuration = (now - startDate) / (1000 * 60 * 60 * 24);
+
+        if (elapsedDuration <= 0) return 0;
+        if (elapsedDuration >= totalDuration) return 100;
+
+        return (elapsedDuration / totalDuration) * 100;
     })
 
     const remainingDaysPercentage = computed(() => {

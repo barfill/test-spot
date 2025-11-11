@@ -24,7 +24,7 @@ class Assignment extends Model
 
     public static array $statuses = ['open', 'closed'];
 
-    protected $appends = ['ends_in', 'duration_days', 'end_date_formatted'];
+    protected $appends = ['ends_in', 'duration_days', 'end_date_formatted', 'start_time_formatted', 'end_time_formatted'];
 
     protected $casts = [
         'start_time' => 'datetime',
@@ -119,6 +119,20 @@ class Assignment extends Model
         $format = $locale === 'pl' ? 'j M' : 'jS M';
 
         return $this->end_time ? $this->end_time->locale($locale)->translatedFormat($format) : null;
+    }
+
+    public function getStartTimeFormattedAttribute(): ?string
+    {
+        if (!$this->start_time) return null;
+
+        return $this->start_time->toIso8601String();
+    }
+
+    public function getEndTimeFormattedAttribute(): ?string
+    {
+        if (!$this->end_time) return null;
+
+        return $this->end_time->toIso8601String();
     }
 
     public function dashboard()
