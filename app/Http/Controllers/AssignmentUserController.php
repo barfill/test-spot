@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Services\CompilationService;
 use App\Services\TestCasesService;
 use App\Services\ReportGeneratorService;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AssignmentUserController extends Controller
 {
@@ -85,6 +86,14 @@ class AssignmentUserController extends Controller
                 'test_in_progress' => __('app.test_in_progress'),
                 'for' => __('app.for'),
                 'generate_ai_report' => __('app.generate_ai_report'),
+                'ai_report' => __('app.ai_report'),
+                'ai_report_generated' => __('app.ai_report_generated'),
+                'student' => __('app.student'),
+                'name' => __('app.name'),
+                'assignment' => __('app.assignment'),
+                'summary' => __('app.summary'),
+                'recommended_grade' => __('app.recommended_grade'),
+                'N/A' => __('app.N/A'),
             ]
         ]);
     }
@@ -166,12 +175,21 @@ class AssignmentUserController extends Controller
     {
         // $this->authorize('update', [$dashboard, $assignment]);
 
-        $results = $reportGeneratorService->generateReport($assignmentUser);
+        $results = $reportGeneratorService->generateReport($locale, $assignmentUser);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'AI report generated',
-            'results' => $results
+        $assignmentUser->load('user');
+
+        $pdf = Pdf::loadView('pdf.ai-report', [
+            'report' => $results,
+            'student' => $assignmentUser->user,
+            'assignment' => $assignment,
         ]);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        $date = now()->format('Y-m-d');
+        $filename = "{$date}_AI_Report_{$assignmentUser->user->last_name}.pdf";
+
+        return $pdf->download($filename);
     }
 }

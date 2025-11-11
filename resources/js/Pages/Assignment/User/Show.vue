@@ -548,31 +548,26 @@
                 dashboard: props.dashboard.id,
                 assignment: props.assignment.id,
                 assignmentUser: props.assignmentUser.id
-            }));
+            }), {}, {
+                responseType: 'blob'
+            });
 
-            if (response.data.success) {
-                generateAiReportResult.value = 'success';
+            generateAiReportResult.value = 'success';
 
-                const reportData = response.data.results;
-                const reportText = JSON.stringify(reportData, null, 2);
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
 
-                const blob = new Blob([reportText], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const date = new Date();
+            const currentDate = date.toISOString().split('T')[0];
+            a.href = url;
+            a.download = `${currentDate}_AI_Report_${props.assignmentUser.user.last_name}.pdf`;
 
-                const a = document.createElement('a');
-                const date = new Date();
-                const currentDate = date.toISOString().split('T')[0];
-                a.href = url;
-                a.download = `${currentDate}_AI_Report_${props.assignmentUser.user.last_name}_${props.assignment.name}.txt`;
+            document.body.appendChild(a);
+            a.click();
 
-                document.body.appendChild(a);
-                a.click();
-
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            } else {
-                generateAiReportResult.value = 'error';
-            }
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
 
             router.reload({
                 only: ['assignmentUser'],

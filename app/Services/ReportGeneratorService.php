@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Log;
 
 class ReportGeneratorService
 {
-    public function generateReport(AssignmentUser $assignmentUser): array
+    public function generateReport($locale, AssignmentUser $assignmentUser): array
     {
         $code = Storage::get($assignmentUser->file_path);
         $agent = ReportGeneratorAgent::for('report_generation');
+        $language = $locale === 'pl' ? 'polskim' : 'angielskim';
 
         $plagiarismResult = json_encode($assignmentUser->plagiarism_check_result ?? ['message' => 'No plagiarism check performed'], JSON_PRETTY_PRINT);
         $compilationResult = json_encode($assignmentUser->compilation_check_result ?? ['message' => 'No compilation check performed'], JSON_PRETTY_PRINT);
@@ -38,6 +39,7 @@ class ReportGeneratorService
 
             Na podstawie powyższych informacji wygeneruj raport oceniający pracę studenta,
             uwzględniając jakość kodu, wyniki testów oraz ewentualne problemy z plagiatem i kompilacją.
+            Odpowiedz w języku {$language}.
         ";
 
         $response = $agent->respond($prompt);

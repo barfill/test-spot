@@ -115,6 +115,19 @@ return [
     'user_removed' => 'User successfully removed from dashboard!',
     'search_users' => 'Search users...',
 
+    //Reports
+    'ai_report' => 'AI Report',
+    'ai_report_generated' => 'AI report generated successfully!',
+    'student' => 'Student',
+    'name' => 'Name',
+    'assignment' => 'Assignment',
+    'summary' => 'Summary',
+    'recommended_grade' => 'Recommended Grade',
+    'N/A' => 'N/A',
+    'no_summary' => 'No summary available',
+    'suggestions_for_student' => 'Suggestions for Student',
+    'overall_summary' => 'Overall Summary',
+    'generated_on' => 'Generated on',
 
     // General
     'name' => 'Name',
