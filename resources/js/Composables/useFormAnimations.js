@@ -1,3 +1,8 @@
+function autoResizeTextarea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
 function getInputLabel(inputId) {
     return document.querySelector(`label[for="${inputId}"]`)
 }
@@ -20,7 +25,12 @@ let globalAnimationLock = false;
 export function labelTransition(event, formType = 'create') {
     const inputElement = event.target;
 
-    if(inputElement.tagName === 'INPUT' && (inputElement.type === 'text' || inputElement.type === 'password' || inputElement.type === 'email')) {
+    if((inputElement.tagName === 'INPUT' && (inputElement.type === 'text' || inputElement.type === 'password' || inputElement.type === 'email')) || inputElement.tagName === 'TEXTAREA') {
+
+        // Auto-resize textarea
+        if(inputElement.tagName === 'TEXTAREA') {
+            autoResizeTextarea(inputElement);
+        }
         if(globalAnimationLock) {
             return;
         }
@@ -83,11 +93,15 @@ export function labelTransition(event, formType = 'create') {
 }
 
 export function initializeFormLabels() {
-    const inputs = document.querySelectorAll('form input[type=text][id]');
+    const inputs = document.querySelectorAll('form input[type=text][id], form textarea[id]');
 
     inputs.forEach((input) => {
         const label = getInputLabel(input.id);
         const span = getSpanAbove(input.id);
+
+        if(input.tagName === 'TEXTAREA') {
+            autoResizeTextarea(input);
+        }
 
         if (input.value && input.value.trim() !== '') {
             label.classList.add('label-enabled');

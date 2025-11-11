@@ -25,7 +25,7 @@
             <div>
                 <label for="description" class="label label-disabled">{{ translations.description }}</label>
                 <span class="absolute span-enabled"> {{ translations.description }}</span>
-                <input type="text" id="description" name="description" v-model="form.description" @input="labelTransition" @keydown="labelTransition" class="input"/>
+                <textarea id="description" name="description" v-model="form.description" @input="labelTransition" @keydown="labelTransition" class="input"></textarea>
                 <div v-if="form.errors.description" class="text-error">{{ form.errors.description }}</div>
             </div>
 
