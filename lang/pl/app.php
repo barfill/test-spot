@@ -86,6 +86,7 @@ return [
     'test_not_run' => 'Nie uruchomiono',
     'test_in_progress' => 'W trakcie...',
     'for' => 'Dla',
+    'generate_ai_report' => 'Generuj raport AI',
 
     //Assignment User
     'assignment_description' => 'Opis Zadania',
@@ -115,6 +116,20 @@ return [
     'user_assigned' => 'Użytkownik został pomyślnie przypisany do panelu!',
     'user_removed' => 'Użytkownik został pomyślnie usunięty z panelu!',
     'search_users' => 'Szukaj użytkowników...',
+
+    //Reports
+    'ai_report' => 'Raport AI',
+    'ai_report_generated' => 'Raport AI został wygenerowany pomyślnie!',
+    'student' => 'Student',
+    'name' => 'Nazwa',
+    'assignment' => 'Zadanie',
+    'summary' => 'Podsumowanie',
+    'recommended_grade' => 'Zalecana Ocena',
+    'N/A' => 'N/D',
+    'no_summary' => 'Brak podsumowania',
+    'suggestions_for_student' => 'Sugestie dla ucznia',
+    'overall_summary' => 'Ogólne podsumowanie',
+    'generated_on' => 'Wygenerowano w',
 
     // General
     'name' => 'Nazwa',

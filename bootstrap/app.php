@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             '*/dashboard/*/assignments/*/check-plagiarism',
             '*/dashboard/*/assignment/*/test-cases/*/random',
             '*/dashboard/*/assignment/*/test-cases/*/edge',
+            '*/dashboard/*/assignment/*/generate-report/*',
             '*/test-agent',
         ]);
         $middleware->redirectGuestsTo(function($request) {
