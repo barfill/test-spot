@@ -3,8 +3,8 @@
         <div class="mx-auto w-3/4 flex flex-col lg:flex-row items-center justify-between mb-4 lg:mb-8">
             <h1 class="text-3xl font-bold text-center text-zinc-700 dark:text-zinc-200 mb-2 lg:mb-0">{{ translations.login }}</h1>
             <div class="flex gap-2">
-                <span class="text-zinc-700 dark:text-zinc-200">{{ translations.no_account }}</span>
-                <Link :href="route('register', { locale })" class="text-orange-500 dark:text-orange-400 hover:underline">{{ translations.register }}</Link>
+                <!-- <span class="text-zinc-700 dark:text-zinc-200">{{ translations.no_account }}</span>
+                <Link :href="route('register', { locale })" class="text-orange-500 dark:text-orange-400 hover:underline">{{ translations.register }}</Link> -->
             </div>
         </div>
         <form

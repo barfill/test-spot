@@ -34,16 +34,14 @@ class AuthenticationController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        // Auth::attempt($validated, $request->boolean('remember'));
-        if (Auth::attempt($validated, $request->boolean('remember_me'))) { //user will be remembered as default for now
+        if (Auth::attempt($validated, $request->boolean('remember_me'))) {
             $request->session()->regenerate();
-
-            // dd($request);
 
             return redirect()
                 ->intended(route('dashboard.index', ['locale' => $locale]))
                 ->with('success', __('auth.login_success'));
         }
+
         $request->session()->regenerate();
 
         return redirect()
