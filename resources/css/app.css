@@ -30,6 +30,10 @@
     @apply bg-zinc-100 dark:bg-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-500 text-zinc-500 dark:text-zinc-100 font-medium p-4 rounded border border-gray-300 dark:border-zinc-400;
 }
 
+.btn-form-tertiary {
+    @apply bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600 text-zinc-600 dark:text-zinc-100 font-medium p-4 rounded border border-gray-300 dark:border-zinc-500 cursor-pointer;
+}
+
 .btn-teacher-secondary {
     @apply bg-zinc-100 dark:bg-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-500 text-zinc-500 dark:text-zinc-100 font-medium px-4 py-2 rounded;
 }

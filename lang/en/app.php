@@ -17,6 +17,7 @@ return [
     'sent' => 'Sent',
     'grade' => 'Grade',
     'not_sent' => 'Not Sent',
+    'add_image' => 'Add Image',
 
     // Assignment
     'assignment' => 'Assignment',

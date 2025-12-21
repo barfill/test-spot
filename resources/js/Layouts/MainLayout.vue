@@ -84,9 +84,11 @@
 
     const indexActiveView = useRemember('assigned','dashboards.view');
     const isStudent = ref(user.value.type === 'student');
+    const isAdmin = ref(user.value.type === 'admin');
 
     provide('indexActiveView', indexActiveView);
     provide('isStudent', isStudent);
+    provide('isAdmin', isAdmin);
 
     const createAction = ref('createDashboard');
     provide('createAction', createAction);

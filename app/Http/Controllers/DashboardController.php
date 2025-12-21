@@ -11,6 +11,7 @@ use App\Policies\DashboardPolicy;
 use App\Models\Assignment;
 use App\Models\AssignmentUser;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 
 class DashboardController extends Controller
@@ -96,7 +97,8 @@ class DashboardController extends Controller
                 'required' => __('validation.required'),
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
-                'edit_profile' => __('app.edit_profile')
+                'edit_profile' => __('app.edit_profile'),
+                'add_image' => __('app.add_image')
             ]
         ]);
     }
@@ -107,7 +109,20 @@ class DashboardController extends Controller
 
         $validated = $request->validated();
         $validated['created_by'] = Auth::id();
-        Dashboard::create($validated);
+        $dashboard = Dashboard::create($validated);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = $file->getClientOriginalName();
+            $path = $file->storeAs("dashboards/{$dashboard->id}", $filename, 'public');
+
+            $dashboard->update([
+                'image_path' => $path,
+                'image_disk' => 'public',
+            ]);
+        }
+
+        // dd($request->all());
 
         return redirect()->route('dashboard.index', ['locale' => $locale])
             ->with('success', $this->successMessage('create', 'dashboard'));
@@ -196,7 +211,8 @@ class DashboardController extends Controller
                 'delete' => __('app.delete'),
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
-                'edit_profile' => __('app.edit_profile')
+                'edit_profile' => __('app.edit_profile'),
+                'add_image' => __('app.add_image')
             ]
         ]);
     }
@@ -208,6 +224,21 @@ class DashboardController extends Controller
         $validated = $request->validated();
         $dashboard->update($validated);
 
+        if ($request->hasFile('image')) {
+            if ($dashboard->image_path && $dashboard->image_disk) {
+                Storage::disk($dashboard->image_disk)->delete($dashboard->image_path);
+            }
+
+            $file = $request->file('image');
+            $filename = $file->getClientOriginalName();
+            $path = $file->storeAs("dashboards/{$dashboard->id}", $filename, 'public');
+
+            $dashboard->update([
+                'image_path' => $path,
+                'image_disk' => 'public',
+            ]);
+        }
+
         return redirect()->route('dashboard.index', ['locale' => $locale])
             ->with('success', $this->successMessage('update', 'dashboard'));
     }
@@ -215,6 +246,10 @@ class DashboardController extends Controller
     public function destroy($locale, Dashboard $dashboard)
     {
         $this->authorize('delete', $dashboard);
+
+        if ($dashboard->image_path && $dashboard->image_disk) {
+            Storage::disk($dashboard->image_disk)->delete($dashboard->image_path);
+        }
 
         $dashboard->delete();
 

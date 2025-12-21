@@ -124,6 +124,8 @@ class AssignmentController extends Controller
                 'status_completed' => __('app.status_completed'),
                 'status_failed' => __('app.status_failed'),
                 'review_comment' => __('app.review_comment'),
+                'sign_out' => __('auth.sign_out'),
+                'edit_profile' => __('app.edit_profile'),
             ]
         ]);
     }
@@ -162,6 +164,8 @@ class AssignmentController extends Controller
                 'test_passed' => __('app.test_passed'),
                 'test_failed' => __('app.test_failed'),
                 'test_not_run' => __('app.test_not_run'),
+                'sign_out' => __('auth.sign_out'),
+                'edit_profile' => __('app.edit_profile'),
             ]
         ]);
     }

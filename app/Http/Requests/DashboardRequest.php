@@ -24,7 +24,7 @@ class DashboardRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'image' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
             'is_active' => 'boolean',
         ];
     }

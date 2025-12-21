@@ -18,6 +18,7 @@ return [
     'sent' => 'Wysłano',
     'grade' => 'Ocena',
     'not_sent' => 'Nie wysłano',
+    'add_image' => 'Dodaj zdjęcie',
 
     // Assignment
     'assignment' => 'Zadanie',

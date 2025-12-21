@@ -30,12 +30,28 @@
 
             <div class="grid grid-cols-1 md:grid-cols-10 gap-4 justify-between pb-6">
                 <div class="col-span-1 md:col-span-7">
-                    <label for="image" class="label label-disabled">{{ translations.image }}</label>
-                    <span class="absolute span-enabled"> {{ translations.image }}</span>
-                    <input type="text" id="image" name="image" v-model="form.image" @input="labelTransition" @keydown="labelTransition" class="input"/>
+                    <label for="image" class="label label-enabled">{{ translations.image }}</label>
+                    <input ref="fileInput" type="file" accept="image/*" @change="handleImageUpload" class="hidden" />
+
+                    <div class="flex items-center gap-3 flex-col">
+                        <button
+                            type="button"
+                            @click="$refs.fileInput.click()"
+                            class="btn-form-tertiary w-full"
+                        >
+                        <div class="flex items-center justify-center gap-3 flex-row">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                            </svg>
+                            <span>
+                                {{ selectedFileName || translations.add_image || 'Dodaj zdjęcie' }}
+                            </span>
+                        </div>
+                        </button>
+
+                    </div>
                     <div v-if="form.errors.image" class="text-error">{{ form.errors.image }}</div>
                 </div>
-
                 <div class="col-span-1  md:col-span-3 flex items-end gap-3">
                     <input type="checkbox" id="is_active" name="is_active" v-model="form.is_active" class="hidden"/>
                     <div class="w-full">
@@ -68,7 +84,7 @@
     import { useForm } from '@inertiajs/vue3';
     import { labelTransition } from '@/Composables/useFormAnimations';
     import Breadcrumbs from '@/Components/UI/Breadcrumbs.vue';
-    import { defineProps, inject } from 'vue';
+    import { defineProps, inject, ref } from 'vue';
 
     const props = defineProps({
         locale: String,
@@ -80,9 +96,19 @@
     const form = useForm({
         name: '',
         description: '',
-        image: '',
+        image: null,
         is_active: false,
     });
+
+    const selectedFileName = ref('');
+
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            form.image = file;
+            selectedFileName.value = file.name;
+        }
+    };
 
     const create = () => form.post(route('dashboard.store', { locale: props.locale }));
     const activeView = inject('indexActiveView');
