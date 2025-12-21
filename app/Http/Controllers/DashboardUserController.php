@@ -48,7 +48,8 @@ class DashboardUserController extends Controller
                 'delete' => __('app.delete'),
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
-                'edit_profile' => __('app.edit_profile')
+                'edit_profile' => __('app.edit_profile'),
+                'users' => __('app.users')
             ]
         ]);
     }

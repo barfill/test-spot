@@ -18,6 +18,7 @@ return [
     'sent' => 'Wysłano',
     'grade' => 'Ocena',
     'not_sent' => 'Nie wysłano',
+    'add_image' => 'Dodaj zdjęcie',
 
     // Assignment
     'assignment' => 'Zadanie',
@@ -150,10 +151,20 @@ return [
     'back' => 'Wróć',
     'days' => 'dni',
     'left' => 'pozostało',
-
+    'edit' => 'Edytuj',
+    'delete' => 'Usuń',
 
     // User types
     'teacher' => 'Nauczyciel',
     'student' => 'Uczeń',
     'admin' => 'Administrator',
+
+    // User
+    'user' => 'Użytkownik',
+    'edit_user' => 'Edytuj użytkownika',
+    'password' => 'Hasło',
+    'first_name' => 'Imię',
+    'last_name' => 'Nazwisko',
+    'title' => 'Tytuł',
+    'type' => 'Rola',
 ];

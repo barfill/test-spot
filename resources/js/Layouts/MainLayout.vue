@@ -22,7 +22,7 @@
                         </div>
 
                         <div v-if="userDropdownEnabled" class="absolute border  dark:border-zinc-200 p-2 rounded w-full bg-white dark:bg-zinc-700">
-                            <Link :href="route('login', { locale })" class="block text-center w-full px-4 py-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded transition-colors">{{ translations.edit_profile }}</Link>
+                            <Link :href="route('user.show', { locale, user: user})" class="block text-center w-full px-4 py-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded transition-colors">{{ translations.edit_profile }}</Link>
                             <Link :href="route('logout', { locale })" method="delete" as="button"
                                 class="block text-center w-full px-4 py-2 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded transition-colors cursor-pointer"
                             >{{ translations.sign_out }}</Link>
@@ -37,10 +37,10 @@
                     <Link :href="route('dashboard.index', { locale })">TestSpot</Link>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <div v-if="(isStudent === false)">
+                    <div v-if="(isStudent === false)" class="flex gap-2">
+                        <Link v-if="(isAdmin === true && !$page.url.includes('/user'))" :href="route('user.index', { locale })" class="btn-primary">{{ translations.users }}</Link>
                         <Link v-if="(createAction === 'createDashboard')" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create_dashboard }} +</Link>
                         <Link v-if="(createAction === 'createAssignment') && dashboard" :href="route('dashboard.assignments.create', { locale, dashboard: dashboard.id })" class="btn-primary">{{ translations.create_assignment }} +</Link>
-                        <Link v-if="(createAction === 'createUser')" :href="route('dashboard.index', { locale })" class="btn-primary">{{ translations.create_user }} +</Link>  <!-- Not implemented yet -->
                     </div>
                     <!-- <Link v-if="(isStudent === false)" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create }} +</Link> -->
                     <select :value="locale" @change="changeLanguage" class="select-dropdown">
@@ -84,9 +84,11 @@
 
     const indexActiveView = useRemember('assigned','dashboards.view');
     const isStudent = ref(user.value.type === 'student');
+    const isAdmin = ref(user.value.type === 'admin');
 
     provide('indexActiveView', indexActiveView);
     provide('isStudent', isStudent);
+    provide('isAdmin', isAdmin);
 
     const createAction = ref('createDashboard');
     provide('createAction', createAction);

@@ -17,6 +17,7 @@ return [
     'sent' => 'Sent',
     'grade' => 'Grade',
     'not_sent' => 'Not Sent',
+    'add_image' => 'Add Image',
 
     // Assignment
     'assignment' => 'Assignment',
@@ -148,9 +149,21 @@ return [
     'back' => 'Back',
     'days' => 'days',
     'left' => 'left',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
 
     // User types
     'teacher' => 'Teacher',
     'student' => 'Student',
     'admin' => 'Admin',
+
+
+    // User
+    'user' => 'User',
+    'edit_user' => 'Edit User',
+    'password' => 'Password',
+    'first_name' => 'First Name',
+    'last_name' => 'Last Name',
+    'title' => 'Title',
+    'type' => 'Rola',
 ];

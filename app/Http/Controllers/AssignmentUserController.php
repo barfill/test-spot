@@ -94,6 +94,9 @@ class AssignmentUserController extends Controller
                 'summary' => __('app.summary'),
                 'recommended_grade' => __('app.recommended_grade'),
                 'N/A' => __('app.N/A'),
+                'sign_out' => __('auth.sign_out'),
+                'edit_profile' => __('app.edit_profile'),
+                'users' => __('app.users')
             ]
         ]);
     }

@@ -10,4 +10,5 @@ return [
     'assignment_delete_success' => ':attribute deleted successfully.',
     'assignment_restore_success' => ':attribute restored successfully.',
     'submission_success' => 'Code submitted successfully! Your teacher will review it soon.',
+    'leave_empty_to_keep_current_password' => 'Leave empty to keep current password',
 ];

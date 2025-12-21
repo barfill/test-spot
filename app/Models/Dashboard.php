@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Storage;
 
 class Dashboard extends Model
 {
@@ -21,6 +22,17 @@ class Dashboard extends Model
         'image_disk',
         'is_active',
     ];
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image_path || !$this->image_disk) {
+            return null;
+        }
+
+        return Storage::disk($this->image_disk)->url($this->image_path);
+    }
 
     public function owner(): BelongsTo
     {

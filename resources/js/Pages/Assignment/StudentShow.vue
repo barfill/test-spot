@@ -27,7 +27,7 @@
                             @click="$refs.fileInput.click()"
                             class="btn-form-secondary w-full"
                         >
-                            📁 {{ selectedFileName || translations.choose_file }}
+                            📁 {{ selectedFileName || translations.choose_file || 'Wybierz plik' }}
                         </button>
 
                         <div v-if="selectedFileName" class="flex items-center gap-2">
