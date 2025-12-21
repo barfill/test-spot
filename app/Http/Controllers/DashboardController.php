@@ -72,7 +72,8 @@ class DashboardController extends Controller
                 'delete' => __('app.delete'),
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
-                'edit_profile' => __('app.edit_profile')
+                'edit_profile' => __('app.edit_profile'),
+                'users' => __('app.users'),
             ]
         ]);
     }
@@ -98,7 +99,8 @@ class DashboardController extends Controller
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
                 'edit_profile' => __('app.edit_profile'),
-                'add_image' => __('app.add_image')
+                'add_image' => __('app.add_image'),
+                'users' => __('app.users')
             ]
         ]);
     }
@@ -185,6 +187,7 @@ class DashboardController extends Controller
                 'status_failed' => __('app.status_failed'),
                 'not_displayed' => __('app.not_displayed'),
                 'restore' => __('app.restore'),
+                'users' => __('app.users')
             ]
         ]);
     }
@@ -212,7 +215,8 @@ class DashboardController extends Controller
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
                 'edit_profile' => __('app.edit_profile'),
-                'add_image' => __('app.add_image')
+                'add_image' => __('app.add_image'),
+                'users' => __('app.users')
             ]
         ]);
     }

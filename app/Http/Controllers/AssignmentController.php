@@ -39,7 +39,8 @@ class AssignmentController extends Controller
                 'required' => __('validation.required'),
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
-                'edit_profile' => __('app.edit_profile')
+                'edit_profile' => __('app.edit_profile'),
+                'users' => __('app.users')
             ]
         ]);
     }
@@ -126,6 +127,7 @@ class AssignmentController extends Controller
                 'review_comment' => __('app.review_comment'),
                 'sign_out' => __('auth.sign_out'),
                 'edit_profile' => __('app.edit_profile'),
+                'users' => __('app.users')
             ]
         ]);
     }
@@ -166,6 +168,7 @@ class AssignmentController extends Controller
                 'test_not_run' => __('app.test_not_run'),
                 'sign_out' => __('auth.sign_out'),
                 'edit_profile' => __('app.edit_profile'),
+                'users' => __('app.users')
             ]
         ]);
     }
@@ -204,7 +207,8 @@ class AssignmentController extends Controller
                 'required' => __('validation.required'),
                 'sign_in' => __('auth.sign_in'),
                 'sign_out' => __('auth.sign_out'),
-                'edit_profile' => __('app.edit_profile')
+                'edit_profile' => __('app.edit_profile'),
+                'users' => __('app.users')
             ]
         ]);
     }

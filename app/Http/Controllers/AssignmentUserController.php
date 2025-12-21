@@ -96,6 +96,7 @@ class AssignmentUserController extends Controller
                 'N/A' => __('app.N/A'),
                 'sign_out' => __('auth.sign_out'),
                 'edit_profile' => __('app.edit_profile'),
+                'users' => __('app.users')
             ]
         ]);
     }

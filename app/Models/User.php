@@ -25,9 +25,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'type',
+        'title',
+        'first_name',
+        'last_name',
     ];
 
     /**
@@ -93,5 +96,14 @@ class User extends Authenticatable
             ->orderBy('email')
             ->distinct()
         ;
+    }
+
+    public function scopeAllUsers($query) {
+        return $query
+            ->select([
+                'users.*',
+            ])
+            ->orderBy('last_name')
+            ->orderBy('first_name');
     }
 }

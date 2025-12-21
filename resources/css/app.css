@@ -43,11 +43,19 @@
 }
 
 .btn-danger {
-    @apply bg-red-500 dark:bg-red-400 hover:bg-red-400 dark:hover:bg-red-300 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded;
+    @apply bg-red-500 dark:bg-red-400 hover:bg-red-400 dark:hover:bg-red-300 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded cursor-pointer;
+}
+
+.btn-danger-disabled {
+    @apply bg-red-500 dark:bg-red-400 hover:bg-red-400 dark:hover:bg-red-300 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded cursor-not-allowed opacity-50;
 }
 
 .btn-success {
     @apply bg-green-500 dark:bg-green-400 hover:bg-green-600 dark:hover:bg-green-300 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded;
+}
+
+.btn-edit {
+    @apply bg-zinc-500 dark:bg-zinc-600 hover:bg-zinc-600 dark:hover:bg-zinc-500 text-white dark:text-zinc-100 font-medium px-4 py-2 rounded;
 }
 
 .btn-toggle-active {
@@ -90,6 +98,10 @@
 
 .select-dropdown {
     @apply border border-gray-300 rounded px-3 py-2 bg-white dark:bg-zinc-700 dark:border-zinc-600 dark:text-white;
+}
+
+.select-user-dropdown {
+    @apply border border-gray-300 rounded px-3 py-2 bg-white dark:bg-zinc-800 dark:border-zinc-600 dark:text-white;
 }
 
 .input {
