@@ -14,6 +14,7 @@ class ReportGeneratorAgent extends Agent
 
     protected $maxTokens = 4096;
 
+    // Available providers:
     // protected $provider = 'default';
     protected $provider = 'gemini';
 

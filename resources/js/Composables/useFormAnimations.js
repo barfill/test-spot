@@ -130,10 +130,6 @@ export function changeInputType(inputId, newType, dateISO = null, dateForTextInp
         }
     }
 
-    // if (input.dataset.partialDatetime) {
-    //     input.value = input.dataset.partialDatetime;
-    // }
-
     if (input._openPickerHandler) {
         input.removeEventListener('pointerdown', input._openPickerHandler);
         input._openPickerHandler = null;

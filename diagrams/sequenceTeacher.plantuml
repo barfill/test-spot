@@ -1,0 +1,104 @@
+@startuml sequenceTeacher
+skinparam BackgroundColor White
+skinparam actorStyle awesome
+skinparam defaultFontName "Times New Roman"
+skinparam Padding 5
+skinparam ArrowColor #0569acff
+skinparam titleFontSize 20
+skinparam titleFontColor #2D2D30
+
+skinparam actor {
+    BackgroundColor #2D2D30
+    BorderColor #0569acff
+    FontColor #2D2D30
+    FontSize 22
+}
+
+skinparam participant {
+    BackgroundColor #2D2D30
+    BorderColor #0569acff
+    FontColor #D4D4D4
+    Padding 10
+    FontSize 16
+}
+
+skinparam sequence {
+    GroupBackgroundColor #3C3C3C
+    GroupBorderColor #0569acff
+    GroupHeaderFontColor #FFFFFF
+    GroupFontSize 16
+    DividerBackgroundColor #2D2D30
+    DividerBorderColor #0569acff
+    DividerFontColor #D4D4D4
+    DividerFontSize 18
+    LifeLineBorderColor #0569acff
+    ArrowFontSize 16
+    ArrowFontColor #2D2D30
+}
+
+title Diagram sekwencji: weryfikacja rozwiązania przez nauczyciela
+
+actor "<b>Nauczyciel</b>" as T
+participant "<b>Interfejs użytkownika</b>" as UI
+participant "<b>System</b>" as SYS
+participant "<b>Agent AI</b>" as AI
+database "<b>Baza danych</b>" as DB
+
+== Kompilacja ==
+T -> UI: Kompilacja kodu
+UI -> SYS: Kompilacja rozwiązania
+SYS -> SYS: Uruchomienie kompilatora
+
+alt Sukces
+    SYS -> DB: Zapis wyniku
+    SYS --> UI: Status sukcesu
+else Błąd
+    SYS -> DB: Zapis błędów
+    SYS --> UI: Błędy kompilacji
+end
+UI --> T: Wynik kompilacji
+
+== Sprawdzenie plagiatu ==
+T -> UI: Sprawdzenie plagiatu
+UI -> SYS: Analiza podobieństwa
+SYS -> DB: Pobranie rozwiązań do porównania
+DB --> SYS: Kody źródłowe
+SYS -> AI: Analiza podobieństwa kodów
+AI --> SYS: Wyniki analizy
+
+alt Brak plagiatu
+    SYS -> DB: Zapis wyników
+    SYS --> UI: Status sukcesu
+else Plagiat wykryty
+    SYS -> DB: Zapis błędów
+    SYS --> UI: Ostrzeżenie o plagiacie
+end
+UI --> T: Wynik testów plagiatowych
+
+== Testy automatyczne ==
+T -> UI: Uruchomienie testów
+UI -> SYS: Wykonanie testów
+SYS -> AI: Kod + opis zadania
+AI -> AI: Generowanie przypadków testowych
+AI -> AI: Analiza kodu dla wygenerowanych danych
+
+alt Sukces
+    AI --> SYS: Testy zaliczone
+    SYS -> DB: Zapis wyników
+    SYS --> UI: Status sukcesu
+else Błąd
+    AI --> SYS: Testy niezaliczone
+    SYS -> DB: Zapis błędów
+    SYS --> UI: Błędy testów
+end
+UI --> T: Wyniki testów
+
+== Ocena ==
+T -> UI: Wprowadzenie oceny
+UI -> SYS: Zapisanie oceny
+SYS -> DB: Aktualizacja oceny i statusu
+DB --> SYS: Potwierdzenie
+SYS --> UI: Potwierdzenie
+UI --> T: Rozwiązanie ocenione
+
+@enduml

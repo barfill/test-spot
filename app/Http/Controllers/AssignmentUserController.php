@@ -11,6 +11,7 @@ use App\Services\CompilationService;
 use App\Services\TestCasesService;
 use App\Services\ReportGeneratorService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 
 class AssignmentUserController extends Controller
 {
@@ -23,6 +24,9 @@ class AssignmentUserController extends Controller
         $fileContent = null;
         if ($assignmentUser->file_path && Storage::exists($assignmentUser->file_path)) {
             $fileContent = Storage::get($assignmentUser->file_path);
+            if (!mb_check_encoding($fileContent, 'UTF-8')) {
+                $fileContent = mb_convert_encoding($fileContent, 'UTF-8', 'UTF-8');
+            }
         }
 
         return inertia('Assignment/User/Show', [
@@ -150,33 +154,47 @@ class AssignmentUserController extends Controller
 
     public function testRandom($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser, TestCasesService $testCasesService)
     {
-        // $this->authorize('update', [$dashboard, $assignment]);
+        $this->authorize('update', [$dashboard, $assignment]);
 
-        $results = $testCasesService->analyzeCode($assignmentUser, 'random');
+        try {
+            $results = $testCasesService->analyzeCode($assignmentUser, 'random');
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Random test cases executed',
-            'results' => $results
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Random test cases executed',
+                'results' => $results
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Random test cases execution failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function testEdge($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser, TestCasesService $testCasesService)
     {
-        // $this->authorize('update', [$dashboard, $assignment]);
+        $this->authorize('update', [$dashboard, $assignment]);
 
-        $results = $testCasesService->analyzeCode($assignmentUser, 'edge');
+        try {
+            $results = $testCasesService->analyzeCode($assignmentUser, 'edge');
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Edge test cases executed',
-            'results' => $results
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Edge test cases executed',
+                'results' => $results
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Edge test cases execution failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function generateAiReport($locale, Dashboard $dashboard, Assignment $assignment, AssignmentUser $assignmentUser, ReportGeneratorService $reportGeneratorService)
     {
-        // $this->authorize('update', [$dashboard, $assignment]);
+        $this->authorize('update', [$dashboard, $assignment]);
 
         $results = $reportGeneratorService->generateReport($locale, $assignmentUser);
 

@@ -42,7 +42,6 @@
                         <Link v-if="(createAction === 'createDashboard')" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create_dashboard }} +</Link>
                         <Link v-if="(createAction === 'createAssignment') && dashboard" :href="route('dashboard.assignments.create', { locale, dashboard: dashboard.id })" class="btn-primary">{{ translations.create_assignment }} +</Link>
                     </div>
-                    <!-- <Link v-if="(isStudent === false)" :href="route('dashboard.create', { locale })" class="btn-primary">{{ translations.create }} +</Link> -->
                     <select :value="locale" @change="changeLanguage" class="select-dropdown">
                         <option value="en">🇺🇸 English</option>
                         <option value="pl">🇵🇱 Polski</option>

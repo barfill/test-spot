@@ -6,17 +6,20 @@ use LarAgent\Agent;
 
 class PlagiarismAgent extends Agent
 {
+    // Available models:
     // protected $model = 'gpt-4.1-nano';
     // protected $model = 'gpt-4o-mini';
     // protected $model = 'gemini-2.0-flash-exp';
     // protected $model = 'gemini-2.5-flash';
+    // protected $model = 'gemini-2.0-flash-lite';
     protected $model = 'gemini-2.5-flash-lite';
-
 
     protected $temperature = 0.3;
 
     protected $history = 'in_memory';
 
+    // Available providers:
+    // protected $provider = 'openai';
     // protected $provider = 'default';
     protected $provider = 'gemini';
 
@@ -50,6 +53,4 @@ class PlagiarismAgent extends Agent
     {
         return $message;
     }
-
-    //todo podejście z embeddingami do porównywania kodów
 }

@@ -1,0 +1,131 @@
+@startuml useCase
+skinparam BackgroundColor White
+skinparam actorStyle awesome
+skinparam defaultFontName "Times New Roman"
+skinparam Padding 5
+skinparam ArrowColor #0569acff
+
+skinparam actor {
+    BackgroundColor #2D2D30
+    BorderColor #0569acff
+    FontColor #2D2D30
+    FontSize 22
+}
+
+skinparam usecase {
+    BackgroundColor #2D2D30
+    BorderColor #0569acff
+    FontColor #D4D4D4
+    Padding 10
+    FontSize 16
+}
+
+skinparam package {
+    BackgroundColor #3C3C3C
+    BorderColor #0569acff
+    FontColor #D4D4D4
+    FontSize 20
+}
+
+skinparam note {
+    BackgroundColor #3C3C3C
+    BorderColor #0569acff
+    FontColor #D4D4D4
+    FontSize 16
+}
+
+left to right direction
+
+actor "<b>Student</b>" as student
+actor "<b>Nauczyciel</b>" as teacher
+actor "<b>Admin</b>" as admin
+
+package "TestSpot - diagram przypadków użycia" {
+  together {
+    (Utwórz panel) as createDashboard
+    (Przeglądaj\nutworzone panele) as viewCreatedDashboards
+    (Przypisz użytkowników) as assignUsers
+    (Utwórz zadanie) as createAssignment
+    (Edytuj zadanie) as editAssignment
+    (Przeglądaj\nutworzone zadania) as viewCreatedAssignments
+    (Skompiluj kod) as compile
+    (Sprawdź plagiat) as plagiarism
+    (Sprawdź\nszczegóły rozwiązania) as viewSubmissionDetails
+    (Sprawdź\nprzypadki testowe) as testCases
+    (Generuj raport AI) as report
+    (Sprawdź błędy) as viewErrors
+    (Oceń rozwiązanie) as gradeSolution
+  }
+
+  together {
+    (Zaloguj się) as login
+    (Edytuj profil) as profile
+    (Zmień język) as changeLanguage
+    (Wyloguj się) as logout
+    (Przeglądaj\nprzypisane panele) as viewAssignedDashboards
+    (Przeglądaj\nprzypisane zadania) as viewAssignedAssignments
+    (Wyświetl\nszczegóły zadania) as viewAssignmentDetails
+    (Dodaj plik\nz rozwiazaniem) as uploadFile
+    (Prześlij rozwiązanie) as submit
+    (Sprawdź\nstatus rozwiazania) as viewAssignmentStatus
+
+    (Utwórz użytkownika) as createUser
+    (Edytuj profil użytkownika) as editUser
+    (Usuń użytkownika) as deleteUser
+
+  }
+    gradeSolution -[hidden]-> deleteUser
+    viewErrors -[hidden]-> editUser
+    report -[hidden]-> createUser
+    testCases -[hidden]-> viewAssignmentStatus
+    viewSubmissionDetails -[hidden]-> submit
+    plagiarism -[hidden]-> uploadFile
+    compile -[hidden]-> viewAssignmentDetails
+    viewCreatedAssignments -[hidden]-> viewAssignedAssignments
+    editAssignment -[hidden]-> viewAssignedDashboards
+    createAssignment -[hidden]-> logout
+    assignUsers -[hidden]-> changeLanguage
+    viewCreatedDashboards -[hidden]-> profile
+    createDashboard -[hidden]-> login
+}
+deleteUser <-- admin
+editUser <-- admin
+createUser <-- admin
+
+viewAssignmentStatus <-- student
+submit <-- student
+uploadFile <-- student
+viewAssignmentDetails <-- student
+viewAssignedAssignments <-- student
+viewAssignedDashboards <-- student
+logout <-- student
+changeLanguage <-- student
+profile <-- student
+login <-- student
+
+teacher --> gradeSolution
+teacher --> viewErrors
+teacher --> report
+teacher --> testCases
+teacher --> viewSubmissionDetails
+teacher --> plagiarism
+teacher --> compile
+teacher --> viewCreatedAssignments
+teacher --> editAssignment
+teacher --> createAssignment
+teacher --> assignUsers
+teacher --> viewCreatedDashboards
+teacher --> createDashboard
+
+
+note bottom of admin
+    Dodatkowo wszystkie
+    uprawnienia Nauczyciela
+end note
+
+note bottom of teacher
+    Dodatkowo wszystkie
+    uprawnienia Studenta
+end note
+
+@enduml

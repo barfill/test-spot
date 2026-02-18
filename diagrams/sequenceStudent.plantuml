@@ -1,0 +1,65 @@
+@startuml sequenceStudent
+skinparam BackgroundColor White
+skinparam actorStyle awesome
+skinparam defaultFontName "Times New Roman"
+skinparam Padding 5
+skinparam ArrowColor #0569acff
+skinparam titleFontSize 20
+skinparam titleFontColor #2D2D30
+
+skinparam actor {
+    BackgroundColor #2D2D30
+    BorderColor #0569acff
+    FontColor #2D2D30
+    FontSize 22
+}
+
+skinparam participant {
+    BackgroundColor #2D2D30
+    BorderColor #0569acff
+    FontColor #D4D4D4
+    Padding 10
+    FontSize 16
+}
+
+skinparam sequence {
+    GroupBackgroundColor #3C3C3C
+    GroupBorderColor #0569acff
+    GroupHeaderFontColor #FFFFFF
+    GroupFontSize 16
+    DividerBackgroundColor #2D2D30
+    DividerBorderColor #0569acff
+    DividerFontColor #D4D4D4
+    DividerFontSize 18
+    LifeLineBorderColor #0569acff
+    ArrowFontSize 16
+    ArrowFontColor #2D2D30
+}
+
+title Diagram sekwencji: przesłanie rozwiązania przez studenta
+
+actor "<b>Student</b>" as S
+participant "<b>Interfejs użytkownika</b>" as UI
+participant "<b>System</b>" as SYS
+participant "<b>System plików</b>" as FS
+database "<b>Baza danych</b>" as DB
+
+== Przesłanie rozwiązania ==
+S -> UI: Wybór pliku z rozwiązaniem
+UI -> SYS: Przesłanie rozwiązania
+
+SYS -> SYS: Walidacja poprawności pliku (rozmiar, typ)
+
+alt Rozwiązanie już istnieje
+    SYS -> FS: Usunięcie poprzedniego pliku
+end
+
+SYS -> FS: Zapis nowego pliku z rozwiązaniem
+
+SYS -> DB: Aktualizacja statusu oraz ścieżki do pliku
+DB --> SYS: Potwierdzenie zapisu
+
+SYS --> UI: Potwierdzenie przesłania
+UI --> S: Status: Oczekuje na weryfikację
+
+@enduml

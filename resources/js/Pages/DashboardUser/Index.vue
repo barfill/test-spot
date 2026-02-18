@@ -38,7 +38,6 @@
                             :is-checked="user.is_in_dashboard"
                             @toggle="(value) => handleUserToggle(user, user.is_in_dashboard, value)"
                         />
-                        <!-- <div class="">view</div> -->
                     </div>
                 </div>
             </div>

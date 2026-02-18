@@ -18,17 +18,6 @@ Route::get('/', function () {
 Route::prefix('{locale}')
     ->where(['locale' => implode('|', config('app.supported_locales'))])
     ->group(function() {
-         // Bez autentykacji pod postmana
-        // Route::post('dashboard/{dashboard}/assignments/{assignment}/compile', [AssignmentController::class, 'compileSubmissions'])
-        //         ->name('dashboard.assignment.compile');
-        // Route::post('dashboard/{dashboard}/assignments/{assignment}/check-plagiarism', [AssignmentController::class, 'checkPlagiarismInAssignment'])
-        //         ->name('dashboard.assignment.check-plagiarism');
-        // Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/random', [AssignmentUserController::class, 'testRandom'])
-        //     ->name('dashboard.assignment.test-cases.random');
-        // Route::post('dashboard/{dashboard}/assignment/{assignment}/test-cases/{assignmentUser}/edge', [AssignmentUserController::class, 'testEdge'])
-        //     ->name('dashboard.assignment.test-cases.edge');
-        // Route::post('dashboard/{dashboard}/assignment/{assignment}/generate-report/{assignmentUser}', [AssignmentUserController::class, 'generateAiReport'])
-        //     ->name('dashboard.assignment.generate-report');
         Route::get('test-agent', [AssignmentController::class, 'testAgent']);
         Route::middleware('auth')->group(function() {
             Route::get('/', function() {

@@ -3,6 +3,7 @@
         <div class="mx-auto w-3/4 flex flex-col lg:flex-row items-center justify-between mb-4 lg:mb-8">
             <h1 class="text-3xl font-bold text-center text-zinc-700 dark:text-zinc-200 mb-2 lg:mb-0">{{ translations.login }}</h1>
             <div class="flex gap-2">
+                <!-- For future needs -->
                 <!-- <span class="text-zinc-700 dark:text-zinc-200">{{ translations.no_account }}</span>
                 <Link :href="route('register', { locale })" class="text-orange-500 dark:text-orange-400 hover:underline">{{ translations.register }}</Link> -->
             </div>
@@ -22,13 +23,11 @@
                     <div class="mt-1.5 h-5">
                         <p v-if="form.errors.email" class="text-error">{{ form.errors.email }}</p>
                     </div>
-                    <!-- <div v-if="form.errors.email" class="text-error">{{ form.errors.email }}</div> -->
                 </div>
                 <div>
                     <label for="password" class="label label-disabled">{{ translations.password }}</label>
                     <span class="absolute span-enabled"> {{ translations.password }}</span>
                     <input type="password" id="password" name="password" v-model="form.password" @input="labelTransition" @keydown="labelTransition" class="input"/>
-                    <!-- <div v-if="form.errors.password" class="text-error">{{ form.errors.password }}</div> -->
                     <div class="mt-1.5 h-5">
                         <p v-if="form.errors.password" class="text-error">{{ form.errors.password }}</p>
                     </div>

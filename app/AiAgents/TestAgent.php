@@ -6,12 +6,13 @@ use LarAgent\Agent;
 
 class TestAgent extends Agent
 {
+    // Available models:
     // protected $model = 'gpt-4.1-nano';
     // protected $model = 'gemini-pro';
 
-
     protected $history = 'in_memory';
 
+    // Available providers:
     // protected $provider = 'default';
     protected $provider = 'gemini';
 
@@ -20,14 +21,14 @@ class TestAgent extends Agent
 
     public function instructions()
     {
-        return "Jesteś testowym agentem. Zwróć mi jakiś żart.";
+        return "Testowy agent zwracający JSON z informacjami o przesłanym komunikacie.";
     }
 
     public function prompt($message)
     {
         return json_encode([
             'success' => true,
-            'message' => 'To jest testowa odpowiedź agenta.',
+            'message' => 'Odpowiedź testowego agenta',
             'input' => $message,
         ]);
     }

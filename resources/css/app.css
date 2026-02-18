@@ -139,10 +139,6 @@
     transition: all 0.2s ease;
 }
 
-/* .checkbox:checked {
-    @apply bg-orange-500 border-orange-300;
-} */
-
 .checkbox-container {
     @apply flex items-center gap-3 mt-10 ml-6;
 }

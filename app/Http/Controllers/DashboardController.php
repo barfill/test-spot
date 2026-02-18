@@ -29,9 +29,6 @@ class DashboardController extends Controller
             ->get()
             ->map(function ($d) use ($user) {
                 $d->can = [
-                    // 'update' => $user->can('update', $d),
-                    // 'delete' => $user->can('delete', $d),
-                    // 'view'   => $user->can('view', $d),
                     'update' => Gate::allows('update', $d),
                     'delete' => Gate::allows('delete', $d),
                     'view'   => Gate::allows('view', $d),
@@ -41,9 +38,6 @@ class DashboardController extends Controller
 
         $userCreatedDashboards = ($user->type === 'admin') || ($user->type === 'teacher') ? $user->dashboards()->with('owner')->get()->map(function ($d) use ($user) {
             $d->can = [
-                // 'update' => $user->can('update', $d),
-                // 'delete' => $user->can('delete', $d),
-                // 'view'   => $user->can('view', $d),
                 'update' => Gate::allows('update', $d),
                 'delete' => Gate::allows('delete', $d),
                 'view'   => Gate::allows('view', $d),
@@ -123,8 +117,6 @@ class DashboardController extends Controller
                 'image_disk' => 'public',
             ]);
         }
-
-        // dd($request->all());
 
         return redirect()->route('dashboard.index', ['locale' => $locale])
             ->with('success', $this->successMessage('create', 'dashboard'));

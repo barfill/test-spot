@@ -13,6 +13,7 @@ use App\Http\Requests\AssignmentRequest;
 use App\Services\CompilationService;
 use App\Services\PlagiarismService;
 use App\AiAgents\TestAgent;
+use Exception;
 
 class AssignmentController extends Controller
 {
@@ -68,7 +69,6 @@ class AssignmentController extends Controller
             abort(403, 'Access denied to this dashboard');
         }
 
-        // if ($user->type === 'student' && $isMember) {
         if ($isMember && $assignment->status === 'open') {
             return $this->showForStudent($locale, $dashboard, $assignment);
         }
@@ -139,8 +139,6 @@ class AssignmentController extends Controller
             ->where('status', 'pending')
             ->get()
             ->keyBy('submitted_at');
-
-        // dd($userPendingAssignments);
 
         return inertia('Assignment/TeacherShow', [
             'locale' => $locale,
@@ -259,7 +257,6 @@ class AssignmentController extends Controller
     public function submit(Request $request, $locale, Dashboard $dashboard, Assignment $assignment)
     {
         $request->validate([
-            // 'code_file' => 'required|file|extensions:cpp,cc,cxx,c,h,hpp|max:5120|min:1',
             'code_file' => 'required|file|extensions:cpp,cc,cxx,c,h,hpp|max:5120',
             'user_comment' => 'nullable|string|max:1000',
         ]);
@@ -304,26 +301,40 @@ class AssignmentController extends Controller
     {
         $this->authorize('update', [$dashboard, $assignment]);
 
-        $results = $compilationService->compileAllSubmissions($assignment);
+        try {
+            $results = $compilationService->compileAllSubmissions($assignment);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Compilation completed',
-            'results' => $results
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Compilation completed',
+                'results' => $results
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Compilation failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function checkPlagiarismInAssignment($locale, Dashboard $dashboard, Assignment $assignment, PlagiarismService $plagiarismService)
     {
-        // $this->authorize('update', [$dashboard, $assignment]);
+        $this->authorize('update', [$dashboard, $assignment]);
 
-        $results = $plagiarismService->checkAssignment($assignment);
+        try {
+            $results = $plagiarismService->checkAssignment($assignment);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Plagiarism check completed',
-            'results' => $results
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Plagiarism check completed',
+                'results' => $results
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Plagiarism check failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function testAgent()
