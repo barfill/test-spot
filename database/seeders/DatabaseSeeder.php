@@ -51,7 +51,6 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Create assignment submissions for students
         $students = User::where('type', 'student')->get();
         $assignments = Assignment::all();
 
